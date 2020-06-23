@@ -1,0 +1,14 @@
+.revenueclinic_container .formdiv{
+   display:flex;
+   align-items: center;
+}
+.revenueclinic_container .formdiv .labeltxt{
+   padding-right:5px;
+   padding-bottom: 0px !important;
+}
+.revenueclinic_container .formdiv .selectbox .ant-select-selection--single {
+border: 1px solid #D8D8D8 !important;
+color:#333333 !important;
+font-size: 16px !important;
+width:180px !important;
+}

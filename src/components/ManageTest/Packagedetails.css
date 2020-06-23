@@ -1,0 +1,77 @@
+.general_button {
+    background-color: #82af3f;
+    font-size: 20px;
+    color: white;
+    border-radius: 2px;
+    border: none;
+    font-weight: 700;
+    padding: 10px 15px;
+}
+
+.butt_parent {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 8px;
+}
+
+.Instruction_text_edit {
+    color: #82af3f;
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+
+.green_uploadint {
+    height: 15px !important;
+    background-color: #86B149;
+    border-radius: 50px;
+}
+
+.green_upload_container {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 8px;
+}
+
+.para_edit {
+    padding-left: 9px;
+    font-size: 16px;
+    flex-wrap: wrap !important;
+    position: relative;
+    bottom: 3px;
+}
+
+.border_edit {
+    border: 1px solid !important;
+    margin-top: 4px;
+}
+
+.Paper_edit {
+    height: 50px;
+    margin: 6px;
+}
+
+.common_row {
+    display: flex;
+    /* justify-content: space-evenly; */
+    justify-content: space-between;
+    /* width: 100%; */
+    /* margin: 0px !important; */
+}
+
+.kwd_edit {
+    height: 50px;
+    color: white;
+    background-color: #86B149;
+    border: none;
+    font-size: 18px;
+    padding: 10px 15px;
+}
+
+.blood_edit {
+    padding: 17px;
+    font-size: 18px;
+}
+
+.overall_paper_div {
+    width: 50%;
+}

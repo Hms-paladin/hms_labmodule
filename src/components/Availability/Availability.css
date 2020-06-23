@@ -1,0 +1,60 @@
+.Cancel_butt{
+width: 314px !important;
+height: 54px !important;
+background: #F38F31 0% 0% no-repeat padding-box !important;
+box-shadow: 0px 2px 5px #00000033 !important ;
+border-radius: 2px !important;
+opacity: 1 !important;
+font-size: 18px !important;
+color:#FFFF !important;
+font-family: "Roboto" !important;
+text-transform: none !important;
+}
+.Block_butt{
+	width: 314px !important;
+height: 54px !important;
+background: #818181 0% 0% no-repeat padding- !important;
+box-shadow: 0px 2px 5px #00000033;
+border-radius: 2px !important;
+opacity: 1 !important;
+font-size: 18px !important;
+color:#FFFF !important;
+font-family: "Roboto" !important;
+text-transform: none !important;
+}
+.Deals_butt{
+	width: 314px !important;
+height: 54px !important;
+box-shadow: 0px 2px 5px #00000033;
+background: #16668F 0% 0% no-repeat padding-box !important;
+border-radius: 2px !important;
+opacity: 1 !important;
+font-size: 18px !important;
+color:#FFFF !important;
+font-family: "Roboto" !important;
+text-transform: none !important;
+}
+.Advertise_butt{
+	background: #16468F 0% 0% no-repeat padding-box !important;
+	width: 314px !important;
+height: 54px !important;
+box-shadow: 0px 2px 5px #00000033;
+border-radius: 2px !important;
+opacity: 1 !important;
+font-size: 18px !important;
+color:#FFFF !important;
+font-family: "Roboto" !important;
+text-transform: none !important;
+}
+.Avail_butt_container{
+	margin-bottom: 20px;
+}
+.calendar_buttons_container{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.text_color{
+	color:#82AE3F !important;
+	;
+}
