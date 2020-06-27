@@ -3,6 +3,7 @@
     width: 100%;
     text-align: left;
     position: relative;
+    color: #797777;
 }
 
 .formdiv .labeltxt {
@@ -49,6 +50,7 @@
     border: 0;
     border: 1px solid #ccc;
     box-shadow: 0 0 1.5px 0px #ccc;
+    color: #797777;
 }
 
 .formdiv .selectbox {
@@ -114,4 +116,8 @@
 
 .MuiDialogActions-root.MuiDialogActions-spacing .MuiButton-label{
     font-size: 12px;
+}
+
+.formdiv .MuiInputBase-inputAdornedEnd{
+    color: #797777;
 }

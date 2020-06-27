@@ -1,37 +1,68 @@
 import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
-import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import UploadView from "./UploadView";
+import axios from 'axios';
+import { apiurl } from "../../App";
+
 
 import "./UploadTable.css";
 
 class UploadTable extends React.Component {
   state = {
     openview: false,
+    tableData:[],
+    tableDatafull:[],
+    openuploadview:false,
+    viewdata:[],
   };
 
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
+ componentDidMount(){
+    var self = this
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getTestUploadResult',
+        data:{
+          "lab_id":"2",
+          "date":"2020-06-23",
+          "period":"Day"        
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
 
-    var returnobj = {};
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+          for(let i = 0;i<100;i++){
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time,
+            status: <span className="uploader_clrgreen">{val.status}</span>,
+            id:index
+            })
+          }
+            tableDatafull.push(val)
+        })
+        self.props.tabledataFun(tableData)
 
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
-  };
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+    })
+}
 
-  modelopen = (data) => {
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
-    } else if (data === "edit") {
-      this.setState({ editopen: true });
+      this.setState({ openview: true,openuploadview:true,viewdata:this.state.tableDatafull[id] });
     }
   };
 
   closemodal = () => {
-    this.setState({ openview: false, editopen: false });
+    this.setState({ openview: false, editopen: false,openuploadview:false });
   };
   render() {
     return (
@@ -46,73 +77,19 @@ class UploadTable extends React.Component {
             { id: "status", label: "Status" },
             { id: "", label: "Action" },
           ]}
-          rowdata={[
-            this.createData({
-              name: "ABDUL-KHAAFID",
-              test: "Blood",
-              date: "18 Sep 2019",
-              time: "09.00 AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-            this.createData({
-              name: "AHMED",
-              test: "Arthroscopy",
-              date: "18 Sep 2019",
-              time: "09.30 AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-            this.createData({
-              name: "IRFAN",
-              test: "Electrocardiogram",
-              date: "17 Sep 2019",
-              time: "09.45 AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-            this.createData({
-              name: "ZAINAB",
-              test: "Galactosemia Test",
-              date: "09 Dec 2019",
-              time: "10.05 AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-            this.createData({
-              name: "SAMREEN",
-              test: "Immunoglobulins",
-              date: "09 Dec 2019",
-              time: "10.47 AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-            this.createData({
-              name: "RASHID",
-              test: "Skull-XRay",
-              date: "08 Dec 2019",
-              time: "11.15AM",
-              status: <span className="uploader_clrgreen">Uploaded</span>,
-            }),
-          ]}
+          rowdata={this.state.tableData}
           // tableicon_align={"cell_eye"}
           EditIcon="close"
           DeleteIcon="close"
           UploadIcon="close"
           GrandTotal="close"
           Workflow="close"
-          modelopen={(e) => this.modelopen(e)}
+          modelopen={(e,id) => this.modelopen(e,id)}
+          props_loading={this.state.props_loading}
         />
-        {console.log("hi")}
 
-        <UploadView open={this.state.openview} onClose={this.closemodal} />
+        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
 
-        {/* <Modalcomp visible={this.state.openview}   closemodal={(e)=>this.closemodal(e)}
-        xswidth={"xs"}
-        >
-            
-            <UploadView />
-        </Modalcomp> */}
-
-        {/* <Modalcomp  visible={this.state.editopen} title={"Edit details"} closemodal={(e)=>this.closemodal(e)}
-        xswidth={"xs"}
-        >
-        </Modalcomp> */}
       </div>
     );
   }

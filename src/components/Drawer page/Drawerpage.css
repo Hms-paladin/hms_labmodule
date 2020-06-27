@@ -1,6 +1,8 @@
 body{
     background-color: #fafafa ;
-}.MuiAppBar-colorPrimary {
+}
+
+.MuiAppBar-colorPrimary {
     Background-color:white !important
 }
 
@@ -378,4 +380,8 @@ font-size: 1.75rem;
 
     .Drawerpage-menuButton-4{
         color: #757575 !important;
+    }
+
+    .appbar_sideicons .MuiTypography-body1{
+        color:#808080;
     }

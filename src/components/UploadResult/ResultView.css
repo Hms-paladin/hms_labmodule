@@ -4,8 +4,6 @@
     align-items: center;
     justify-content: flex-end;
     font-size: 1.5rem !important;
-    padding-bottom: 20px;
-    padding-right: 20px;
     padding-top: 20px;
 }
 .cancel_button{
@@ -45,11 +43,27 @@
     justify-content:flex-end;
     align-items: center;
 }
+.resultnameparent_child{
+  margin-bottom: 20px;
+}
 .resultname_div{
     display: flex;
     align-items: center;
     font-size: 1.25rem;
 }
+
+.resultname_div div:first-child{
+  width: 30%;
+  font-size: 16px;
+  color: #949494;
+  margin-bottom: 5px;
+}
+
+.resultname_div div:nth-child(2){
+  font-size: 16px;
+  color: #666666;
+}
+
 .result_date_div{
     display:flex;
     justify-content: space-between;
@@ -70,9 +84,11 @@
     margin-bottom: 10px;
   }
   .myimage_upload{
-    color:#333;
-    margin-left: 5px;
-  
+    color: #333;
+    margin-left: 5px !important;
+    text-overflow: ellipsis;
+    width: 215px;
+    overflow: hidden;
   }
   .labdate-div .resultupload_button{
     border: 1px solid #ccc !important;
@@ -111,22 +127,22 @@
   }
   .list_class{
     border-radius: 25px; 
-    /* padding: 7px; */
     box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 8px 0 rgba(0,0,0,0.20) !important;
     border-radius: 26px;
     padding: 8px;
-    /* font-size: 1.25rem; */
-    margin-top: 10px;
-    /* display: flex;
-    align-items: center; */
-    width: 30%;
+    width: max-content;
+    height: max-content;
     font-size: 12px;
+    margin: 15px 5px 0px 5px;
   }
   .resultsecond_half{
     width: 50%;
     border:1px solid #ccc;
     box-shadow: 0 0 1.5px 0px #ccc;
     border-radius: 2px !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: baseline;
   }
   .resultview_mainbox{
     display: flex;
@@ -153,5 +169,10 @@
 }
 .labdate-div .ant-upload.ant-upload-select{
   display: flex;
-  border: 1px solid;
+  border: 1px solid #d9d9d9;
+}
+
+.labdate-div div span{
+  display: flex;
+  justify-content: space-between;
 }
