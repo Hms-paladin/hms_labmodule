@@ -97,7 +97,8 @@
 }
 
 .formdiv .MuiFormControl-marginNormal {
-    margin-top: 0px !important
+    margin-top: 0px !important;
+    width:100%;
 }
 
 /* for datepicker */

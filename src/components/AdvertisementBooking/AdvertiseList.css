@@ -80,7 +80,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    
+    font-weight: bold;
 }
 .person_age{
     color: #86b149;
@@ -110,6 +110,7 @@ font-size: 1.25rem;
 }
 .test_report {
     font-size: 1.5rem !important;
+    font-weight: 600 !important;
 }
 .date_view{
     display: flex;
@@ -132,6 +133,14 @@ font-size: 1.25rem;
 .list_test_report{
     color:#333;
     font-size: 1.5rem !important;
+    font-weight: 600 !important;
+}
+.list_edit{
+    fill:#83AF40 !important;
+}
+
+.list_edit:hover{
+    cursor: pointer;
 }
 .view{
    font-size: 1.5rem !important;
@@ -142,61 +151,46 @@ font-size: 1.25rem;
 .listdelete_icon{
     fill:#D11A2A !important;
     cursor: pointer;
-    display: flex;
-    padding-right: 3px;
-    font-size: 1.9rem !important;
 }
-/* .listdelete_icon .MuiSvgIcon-root {
-    font-size: 1.9rem;
-} */
 .list_head{
-    color:#4A4A4A;
-    
+    color: #4A4A4A;
+    font-weight: 100;
 }
 .list_subhead{
     color:#989898 !important;
 }
 .Ad_location_container{
-    border: 1px dashed #D1D1D1;
-    padding:10px;
-    margin-bottom: 10px; 
+   
+    overflow-y: scroll;
+    margin-right: 5px;
   
 }
+.advertise_addlist_items{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    border: 2px dashed #D1D1D1;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    
+}
+.full_half_div{
+    padding-left: 10px;
+}
 .location_add_container{
-    overflow-y:none;
+  
     scrollbar-width: thin;
 }
-.edit_icon{
-      color: #97B866;
-      display: flex;
-      padding-right: 3px;
+@media only screen and (max-width: 959px){
+.advertise_addlist_items{
+    margin:20px 20px 5px 20px;
 }
-.icon_editing{
-    display: flex;
-    margin-left: 8px;
-    justify-content: center;
 }
-.full_half_textedit{
-    padding-top: 5px;
-    text-align: center;
-    justify-content:center;
-    display: flex;
-    margin: 0px !important;
+
+
+.location_add_container {
+    height: 370px;
+    overflow: scroll;
 }
-.phone_icon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-/* stepper editing css */
-.stepper_edit{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding-left:0px;
-    margin-left: 0px;
-    width: 100%;
-}
-.stepper_par {
-    width: 100%;
-}
+

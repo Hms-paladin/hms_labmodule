@@ -2,23 +2,16 @@ import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import ListView from "./ListView";
+import axios from 'axios';
+import { apiurl } from "../../App";
+
 import "./AppointmentsTable.css";
 
 class Approvalmanagement extends React.Component {
   state = {
     openview: false,
-  };
-
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
-
-    var returnobj = {};
-
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
+    tableData:[],
+    tableDatafull:[],
   };
 
   modelopen = (data) => {
@@ -32,7 +25,74 @@ class Approvalmanagement extends React.Component {
   closemodal = () => {
     this.setState({ openview: false, editopen: false });
   };
+
+  componentDidMount(){
+    var self = this
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getTestPendingResult',
+        data:{
+          "lab_id":"2",
+          "date":"2020-06-18",
+          "period":"Day"        
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
+
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time ? val.uploaded_time : '-',
+              id:index
+            })
+            tableDatafull.push(val)
+        })
+
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+    })
+}
+
+UNSAFE_componentWillReceiveProps(newProps){
+  console.log(newProps,"newProps")
+  this.setState({
+    tableData:newProps.weekMonthYearData,
+    tableDatafull:newProps.wk_Mn_Yr_Full_Data,
+    search:newProps.searchData,
+  })
+}
+
   render() {
+    const searchdata = []
+    this.state.tableDatafull.filter((data,index) => {
+      console.log(data,"datadata")
+      if (this.state.search === undefined || this.state.search === null){
+        searchdata.push({
+            name: data.customer,
+            test: data.test,
+            date: data.test_date,
+            time: data.uploaded_time ? data.uploaded_time : '-',
+          id:index
+          })
+      }
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          date: data.test_date,
+          time: data.uploaded_time ? data.uploaded_time : '-',
+        id:index
+        })
+      }
+  })
     return (
       <div>
         <Tablecomponent
@@ -44,51 +104,12 @@ class Approvalmanagement extends React.Component {
             { id: "time", label: "Time" },
             { id: "", label: "Action" },
           ]}
-          rowdata={[
-            this.createData({
-              name: "AAMINA",
-              test: "Blood Test",
-              date: "18 Dec 2019",
-              time: "09.00 AM",
-            }),
-            this.createData({
-              name: "MOHAMED",
-              test: "Arthroscopy",
-              date: "18 Dec 2019",
-              time: "09.30 AM",
-            }),
-            this.createData({
-              name: "ABLA",
-              test: "Electrocardiogram",
-              date: "18 Dec 2019",
-              time: "09:45 AM",
-            }),
-            this.createData({
-              name: "ZAINAB",
-              test: "Galactosemia Test",
-              date: "18 Dec 2019",
-              time: "10.05 AM",
-            }),
-            this.createData({
-              name: "SAMREEN",
-              test: "Immunoglobulins",
-              date: "18 Dec 2019",
-              time: "10.47 AM",
-            }),
-            this.createData({
-              name: "RASHID",
-              test: "Skull X-Ray",
-              date: "18 Dec 2019",
-              time: "11.15 AM",
-            }),
-          ]}
-          // tableicon_align={"cell_eye"}
+          rowdata={searchdata}
           EditIcon="close"
           DeleteIcon="close"
-          UploadIcon="close"
-          GrandTotal="close"
-          Workflow="close"
           modelopen={(e) => this.modelopen(e)}
+          props_loading={this.state.props_loading}
+
         />
         <ListView open={this.state.openview} onClose={this.closemodal} />
         {/* <Modalcomp  visible={this.state.openview} className="modal"  closemodal={(e)=>this.closemodal(e)}   xswidth={"xs"}

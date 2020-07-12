@@ -10,7 +10,8 @@ import axios from 'axios';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
 import DeleteMedia from '../../helpers/ModalComp/deleteModal';
-import { ConsoleSqlOutlined } from "@ant-design/icons";
+import DragdropTable from "./DragTable.js"
+
 class MediaUploadsTable extends React.Component {
   state = {
     openview: false,
@@ -86,9 +87,12 @@ class MediaUploadsTable extends React.Component {
       // console.log(response.data.data[0].details,"res")
       console.log(response,"response_data_table")
       var tableData = [];
-        response.data.data[0].details.map((val) => {
-            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id })
-             console.log(val.id,"idddddd")
+        response.data.data[0].details.map((val,index) => {
+          for(let i=0;i<50;i++){
+            tableData.push({ title: val.media_title,type:"num"+i,uploaded:val.created_on,status:val.is_active,id: val.id,indexid:i.toString() })
+            console.log(val.id,"idddddd")
+          }
+
         })
         self.setState({
             tableData:tableData,
@@ -131,7 +135,7 @@ deleterow = () => {
     const img_var = <ReactSVG src={order} />;
     return (
       <div>
-        <Tablecomponent
+        {/* <Tablecomponent
           heading={[
             //  {id:"order", label:"Order"},
             { id: "", label: "S.No" },
@@ -144,9 +148,24 @@ deleterow = () => {
           rowdata={this.state.tableData && this.state.tableData}
           tableicon_align={"cell_eye"}
           deleteopen={this.deleteopen}
-          UploadIcon="close"
-          GrandTotal="close"
+          props_loading={this.state.props_loading}
           modelopen={(e,id) => this.modelopen(e,id)}
+        /> */}
+        <DragdropTable 
+                  heading={[
+                     {id:"order", label:"Order"},
+                    { id: "", label: "S.No" },
+                    { id: "title", label: "Media Title" },
+                    { id: "type", label: "Media Type" },
+                    { id: "uploaded", label: "Uploaded On" },
+                    { id: "status", label: "Status" },
+                    { id: "", label: "Action" },
+                  ]}
+          rowdata={this.state.tableData && this.state.tableData}
+          deleteopen={this.deleteopen}
+          props_loading={this.state.props_loading}
+          modelopen={(e,id) => this.modelopen(e,id)}
+
         />
         {/* <ViewMedia open={this.state.openview} onClose={this.closemodal} /> */}
         <Modalcomp

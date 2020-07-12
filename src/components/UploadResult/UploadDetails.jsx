@@ -1,87 +1,97 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import UploadTable from "./UploadTable";
 import PendingTable from './PendingTable';
 
 import "./UploadDetails.css"
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+function TabContainer(props) {
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
   );
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
-}));
+});
 
-export default function SimpleTabs(props) {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+class UploadDetails extends React.Component {
+  state = {
+    value: 0,
+    weekMonthYearData:[],
+    weekMonthYearDatapending:[],
+    wk_Mn_Yr_Full_DataPending:[],
+    wk_Mn_Yr_Full_DataUpload:[],
   };
 
-  const callmaster=(data)=>{
-    props.tabledataFun(data)
+  handleChange = (event, value) => {
+    this.setState({ value });
+    this.props.tabindex(value)
+
+  };
+
+  callmaster=(data)=>{
+    this.props.tabledataFun(data)
   }
 
-  return (
-    <div className={`${classes.root} tabfontUploadResult`}>
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} indicatorColor="primary"
-          textColor="primary"
-          centered 
-          aria-label="simple tabs example"
-        >
-          <Tab label="Uploaded" {...a11yProps(0)} />
-          <Tab label="Pending" {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        <UploadTable tabledataFun={(data)=>callmaster(data)}/>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-      <PendingTable />
-      </TabPanel>
-    </div>
-  );
+    UNSAFE_componentWillReceiveProps(newProps){
+      console.log(newProps.weekMonthYearData,"rowDetails")
+      if(this.state.value){
+        this.setState({
+          weekMonthYearDatapending:newProps.weekMonthYearData,
+          wk_Mn_Yr_Full_DataPending:newProps.wk_Mn_Yr_Full_Data,
+          searchDataPending:newProps.searchData,
+        })
+    }else{
+      this.setState({
+        weekMonthYearData:newProps.weekMonthYearData,
+        wk_Mn_Yr_Full_DataUpload:newProps.wk_Mn_Yr_Full_Data,
+        searchDataUpload:newProps.searchData,
+      })
+    }
+    }
+
+  render() {
+    const { classes } = this.props;
+    const { value } = this.state;
+
+    return (
+      <div className={`${classes.root} tabfontUploadResult`}>
+        <AppBar position="static">
+          <Tabs value={value} onChange={this.handleChange} centered>
+            <Tab label="Uploaded" />
+            <Tab label="Pending" />
+          </Tabs>
+        </AppBar>
+        {value === 0 && 
+          <TabContainer>
+          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchDataUpload} />
+          </TabContainer>}
+        {value === 1 && 
+          <TabContainer>
+          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} />
+          </TabContainer>}
+      </div>
+    );
+  }
 }
+
+UploadDetails.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(UploadDetails);

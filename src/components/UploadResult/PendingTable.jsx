@@ -14,7 +14,7 @@ class PendingTable extends React.Component {
   state = {
     openview: false,
     tableData:[],
-    tableAllData:[],
+    tableDatafull:[],
     uploaddata:[],
   };
 
@@ -33,29 +33,42 @@ class PendingTable extends React.Component {
       console.log(response,"response_data")
 
       var tableData = [];
-      var tableAllData = [];
+      var tableDatafull = [];
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
               test: val.test,
               date: val.test_date,
-              time: val.uploaded_time,
+              time: val.uploaded_time ? val.uploaded_time : '-',
             status: <span className="pending_clrred">{val.status}</span>,
             action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
             id:index
             })
-            tableAllData.push(val)
+            tableDatafull.push(val)
+        self.props.tabledataFun(tableData)
         })
         self.setState({
           tableData:tableData,
-          tableAllData:tableAllData,
+          tableDatafull:tableDatafull,
           props_loading:false
         })
     })
 }
 
+UNSAFE_componentWillReceiveProps(newProps){
+  console.log(newProps.weekMonthYearDatapending,"pendingdata")
+
+  // if(newProps.weekMonthYearDatapending.length!==0){
+  this.setState({
+    tableData:newProps.weekMonthYearDatapending,
+    tableDatafull:newProps.wk_Mn_Yr_Full_Data,
+    search:newProps.searchData,
+  })
+// }
+}
+
 openresultModel=(indexid)=>{
-  var uploadcurrentdata = [this.state.tableAllData[indexid]]
+  var uploadcurrentdata = [this.state.tableDatafull[indexid]]
   this.setState({uploadview:true,uploaddata:uploadcurrentdata})
 }
 
@@ -75,6 +88,32 @@ openresultModel=(indexid)=>{
   };
 
   render() {
+    const searchdata = []
+    this.state.tableDatafull.filter((data,index) => {
+      console.log(data,"datadata")
+      if (this.state.search === undefined || this.state.search === null){
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          date: data.test_date,
+          time: data.uploaded_time ? data.uploaded_time : '-',
+        status: <span className="pending_clrred">{data.status}</span>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        id:index
+        })
+      }
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          date: data.test_date,
+          time: data.uploaded_time ? data.uploaded_time : '-',
+        status: <span className="pending_clrred">{data.status}</span>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        id:index
+        })
+      }
+  })
     return (
       <div>
         <Tablecomponent
@@ -87,7 +126,7 @@ openresultModel=(indexid)=>{
             { id: "status", label: "Status" },
             { id: "action", label: "Action" },
           ]}
-          rowdata={this.state.tableData}
+          rowdata={searchdata}
           actionclose="close"
           modelopen={(e) => this.modelopen(e)}
           props_loading={this.state.props_loading}    

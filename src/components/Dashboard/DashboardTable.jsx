@@ -6,22 +6,50 @@ import Button from "@material-ui/core/Button";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import Clientsmodal from "../UploadResult/clientsmodal";
+import axios from 'axios';
+import { apiurl } from "../../App";
+
 export default class DashboardTable extends Component {
   state = {
     openview: false,
   };
 
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
 
-    var returnobj = {};
+  componentDidMount(){
+    var self = this
+    axios({
+      method: 'post',
+      url: apiurl + '/Dashboard',
+      data: {
+        lab_id: 2,
+        date: "2020-01-07",
+        period: "day"
+      }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
 
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
-  };
+      // var tableData = [];
+      // var tableDatafull = [];
+      //   response.data.data.map((val,index) => {
+      //       tableData.push({
+      //         name: val.customer,
+      //         test: val.test,
+      //         Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
+      //         Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
+      //         time:"-",
+      //         id:index
+      //       })
+      //       tableDatafull.push(val)
+      //   })
+
+      //   self.setState({
+      //     tableData:tableData,
+      //     tableDatafull:tableDatafull,
+      //     props_loading:false
+      //   })
+    })
+}
 
   modelopen = (data) => {
     if (data === "view") {
@@ -109,33 +137,12 @@ export default class DashboardTable extends Component {
               { id: "charge", label: "Charge(KWD)" },
               { id: "", label: "Action" },
             ]}
-            rowdata={[
-              this.createData({
-                name: "AAMINA",
-                test: "Blood ",
-                time: "04:00PM",
-                charge: "20",
-              }),
-              this.createData({
-                name: "MOHAMED",
-                test: "Blood",
-                time: "13:00PM",
-                charge: "20",
-              }),
-              this.createData({
-                name: "ABLA",
-                test: "General",
-                time: "09:00AM",
-                charge: "30",
-              }),
-            ]}
-            // tableicon_align={"cell_eye"}
+            rowdata={[]}
             EditIcon="close"
             DeleteIcon="close"
-            UploadIcon="close"
-            GrandTotal="close"
-            Workflow="close"
             modelopen={(e) => this.modelopen(e)}
+          props_loading={false}
+
           />
 
           {/* <Modalcomp  visible={this.state.openview} title={"CLIENTS"} closemodal={(e)=>this.closemodal(e)}>          

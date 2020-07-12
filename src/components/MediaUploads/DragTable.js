@@ -27,6 +27,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import NotfoundIcon from "../../Images/NotFound.svg"
 import { apiurl } from "../../../src/App.js";
 
 
@@ -405,7 +406,9 @@ export default class DragdropTable extends Component {
                 rowCount={this.state.rows && this.state.rows.length}
                 alignheading={this.props.alignheading}
               />
-
+              {
+                  this.state.rows.length === 0 && <TableCell className={"noFoundIconCenter"} colSpan={12}><img src={NotfoundIcon} /><div>No Data Found</div></TableCell>
+                }
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable">
                   {(provided, snapshot) => (
@@ -446,9 +449,9 @@ export default class DragdropTable extends Component {
                                       key={index}>
 
                                       <TableCell key={index} >
-                                        <span {...provided.dragHandleProps}>
+                                        {page===0?<span {...provided.dragHandleProps}>
                                           <AppsIcon style={{ fontSize: "22px" }} />
-                                        </span>
+                                        </span>:<AppsIcon style={{ fontSize: "22px" }}/>}
                                       </TableCell>
                                       <TableCell>
                                         {this.state.rowsPerPage * this.state.page - 1 + index + 2}

@@ -39,16 +39,16 @@ export default class DealList extends React.Component {
     this.getlistdata()
   }
   componentWillReceiveProps(){
-    if(this.props.afteredit){
+    // if(this.props.afteredit){
     this.getlistdata()
-    }
+    // }
   }
 
   getlistdata=()=>{
     var self = this
     axios({
         method: 'POST',
-        url: apiurl + "Common/getsingle_deals",
+        url: apiurl + "/Common/getsingle_deals",
         data:{
           "vendor_id":"2", 
           "limit":10, 
@@ -66,7 +66,7 @@ export default class DealList extends React.Component {
         dyndeallist.push(
           <>
                     <Grid item xs={12} md={12}>
-              <Paper style={{ marginBottom: "10px" }}>
+              <Paper className="dyndeallistPaper">
                 <div className="aligndeallistdata">
                   <div>
                     <span>Service Type</span>
@@ -86,6 +86,7 @@ export default class DealList extends React.Component {
                   </div>
                 </div>
                 <div className="aligndeallistdataRow2">
+                  <div className={"titleDealFlex"}>
                   <div className={"listTitleWidth"}>
                     <span>Title</span>
                 <div>{listdata.deal_title}</div>
@@ -94,8 +95,8 @@ export default class DealList extends React.Component {
                     <span>Deal</span>
                 <div className="view">{listdata.deal_active==1?"Active":"Inactive"}</div>
                   </div>
-                </div>
-                <div className="iconsdiv">
+                  </div>
+                  <div className="iconsdiv">
                   <img src={Workflow} alt="error" onClick={()=>this.openstepper(listdata.id)} />
                   <EditIcon className="edit_icon_div" onClick={()=>this.props.changeTab(listdata)}/>
                   <DeleteIcon
@@ -103,6 +104,8 @@ export default class DealList extends React.Component {
                     onClick={()=>this.handleOpen(listdata.id)}
                   />
                 </div>
+                </div>
+
                 <div>
                 {this.state.openstepper.includes(listdata.id) && <Stepper /> }
                 </div>
@@ -159,6 +162,7 @@ export default class DealList extends React.Component {
                 </div>
               </div>
               <div className="aligndeallistdataRow2">
+                <div className={"titleDealFlex"}>
                 <div className={"listTitleWidth"}>
                   <span>Title</span>
               <div>{listdata.deal_title}</div>
@@ -167,14 +171,15 @@ export default class DealList extends React.Component {
                   <span>Deal</span>
               <div className="view">{listdata.deal_active==1?"Active":"Inactive"}</div>
                 </div>
-              </div>
-              <div className="iconsdiv">
+                </div>
+                <div className="iconsdiv">
                 <img src={Workflow} alt="error" onClick={()=>this.openstepper(listdata.id)} />
                 <EditIcon className="edit_icon_div" onClick={()=>this.props.changeTab(listdata)}/>
                 <DeleteIcon
                   className="delete_icon_div"
                   onClick={()=>this.handleOpen(listdata.id)}
                 />
+              </div>
               </div>
               <div>
               {this.state.openstepper.includes(listdata.id) && <Stepper /> }
