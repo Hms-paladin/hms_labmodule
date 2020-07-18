@@ -62,7 +62,6 @@ componentWillMount() {
     
         }).catch((error) => {
         })
-        console.log("deletedetails", details)
     }
 
 
@@ -73,7 +72,6 @@ componentWillMount() {
             {
                 this.props.ad_details && this.props.ad_details.length > 0 &&
                                 this.props.ad_details.map((bookingDetails,index) => {
-                                    console.log("sadfdshfjshdfjdfsh",bookingDetails)
               
                     return(
                         <div className="Ad_location_container">
@@ -139,22 +137,14 @@ componentWillMount() {
                     )
                 })}
 
-
             </div>
-
-             
-
-             
-                        
                           
                 <div>
-                 
                         <Modalcomp xswidth={"xs"} clrchange="textclr" 
                         title="Delete Media" visible={this.state.open} closemodal={this.handleClose}>
                             <DeleteMedia  delid={this.state.del_id} listName="advertisement" getAdvertiseList={this.props.getAdvertiseList}
                             apiendpoint={"deleteAdBooking"} generateAlert={this.props.generateAlert}
-                                           
-                                            closemodal={this.handleClose} />
+                            closemodal={this.handleClose} />
                         </Modalcomp>
                 </div>
 

@@ -18,6 +18,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ReactToPrint from "react-to-print";
 import ReactExport from 'react-data-export';
+import DateRangeSelect from "../../helpers/DateRange/DateRange";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -33,6 +34,7 @@ class AppointmentsList extends Component {
       spinner: false,
       weekMonthYearData: [],
       wk_Mn_Yr_Full_Data: [],
+      dateRangeOpen:false,
     };
   }
 
@@ -123,6 +125,13 @@ class AppointmentsList extends Component {
 
   }
 
+  rangedataFun=(date)=>{
+    this.setState({
+      rangedate:date,
+      dateRangeOpen:false,
+    })
+  }
+
 
   render() {
     const { Option } = Select;
@@ -153,6 +162,8 @@ class AppointmentsList extends Component {
     ];
     return (
       <Spin className="spinner_align" spinning={this.state.spinner}>
+        {this.state.dateRangeOpen && <DateRangeSelect dynalign={"dynalign"} rangeDate={(data)=>this.rangedataFun(data)} />}
+
         <Paper>
           <div className="dashboard_header">
             <div className="dashboard_title">APPOINTMENT LIST</div>
@@ -162,7 +173,7 @@ class AppointmentsList extends Component {
                 <Button className="clinic_details" onClick={() => this.weekFun("Month")}>This Month</Button>
                 <Button className="clinic_details" onClick={() => this.weekFun("YEAR")}>This Year</Button>
               </ButtonGroup>
-              <Moment format="DD-MMM-YYYY" className="mr-5 "></Moment>
+              <Moment format="DD-MMM-YYYY" className="mr-5 "onClick={()=>this.setState({dateRangeOpen:true})} ></Moment>
               <Search
                 placeholder="Search"
                 onSearch={value => console.log(value)}

@@ -1,0 +1,25 @@
+.daterangeMaster {
+    z-index: 1;
+}
+
+.daterangeMaster .rdrCalendarWrapper {
+    border: 1px solid #c3bbbb;
+    border-radius: 5px;
+}
+
+.daterangeMaster .rdrStartEdge,
+.daterangeMaster .rdrInRange,
+.daterangeMaster .rdrEndEdge{
+    color: #86b149 !important;
+}
+
+
+.daterangeMaster .rdrDayStartPreview,
+.daterangeMaster .rdrDayInPreview,
+.daterangeMaster .rdrDayEndPreview {
+    color: #82AF3F !important;
+}
+
+.daterangeMaster .rdrWeekDay{
+    color: #86b149;
+}

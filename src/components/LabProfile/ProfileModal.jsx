@@ -7,9 +7,6 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Profile from '../../Images/11.jpg'
 import { Upload, Icon, message } from 'antd';
 import Labelbox from '../../helpers/labelbox/labelbox'
 import CheckboxLabels from './DayCheckbox'
@@ -35,7 +32,7 @@ const DialogTitle = withStyles(styles)(props => {
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-          <CloseIcon className="closeicon_title"/>
+          <CloseIcon className="closeicon_title" />
         </IconButton>
       ) : null}
     </MuiDialogTitle>
@@ -74,114 +71,122 @@ function beforeUpload(file) {
 }
 
 class Modalcomp extends React.Component {
+
   constructor(props) {
     super(props);
-  console.log(props);
-    this.state = {open: false,basicdetails:true,Workingdetails:false};
+    this.state = {
+      openprofile: false,
+      basicdetails: true,
+      Workingdetails: false
+    };
   }
-  
-        handleChange = info => {
-          if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-          }
-          if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-              this.setState({
-                imageUrl,
-                loading: false,
-              }),
-            );
-          }
-        };
 
-  handleClickOpen = () => {
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          imageUrl,
+          loading: false,
+        }),
+      );
+    }
+  };
+
+
+  basicdetailsfn = () => {
+    this.setState({ basicdetails: true, Workingdetails: false })
+  }
+
+  Workingdetailsfn = () => {
+    this.setState({ Workingdetails: true, basicdetails: false })
+  }
+
+  closemodel = () => {
+    this.setState({ openprofile: false })
+  }
+
+  UNSAFE_componentWillReceiveProps(newProps){
+    if(newProps.openmodel){
     this.setState({
-      open: true,
-    });
-  };
-  basicdetailsfn=()=>
-  {
-    this.setState({basicdetails:true,Workingdetails:false}) 
+      openprofile:newProps.openmodel,
+      ProfileGetdata:newProps.ProfileGetdata,
+    })
+    this.props.closemodelPage()
   }
-  Workingdetailsfn=()=>
-  { 
-    this.setState({Workingdetails:true,basicdetails:false})
-
-  }
-  handleClose = (value) => {
-    // this.props.closemodal(false);
-    this.setState({ open: false });
-    console.log(this.state.open)
-  };
-  handleClickClose=()=>
-  {
-    this.setState({open:false})
-  }
-  Cancel=()=>
-  {
-    this.setState({open:false})   
-    console.log(this.state.open)  
   }
 
   render() {
-     const uploadButton = (
-          <div>
-            <div className="upload-icon"><i class="fa fa-user-plus"></i></div>
-          </div>
-        );
-       const { imageUrl } = this.state; 
+    const { classes, onClose, selectedValue, ...other } = this.props;
+    const uploadButton = (
+      <div>
+        <div className="upload-icon"><i class="fa fa-user-plus"></i></div>
+      </div>
+    );
+    const { imageUrl } = this.state;
 
     return (
       <div className="labmodaldiv_profile">
-       
- <Dialog className="Dialogmodaltitle"
-          onClose={this.props.handleClose}
+        <Dialog
+          className="Dialogmodaltitle"
+          // onClose={this.props.handleClose}
           aria-labelledby="customized-dialog-title"
-          open={this.props.open}
-           maxWidth={this.props.xswidth ? 'xs' : 'md'}
-           fullWidth={true}
-           disableBackdropClick={true}
+          open={this.state.openprofile}
+          maxWidth={this.props.xswidth ? 'xs' : 'md'}
+          fullWidth={true}
         >
-  <DialogTitle id="customized-dialog-title" className="labModaltitle" onClose={this.props.onClose}>
-             <div className="profile_container"> <div className="profile_imagediv"> <div className="User-upload-container"><Upload
-        name="avatar"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        beforeUpload={beforeUpload}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? <img src={imageUrl} className="upload-img-circle" alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-      </Upload></div></div>
-              <div className="profile_image_container"><div><h3 className="basic_details" onClick={this.basicdetailsfn}>Basic Details</h3>
-                       {this.state.basicdetails==true ?<div className="tab_line"></div>:""}</div>
-                      <div><h3  className="basic_details" onClick={this.Workingdetailsfn}>Working Hours</h3>{this.state.Workingdetails==true ?<div className="tab_line"></div>:""}</div>
+          <DialogTitle
+            id="customized-dialog-title"
+            className="labModaltitle"
+          >
+            <div className="profile_container">
+              <div className="profile_imagediv">
+                <div className="User-upload-container">
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    beforeUpload={beforeUpload}
+                    onChange={this.handleChange}>
+                    {imageUrl ? <img src={imageUrl} className="upload-img-circle" alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                  </Upload>
+                </div>
               </div>
+              <div className="profile_image_container">
+                <div>
+                  <h3 className="basic_details"
+                    onClick={this.basicdetailsfn}>
+                    Basic Details
+                  </h3>
+                  {this.state.basicdetails == true ? <div className="tab_line"></div> : ""}
+                </div>
+                <div>
+                  <h3 className="basic_details"
+                    onClick={this.Workingdetailsfn}>
+                    Working Hours
+                </h3>
+                  {this.state.Workingdetails == true ? <div className="tab_line"></div> : ""}
+                </div>
               </div>
+            </div>
           </DialogTitle>
-
-
-          
           <DialogContent dividers className="DialogContent">
-            
-              <div>
-             {this.state.basicdetails ===true?
-                      <BasicDetails/>
-       :this.state.Workingdetails == true &&<CheckboxLabels />}
- <div className="buttons_container"><div><div><Button className="cancel_button" variant="contained" onClick={()=>this.props.onClose(false)}>Cancel</Button></div></div>
- <div><div><Button className="update_button" variant="contained" color="primary">Update</Button></div></div> 
- </div>
 
-      </div>
+            <div>
+              {this.state.basicdetails === true ?
+                <BasicDetails onClose={this.closemodel} ProfileGetdata={this.state.ProfileGetdata}/>
+                : this.state.Workingdetails == true && <CheckboxLabels />}
+            </div>
           </DialogContent>
-          
         </Dialog>
       </div>
     );
   }
 }
-
 export default Modalcomp;

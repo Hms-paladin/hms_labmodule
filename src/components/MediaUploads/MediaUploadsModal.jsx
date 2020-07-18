@@ -101,24 +101,41 @@ export default class MediaUploadsModal extends Component {
       this.setState({mediaupload_lab})
     }
     onSubmitData = () => {
-      console.log(this.state.imageurl.name,"checking_imageurl_value")
-      var formData = new FormData();
-      formData.append('imageArray', this.state.imageurl)
-      formData.set("mediatype","image");
-      formData.set("mediasortorder", 1)
-      formData.set("mediavendorId", 2)
-      formData.set("activeflag", 1)
-      formData.set("createdby", 1)
-      formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
-      formData.set("modifiedby", 1)
-      formData.set("modifiedon", 1)
-      formData.set("ipaddress", "192.144.23")
-      formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
-      formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
-      formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
+
       if(this.props.editData){
+        console.log(this.state.imageurl.name,"checking_imageurl_value")
+        var formData = new FormData();
+        formData.append('imageArray', this.state.imageurl)
+        formData.set("mediatype","image");
+        formData.set("mediasortorder", 1)
+        formData.set("mediavendorId", 11)
+        formData.set("activeflag", 1)
+        formData.set("createdby", 1)
+        formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
+        formData.set("modifiedby", 1)
+        formData.set("modifiedon", 1)
+        formData.set("ipaddress", "192.144.23")
+        formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
+        formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
+        formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
+        formData.set( "id",this.props.editData.id)
         this.mediaupload_labUpdateApi(formData)   // Update Api Call
       }else{
+        console.log(this.state.imageurl.name,"checking_imageurl_value")
+        var formData = new FormData();
+        formData.append('imageArray', this.state.imageurl)
+        formData.set("mediatype","image");
+        formData.set("mediasortorder", 1)
+        formData.set("mediavendorId", 11)
+        formData.set("activeflag", 1)
+        formData.set("createdby", 1)
+        formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
+        formData.set("modifiedby", 1)
+        formData.set("modifiedon", 1)
+        formData.set("ipaddress", "192.144.23")
+        formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
+        formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
+        formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
         this.mediaupload_labAddApi(formData)   // Insert Api Call
       }
       this.props.closemodal()
@@ -134,19 +151,16 @@ export default class MediaUploadsModal extends Component {
       .then((response) => {
         console.log(response,"post_check_response")
         this.props.getTableData()
-      }).catch((error) => {
-        alert(JSON.stringify(error))
       })
+
     }
     // for put api
    mediaupload_labUpdateApi = (mediaupload_labApiData) => {
+     alert("testedit")
       axios({
         method:'PUT',
         url: apiurl+'/editMediaUpload',
-        data:{
-          id:this.props.editData.id,
-          ...mediaupload_labApiData
-        }
+        data:mediaupload_labApiData,
       })
       .then((response)=>{
         console.log(response,"response_checkingg")
@@ -190,7 +204,7 @@ componentDidMount(){
     }
     render() {
       console.log(this.state.mediaupload_lab.media_description.value,"description")
-      console.log(this.state,"statevalue")
+      console.log(this.props.truegetmethod,"statevalue")
       const props = {
         name: 'file',
         action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -199,6 +213,7 @@ componentDidMount(){
           authorization: 'authorization-text',
         },
     }
+
         return (
             <>
             <div className={`lab_mediauploads ${this.state.open === true && "d-none"}`}>

@@ -8,6 +8,7 @@ import { Input, Select, Icon } from 'antd';
 import dateFormat from 'dateformat';
 import TestView from "../ManageTest/TestView";
 const current_date=(dateFormat(new Date(),"dd mmm yyyy"))
+
 export default class LabTestMaster extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +18,9 @@ export default class LabTestMaster extends Component {
     };
   }
   handleClickopen = () => {
-    this.setState({ open: true,callgetapi:false });
+    this.setState({ open: true});
   };
   handleClickclose = () => {
-    alert("secondbol")
-
     this.setState({ open: false });
   };
   callget=()=>{
@@ -45,6 +44,7 @@ export default class LabTestMaster extends Component {
               placeholder=" search "
               onSearch={value => console.log(value)}
               style={{ width: 150 }}
+              onChange={(e) => this.setState({ searchData: e.target.value })}
               />
                 <img
                   className="plus-icon"
@@ -58,7 +58,7 @@ export default class LabTestMaster extends Component {
           </div>
       
         
-       <LabTestTable getdatacall={this.state.callgetapi}/>
+       <LabTestTable getdatacall={this.state.callgetapi} falsegetmethod={()=>this.setState({callgetapi:false})} searchData={this.state.searchData} />
         <div className="Upload-modal-container">
           <Modalcomp
             visible={this.state.open}
