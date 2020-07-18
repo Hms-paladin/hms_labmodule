@@ -26,7 +26,7 @@ const AppRouter = () => (
                 <Route path="/login" component={Login}/>
                 <Route path="/forgot" component={Forgot}/>
                 <Route path="/resetpassword" component={ResetPassword}/> 
-                <Route path="/dashboard" component={Dashboard}/>
+                <Route path="/dashboard" component={Dashboard} exact/>
                 <Route path="/AppointmentsList" component={AppointmentList}/>
                 <Route path="/CancelAppointments" component={CancelAppointmentMaster}/>
                 <Route path="/uploadresults" component={UploadMaster}/>
@@ -38,7 +38,7 @@ const AppRouter = () => (
                 <Route path="/Deal" component={DealsMaster} />
                 <Route path="/Paymentreceived" component={PaymentReceived}/>
                 <Route path="/Cancelpayment" component={CancelPayment} />
-                <Route path="/profile" component={ProfileComp}/>
+                <Route path="/profile" component={ProfileComp} exact/>
                 {/* <Route path="/stepper" component={Stepper} /> */}
             </Switch>
             </Drawerpage>

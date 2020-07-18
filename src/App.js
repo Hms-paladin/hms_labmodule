@@ -7,9 +7,8 @@ import Login from "./components/Login/Login";
 import ResetPassword from "./components/Login/ResetPassword";
 import Forgot from "./components/Login/Forgot";
 import Drawerpage from "./components/Drawer page/Drawerpage";
-import "./App.css";
 
-export const apiurl = "http://52.200.251.222:8158/api/v1/";
+export const apiurl = "http://52.200.251.222:8158/api/v1";
 
 function App() {
   return (

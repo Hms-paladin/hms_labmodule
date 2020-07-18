@@ -1,25 +1,77 @@
 import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
-import "./PendingTable.css";
 import ResultView from "./ResultView";
+import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import axios from 'axios';
+import { apiurl } from "../../App";
+
+import "./PendingTable.css";
+
 
 class PendingTable extends React.Component {
   state = {
     openview: false,
+    tableData:[],
+    tableDatafull:[],
+    uploaddata:[],
   };
 
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
+  componentDidMount(){
+    var self = this
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getTestPendingResult',
+        data:{
+          "lab_id":"2",
+          "date":"2020-06-22",
+          "period":"Day"        
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
 
-    var returnobj = {};
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time ? val.uploaded_time : '-',
+            status: <span className="pending_clrred">{val.status}</span>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+            id:index
+            })
+            tableDatafull.push(val)
+        self.props.tabledataFun(tableData)
+        })
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+    })
+}
 
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
-  };
+UNSAFE_componentWillReceiveProps(newProps){
+  console.log(newProps.weekMonthYearDatapending,"pendingdata")
+
+  // if(newProps.weekMonthYearDatapending.length!==0){
+  this.setState({
+    tableData:newProps.weekMonthYearDatapending,
+    tableDatafull:newProps.wk_Mn_Yr_Full_Data,
+    search:newProps.searchData,
+  })
+// }
+}
+
+openresultModel=(indexid)=>{
+  var uploadcurrentdata = [this.state.tableDatafull[indexid]]
+  this.setState({uploadview:true,uploaddata:uploadcurrentdata})
+}
+
 
   modelopen = (data) => {
     if (data === "view") {
@@ -36,6 +88,32 @@ class PendingTable extends React.Component {
   };
 
   render() {
+    const searchdata = []
+    this.state.tableDatafull.filter((data,index) => {
+      console.log(data,"datadata")
+      if (this.state.search === undefined || this.state.search === null){
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          date: data.test_date,
+          time: data.uploaded_time ? data.uploaded_time : '-',
+        status: <span className="pending_clrred">{data.status}</span>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        id:index
+        })
+      }
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          date: data.test_date,
+          time: data.uploaded_time ? data.uploaded_time : '-',
+        status: <span className="pending_clrred">{data.status}</span>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        id:index
+        })
+      }
+  })
     return (
       <div>
         <Tablecomponent
@@ -46,79 +124,23 @@ class PendingTable extends React.Component {
             { id: "date", label: "Test Date" },
             { id: "time", label: "Time" },
             { id: "status", label: "Status" },
-            { id: "", label: "Action" },
+            { id: "action", label: "Action" },
           ]}
-          rowdata={[
-            this.createData({
-              name: "ABDUL-KHAAFID",
-              test: "Blood",
-              date: "18 Sep 2019",
-              time: "10.00 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-            this.createData({
-              name: "AHMED",
-              test: "Arthroscopy",
-              date: "18 Sep 2019",
-              time: "10.30 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-            this.createData({
-              name: "IRFAN",
-              test: "Electrocardiogram",
-              date: "17 Sep 2019",
-              time: "11.30 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-            this.createData({
-              name: "ZAINAB",
-              test: "Galactosemia Test",
-              date: "09 Dec 2019",
-              time: "11.30 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-            this.createData({
-              name: "SAMREEN",
-              test: "Immunoglobulins",
-              date: "09 Dec 2019",
-              time: "11.30 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-            this.createData({
-              name: "RASHID",
-              test: "Skull-XRay",
-              date: "08 Dec 2019",
-              time: "11.30 AM",
-              status: <span className="pending_clrred">Pending</span>,
-            }),
-          ]}
-          // tableicon_align={"cell_eye"}
-          EditIcon="close"
-          DeleteIcon="close"
-          GrandTotal="close"
-          Workflow="close"
+          rowdata={searchdata}
+          actionclose="close"
           modelopen={(e) => this.modelopen(e)}
+          props_loading={this.state.props_loading}    
         />
-        {/* <ResultView open={this.state.openview} onClose={this.closemodal} /> */}
-
-        {/* <Modalcomp  visible={this.state.openview}closemodal={(e)=>this.closemodal(e)}
-        // xswidth={"xs"}
-        >
-           
-        </Modalcomp> */}
 
         <Modalcomp
           visible={this.state.uploadview}
           title={"UPLOAD TEST RESULTS"}
           closemodal={(e) => this.closemodal(e)}
+          modelwidthClass={"resultviewModelWidth"}
         >
-          <ResultView />
+          <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} />
         </Modalcomp>
 
-        {/* <Modalcomp  visible={this.state.editopen} title={"Edit details"} closemodal={(e)=>this.closemodal(e)}
-        xswidth={"xs"}
-        >
-        </Modalcomp> */}
       </div>
     );
   }

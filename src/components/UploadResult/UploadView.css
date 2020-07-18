@@ -1,9 +1,9 @@
-.lab_dashboard_view{
- width:100%;
- height:100%;
- display: flex;
- align-items: flex-end;
- justify-content: center;
+.lab_dashboard_view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   margin: 60px auto 30px;
   background-color: #fff;
   border-radius: 6px;
@@ -11,158 +11,183 @@
   -moz-border-radius: 6px;
   text-align: center;
 }
+
 .lab_popup_details .MuiDialog-paperWidthSm {
-  width:400px !important;
+  width: 400px !important;
 }
 
-.patient_name{
-  font-size:25px !important;
+.patient_name {
+  font-size: 25px !important;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 0px !important;
-  
 }
-.patient_age{
-  display:flex;
+
+.patient_age {
+  display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color:grey;
+  color: grey;
   /* margin-bottom: 5px !important; */
 }
-.patientappointment_details{
+
+.patientappointment_details {
   color: rgba(0, 0, 0, 0.87);
   font-size: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.patient_date{
-  color:grey;
+
+.patient_date {
+  color: grey;
   font-size: 1.5rem;
   margin-left: 20px;
 }
-.patientlist_detailsdiv{
-  display:flex;
+
+.patientlist_detailsdiv {
+  display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 0px 20px 0px 20px;
 }
-.patientappointment_details{
-  display:flex;
+
+.patientappointment_details {
+  display: flex;
   align-items: center;
   justify-content: space-around;
 }
-.patientappointment_details_info{
-  display:flex;
+
+.patientappointment_details_info {
+  display: flex;
   align-items: center;
   justify-content: space-around;
   position: relative;
   right: 6px;
   font-size: 1.75rem;
-  color:#333;
+  color: #333;
 }
-.view_detailsbutton{
-  color:#fff !important;
+
+.view_detailsbutton {
+  color: #fff !important;
   font-size: 1.25rem !important;
-  padding:8px 20px !important;
+  padding: 8px 20px !important;
   background-color: rgb(71, 196, 88) !important;
 }
-.right_arrowview{
+
+.right_arrowview {
   font-size: 2rem !important;
 }
-.lab_details_container{
-  width:100%;
-  padding:20px;
+
+.lab_details_container {
+  width: 100%;
+  padding: 20px;
 }
-.lab_detailsdiv{
-  width:100%;
-  height:100%;
+
+.lab_detailsdiv {
+  width: 100%;
+  height: 100%;
 }
-.test_details_head{
-  color:#333;
+
+.test_details_head {
+  color: #333;
   font-size: 1.75rem;
-  display:flex;
+  display: flex;
   justify-content: flex-start;
   margin-top: 15px;
 }
-.patient{
+
+.patient {
   border-radius: 50%;
-  width:150px;
+  width: 150px;
   position: absolute;
   top: -60px;
   z-index: 10000;
   left: 32%;
-  padding:5px;
-  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12) !important;
+  padding: 5px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
 }
-.dividerlist_root{
+
+.dividerlist_root {
   margin-top: 20px !important;
-  height:2px !important;
+  height: 2px !important;
 }
-.patient:hover{
-transition: all 0.3s ease-in-out !important;
+
+.patient:hover {
+  transition: all 0.3s ease-in-out !important;
   -webkit-transition: all 0.3s ease-in-out !important;
   -moz-transition: all 0.3s ease-in-out !important;
 }
-.profile_modal .MuiDialog-paperWidthSm
-{
-  width:40% !important;
+
+.profile_modal .MuiDialog-paperWidthSm {
+  width: 40% !important;
 }
-.lab_details_container  p {
+
+.lab_details_container p {
   margin-bottom: 7px !important;
 }
-.test_report_container{
-  color:#8f8181 !important;
+
+.test_report_container {
+  color: #8f8181 !important;
   font-size: 1.3rem !important;
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
 }
-.no_border{
+
+.no_border {
   border-right: 0px !important;
-  fill:#f16f6f !important;
+  fill: #f16f6f !important;
   font-size: 2rem !important;
   /* padding-right: 9px; */
 }
-.file_attach{
+
+.file_attach {
   font-size: 2rem !important;
-  fill:#f16f6f !important;
+  fill: #f16f6f !important;
   /* border-right: 1px solid; */
   /* padding-right: 9px; */
 }
-.line_edit{
+
+.line_edit {
   margin: 0px 5px;
   font-size: 20px;
 }
-.lab_details_container .blood_test_edit{
+
+.lab_details_container .blood_test_edit {
   margin-bottom: 0px !important;
 }
-.head_text_edit{
-  margin: 5px 60px ;
+
+.head_text_edit {
+  margin: 5px 60px;
 }
-.date_uploadetext_edit{
+
+.date_uploadetext_edit {
   display: flex;
   justify-content: space-between;
   /* margin: 15px 2px; */
 }
-.uploadeddate_text_date{
-/* display: flex;
+
+.uploadeddate_text_date {
+  /* display: flex;
 align-items:flex-start; */
-font-size: 14px;
-color: black;
+  font-size: 14px;
+  color: black;
 }
-.date_text_date{
+
+.date_text_date {
   font-size: 14px;
 }
- /* .lab_details_container .patientappointment_details, .uploadeddate_text_date{
+
+/* .lab_details_container .patientappointment_details, .uploadeddate_text_date{
   
 } */
-@media only screen and (max-width: 768px){
-  .profile_modal .MuiDialog-paperWidthSm
-{
-  width:60% !important;
-}
+
+@media only screen and (max-width: 768px) {
+  .profile_modal .MuiDialog-paperWidthSm {
+    width: 60% !important;
+  }
 }

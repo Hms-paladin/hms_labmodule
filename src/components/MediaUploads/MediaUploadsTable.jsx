@@ -10,7 +10,8 @@ import axios from 'axios';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
 import DeleteMedia from '../../helpers/ModalComp/deleteModal';
-import { ConsoleSqlOutlined } from "@ant-design/icons";
+import DragdropTable from "./DragTable.js"
+
 class MediaUploadsTable extends React.Component {
   state = {
     openview: false,
@@ -23,27 +24,14 @@ class MediaUploadsTable extends React.Component {
   componentDidMount() {
     this.getTableData()
 }
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
-    var returnobj = {};
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
-  };
-  // modelopen = (data) => {
-  //   if (data === "view") {
-  //     this.setState({ openview: true });
-  //   } else if (data === "edit") {
-  //     this.setState({ editopen: true });
-  //     this.setState({
-  //     })
-  //   } else if (data === "workflow") {
-  //     this.setState({ workflow: true });
-  //     console.log(this.state.workflow,"workflow_check")
-  //   }
-  // };
+
+UNSAFE_componentWillReceiveProps(newProps) {
+  if(newProps.truegetmethod){
+    this.getTableData()
+    this.props.falsegetmethod()
+  }
+}
+
   modelopen = (data,id) => {
     console.log(data,"data_checking")
     if (data === "view") {
@@ -75,7 +63,7 @@ class MediaUploadsTable extends React.Component {
         method: 'POST', //get method 
         url: apiurl + '/mediauploaddetails',
         data:{
-          doctorid:2,
+          doctorid:11,
           // vendor_id:1,
           limit:100,
           offset:1,
@@ -86,9 +74,12 @@ class MediaUploadsTable extends React.Component {
       // console.log(response.data.data[0].details,"res")
       console.log(response,"response_data_table")
       var tableData = [];
-        response.data.data[0].details.map((val) => {
-            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id })
-             console.log(val.id,"idddddd")
+        response.data.data[0].details.map((val,index) => {
+          // for(let i=0;i<50;i++){
+            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id,indexid:index.toString() })
+            console.log(val.id,"idddddd")
+          // }
+
         })
         self.setState({
             tableData:tableData,
@@ -131,7 +122,7 @@ deleterow = () => {
     const img_var = <ReactSVG src={order} />;
     return (
       <div>
-        <Tablecomponent
+        {/* <Tablecomponent
           heading={[
             //  {id:"order", label:"Order"},
             { id: "", label: "S.No" },
@@ -144,9 +135,24 @@ deleterow = () => {
           rowdata={this.state.tableData && this.state.tableData}
           tableicon_align={"cell_eye"}
           deleteopen={this.deleteopen}
-          UploadIcon="close"
-          GrandTotal="close"
+          props_loading={this.state.props_loading}
           modelopen={(e,id) => this.modelopen(e,id)}
+        /> */}
+        <DragdropTable 
+                  heading={[
+                     {id:"order", label:"Order"},
+                    { id: "", label: "S.No" },
+                    { id: "title", label: "Media Title" },
+                    { id: "type", label: "Media Type" },
+                    { id: "uploaded", label: "Uploaded On" },
+                    { id: "status", label: "Status" },
+                    { id: "", label: "Action" },
+                  ]}
+          rowdata={this.state.tableData && this.state.tableData}
+          deleteopen={this.deleteopen}
+          props_loading={this.state.props_loading}
+          modelopen={(e,id) => this.modelopen(e,id)}
+
         />
         {/* <ViewMedia open={this.state.openview} onClose={this.closemodal} /> */}
         <Modalcomp
@@ -157,9 +163,11 @@ deleterow = () => {
         >
           <ViewMedia visible={this.state.openview} viewData={this.state.viewData} viewopenModal ={this.state.openview && true}/>
         </Modalcomp>
+
         <Modalcomp  visible={this.state.editopen} editData={this.state.editData}  title={"EDIT MEDIA UPLOADS"} closemodal={(e) => this.closemodal(e)} >
           <MediaUploadsModal getTableData={this.getTableData} closemodal ={this.closemodal} editData={this.state.editData} editopenModal ={this.state.editopen && true} />
         </Modalcomp>
+
         <Modalcomp  visible={this.state.deleteopen} title={"Delete"} closemodal={this.closemodal} xswidth={"xs"}>
            <DeleteMedia deleterow={this.deleterow} closemodal={this.closemodal}  />
          </Modalcomp>

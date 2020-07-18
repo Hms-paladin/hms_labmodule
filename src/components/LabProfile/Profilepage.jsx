@@ -1,13 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
-import PersonIcon from "@material-ui/icons/Person";
-import AddIcon from "@material-ui/icons/Add";
-import Typography from "@material-ui/core/Typography";
-import { blue } from "@material-ui/core/colors";
-import Button from "@material-ui/core/Button";
 import Trainee from "../../Images/11.jpg";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -16,35 +8,74 @@ import "./Profilepage.css";
 import { TiLocation, MdLocationOn, MdLocalPhone } from "react-icons/md";
 import { IoIosGlobe } from "react-icons/io";
 import EditIcon from "@material-ui/icons/Edit";
-import Modalcomp from './ProfileModal'
+import Modalcomp from './ProfileModal';
+// import { BsThreeDots } from 'react-icons/bs';
+import Axios from "axios";
+import { apiurl } from "../../App";
+
 const styles = {};
 export default class Profilepage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { cancel: null };
+    this.state = {
+      cancel: null,
+      see: true,
+      open: false,
+      ProfileGetdata: [],
+      editIcon: false
+    }
   }
-  handleClose = () => {
-    this.props.onClose(this.props.selectedValue);
-  };
-  open=()=>
-  {
-  	this.setState({view:true})
+  // DOT FUNC
+  viewAddress = () => {
+    this.setState({
+      see: !this.state.see,
+    })
   }
-  onclose=()=>
-  {
-    this.setState({view:false})
+
+  handleopen = (id) => {
+    this.setState({
+      editid: id,
+      editIcon: true,
+      open: true,
+    })
+  }
+
+  closemodelPage = () => {
+    this.setState({
+      editIcon: false,
+    })
+  }
+
+  componentDidMount() {
+    this.LabProfileGetapi()
+  }
+  LabProfileGetapi = () => {
+    var ProfileGetdata = this
+    Axios({
+      method: 'post',
+      url: apiurl + '/Lab/getlabprofiledetails',
+      data: {
+        labId: "2",
+      }
+    })
+      .then((response) => {
+        console.log(response, "profile_check_lab")
+        ProfileGetdata = response.data.data
+        this.setState({
+          ProfileGetdata: ProfileGetdata
+        })
+        console.log(ProfileGetdata, "profilr_datacheck")
+      })
+      .catch((error) => {
+        alert(JSON.stringify(error))
+      })
   }
   render() {
     const styles = "";
     const { classes, onClose, cancel, selectedValue, ...other } = this.props;
-
     return (
-      <div >
-        <Dialog
-          onClose={this.handleClose}
-          aria-labelledby="simple-dialog-title"
-          {...other}
-        >
+      <div className="profileWidthFull">
+      <div className="profileContainer">
           <Grid container className="total">
             <Grid item xs={12} md={5}>
               <div className="trainee_image_container">
@@ -55,93 +86,82 @@ export default class Profilepage extends React.Component {
             </Grid>
             <Grid item xs={12} md={7} className="addtrainee_gridcontainer">
               <div className="addtraineee_containerdiv">
-                <div className="icon_edit">
-                  <EditIcon className="icon" onClick={this.open}/>
-                </div>
-                <div>
-                  <h1 className="trainee_detail">Abdul Khaafid</h1>
-                  <div className="age_details">
-                    <h5>
-                      <MdLocationOn className="group_icons"/>
-                    </h5>
-                    <p className="trainee_text">
-                      PO Box 2, safari 13001, Kuwait City, Kuwait -54541
-                    </p>
-                  </div>
-                  <div className="age_details">
-                    <h5>
-                      <MdLocalPhone className="group_icons"/>
-                    </h5>
-                    <p className="trainee_text">+965 220000001</p>
-                  </div>
-                  <div className="age_details">
-                    <h5>
-                      <IoIosGlobe className="group_icons"/>
-                    </h5>
-                    <p className="trainee_text">+965 220000001</p>
-                  </div>
-                  <div>
-                    <h4 className="working_hour">
-                      <b>Working Hours</b>
-                    </h4>
-                  </div>
-                  <div className="working_detail">
-                    <h4 className="working_hour_detail">Friday</h4>
-
-                    <p className="working_time_detail">09.30 AM-12.30 PM</p>
-                  </div>
-                  <div>
-                    <div className="working_detail">
-                      <h4 className="working_hour_detail">Thursday</h4>
-                      <p className="working_time_detail">09.30 AM-04.30 PM</p>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="working_detail">
-                      <h4 className="working_hour_detail">
-                        Saturday-Wednesday
-                      </h4>
-
-                      <p className="working_time_detail">10.30 AM-05.30 PM</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <Divider  className="divider_profile"/>
-              <div>
-                <div className="package_details_container">
-                  <div className="package_details">
-                    <div className="package_details_list">
-                      <p>Contact Person</p>
-                    </div>
-                  </div>
-                  <div>
-                    <p>Hamad Abdallah Hassan</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="package_container">
-                <div className="package_details_container">
-                  <div className="package_details">
-                    <div className="package_details_list">
-                      <p> Mobile Number</p>
-                    </div>
+                {this.state.ProfileGetdata.map((val) => {
+                  console.log(val, "val_check")
+                  return (
                     <div>
-                      <p></p>
+                      <div className="icon_edit">
+                        <EditIcon className="icon" onClick={() => this.handleopen(val.labId)} />
+                      </div>
+                      <h1 className="trainee_detail">{val.vendor_name}
+                        {/* Lina Clinical Lab */}
+                      </h1>
+                      <div className="age_details">
+                        <h5>
+                          <MdLocationOn className="address_icons" />
+                        </h5>
+                        <div className="name_dot_parent">
+                          <h5>Jabriya</h5>
+                          <span>
+                            {/* <BsThreeDots onClick={this.viewAddress} className="dot_icons"></BsThreeDots> */}
+                            {this.state.see === false ?
+                              <div>
+                                <p className="trainee_text">
+                                  {val.vendor_address}
+                                  {/* PO Box 2, safari 13001, Kuwait City, Kuwait -54541 */}
+                                </p>
+                              </div> : null}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="age_details">
+                        <h5>
+                          <MdLocalPhone className="group_icons" />
+                        </h5>
+                        <p className="trainee_text">{val.vendor_phone}
+                          {/* +965 22000001 */}
+                        </p>
+                      </div>
+                      <div className="age_details">
+                        <h5>
+                          <IoIosGlobe className="group_icons" />
+                        </h5>
+                        <p className="trainee_text">{val.vendor_website}
+                          {/* tec@tec.com.kw */}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="working_hour">
+                          <b>Working Hours</b>
+                        </h4>
+                      </div>
+                      <div className="working_detail">
+                        <h4 className="working_hour_detail">Friday</h4>
+                        <p className="working_time_detail">09.30 AM-12.30 PM</p>
+                      </div>
+                      <div>
+                        <div className="working_detail">
+                          <h4 className="working_hour_detail">Thursday</h4>
+                          <p className="working_time_detail">09.30 AM-04.30 PM</p>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="working_detail">
+                          <h4 className="working_hour_detail">
+                            Saturday-Wednesday
+                      </h4>
+                          <p className="working_time_detail">10.30 AM-05.30 PM</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <p>+956 22001110</p>
-                  </div>
-                </div>
+                  )
+                })}
               </div>
-
-            
+              <Divider className="divider_profile" />
             </Grid>
           </Grid>
-        </Dialog>
-        <Modalcomp  open={this.state.view} onClose={this.onclose} title="gfffffffffffffh"/>
+        <Modalcomp closemodelPage={this.closemodelPage} openmodel={this.state.editIcon} ProfileGetdata={this.state.ProfileGetdata}/>
+      </div>
       </div>
     );
   }

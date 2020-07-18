@@ -130,7 +130,6 @@ class knowledgemgmt extends React.Component {
         }
     })
         .then(function (response) {
-           alert("saved successfully")
           console.log(response, "knowsuccess");
           self.state.knowledgemgmtdata.title.value=""
           self.state.knowledgemgmtdata.categories.value=""

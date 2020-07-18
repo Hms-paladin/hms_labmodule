@@ -426,10 +426,10 @@ class Drawerpage extends React.Component {
             />
             <div>
               {children}
-              <Profilepage
+              {/* <Profilepage
                 open={this.state.viewmodal}
                 onClose={this.viewmodalClose}
-              />
+              /> */}
               {/* {this.state.viewmodal &&<ProfileComp/>} */}
             </div>
           </main>
