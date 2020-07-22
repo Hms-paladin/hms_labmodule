@@ -178,3 +178,12 @@
         justify-content: flex-start;
     }
 }
+
+.valid_toErrormsg{
+    font-size: 12px;
+    /* margin-top: 4px; */
+    color: red;
+    height: 15px;
+    position: relative;
+    bottom: 15px;
+}

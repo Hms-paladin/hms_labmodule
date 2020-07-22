@@ -1,9 +1,9 @@
 import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
-import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import ListView from "./ListView";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import dateformat from 'dateformat';
 
 import "./AppointmentsTable.css";
 
@@ -14,9 +14,9 @@ class Approvalmanagement extends React.Component {
     tableDatafull:[],
   };
 
-  modelopen = (data) => {
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
+      this.setState({ openview: true,viewdata:this.state.tableDatafull[id] });
     } else if (data === "edit") {
       this.setState({ editopen: true });
     }
@@ -27,14 +27,16 @@ class Approvalmanagement extends React.Component {
   };
 
   componentDidMount(){
+    
     var self = this
     axios({
         method: 'POST', //get method 
         url: apiurl + '/getTestPendingResult',
         data:{
-          "lab_id":"2",
-          "date":"2020-06-18",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")
         }
     })
     .then((response) => {
@@ -46,7 +48,7 @@ class Approvalmanagement extends React.Component {
             tableData.push({
               name: val.customer,
               test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.uploaded_time ? val.uploaded_time : '-',
               id:index
             })
@@ -78,7 +80,7 @@ UNSAFE_componentWillReceiveProps(newProps){
         searchdata.push({
             name: data.customer,
             test: data.test,
-            date: data.test_date,
+            date: dateformat(data.test_date, "dd mmm yyyy"),
             time: data.uploaded_time ? data.uploaded_time : '-',
           id:index
           })
@@ -87,7 +89,7 @@ UNSAFE_componentWillReceiveProps(newProps){
         searchdata.push({
           name: data.customer,
           test: data.test,
-          date: data.test_date,
+          date: dateformat(data.test_date, "dd mmm yyyy"),
           time: data.uploaded_time ? data.uploaded_time : '-',
         id:index
         })
@@ -107,22 +109,11 @@ UNSAFE_componentWillReceiveProps(newProps){
           rowdata={searchdata}
           EditIcon="close"
           DeleteIcon="close"
-          modelopen={(e) => this.modelopen(e)}
+          modelopen={(e,id) => this.modelopen(e,id)}
           props_loading={this.state.props_loading}
 
         />
-        <ListView open={this.state.openview} onClose={this.closemodal} />
-        {/* <Modalcomp  visible={this.state.openview} className="modal"  closemodal={(e)=>this.closemodal(e)}   xswidth={"xs"}
-
-        >
-            <ListView onClose={this.closemodal} />
-    
-        </Modalcomp> */}
-
-        {/* <Modalcomp  visible={this.state.editopen} title={"Edit details"} closemodal={(e)=>this.closemodal(e)}
-        xswidth={"xs"}
-        >
-        </Modalcomp> */}
+        <ListView open={this.state.openview} onClose={this.closemodal} viewdata={this.state.viewdata}  />
       </div>
     );
   }

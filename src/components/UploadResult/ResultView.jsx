@@ -1,12 +1,17 @@
 
 import React from 'react';
 import './ResultView.css';
-import { Upload,Button } from 'antd';
+import { Upload,Button,notification } from 'antd';
+import axios from 'axios';
+import { apiurl } from "../../App";
 
 export default class ResultView extends React.Component{
     state={
       fileList: [],
+      resultdata:this.props.uploaddata
     } 
+
+    
 
     handleChange = info => {
       let fileList = [...info.fileList];
@@ -24,7 +29,39 @@ export default class ResultView extends React.Component{
       });
   
       this.setState({ fileList });
+      console.log(fileList,"fileList")
     };
+
+    Notification=()=>{
+      notification.info({
+        description:
+          'Uploaded Succesfully',
+          placement:"topRight",
+      });
+    }
+
+    uploadFile=()=>{
+      console.log(this.state.resultdata)
+      var self = this
+      for(let i = 0;i<this.state.fileList.length;i++){
+        var formData = new FormData();
+        formData.append('test_result', this.state.fileList[i].originFileObj)
+        formData.set("test_id",this.state.resultdata && this.state.resultdata[0].test_id);
+        formData.set("booking_id",this.state.resultdata && this.state.resultdata[0].booking_id)
+      axios({
+        method: 'POST', //get method 
+        url: apiurl + "/uploadTestResult",
+        data: formData
+      })
+        .then((response) => {
+          console.log(response, "response_dataweek")
+          self.props.onClose()
+          self.Notification()
+        })
+      }
+  
+    }
+
       render(){
         const props = {
           action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -33,7 +70,7 @@ export default class ResultView extends React.Component{
         };
       const styles = "";
       const { classes, onClose, cancel, selectedValue,uploaddata, ...other } = this.props;
-      console.log(this.state,"openresultView")
+      console.log(this.props.uploaddata,"openresultView")
 
       
           return(
@@ -44,19 +81,19 @@ export default class ResultView extends React.Component{
 
                               <div className="resultnameparent_child">
                                 <div className="resultname_div">
-                                    <div>Name</div><div>{uploaddata[0].customer}</div>
+                                    <div>Name</div><div>{uploaddata[0].customer?uploaddata[0].customer:"---"}</div>
                                 </div>
                                 <div className="resultname_div">
-                                <div>Gender</div><div>{uploaddata[0].gender}</div>
+                                <div>Gender</div><div>{uploaddata[0].gender?uploaddata[0].gender:"---"}</div>
                                 </div>
                                 <div className="resultname_div">
-                                <div>Age</div><div>{uploaddata[0].age}</div>
+                                <div>Age</div><div>{uploaddata[0].age?uploaddata[0].age:"---"}</div>
                                 </div>
                                 <div className="resultname_div">
-                                <div>Test Date</div><div>{uploaddata[0].test_date}</div>
+                                <div>Test Date</div><div>{uploaddata[0].test_date?uploaddata[0].test_date:"---"}</div>
                                 </div>
                                 <div className="resultname_div">
-                                <div>Time</div><div>{uploaddata[0].uploaded_time}</div>
+                                <div>Time</div><div>{uploaddata[0].uploaded_time?uploaddata[0].uploaded_time:"---"}</div>
                                 </div>
 
                               </div>
@@ -90,7 +127,7 @@ export default class ResultView extends React.Component{
                         </div>
                         <div className="user_buttons_container">
                             <div><Button variant="contained" className="common_btn_cancel" onClick={()=>this.props.onClose()}>Cancel</Button></div>
-                            <div><Button variant="contained" className="common_btn_submit" color="primary">Submit</Button></div>
+                            <div><Button variant="contained" className="common_btn_submit" color="primary" onClick={this.uploadFile}>Submit</Button></div>
                         </div>
           
           </>

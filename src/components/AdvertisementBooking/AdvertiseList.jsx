@@ -1,18 +1,22 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
+
 import './AdvertiseList.css'
+
+
 import Workflow from '../../Images/workflow.svg'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Full from '../../Images/Half.svg'
-import Half from '../../Images/Full.svg'
-import DeleteMedia from '../Deals/DeleteMedia'
+import Full from '../../Images/half.svg';
+
+import DeleteMedia from './DeleteMedia'
 import Modalcomp from '../../helpers/ModalComp/Modalcomp'
 import Axios from 'axios';
 // import apiservice from '../../helpers/apiservices'
 import { apiurl, imageUrl } from "../../App";
 import { Chart, Axis, Legend, Tooltip, Geom } from 'bizcharts';
 import Stepper from '../StepperStatus/Stepper'
+import ReactPagination from "../Pagination/Pagination";
 
 
 const data = [
@@ -23,17 +27,66 @@ const scale = {
     count: { alias: 'Sales', },
 };
 
+
+
 export default class AdvertiseList extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
              open: false,
-             del_id:""
+             del_id:"",
+             ad_details:[],
+             total_count:"",
+             limit:5,
+             pageno:1
     }
 }
 
+
+getAdBooking = () => {
+    Axios({
+        method: 'POST',
+        url: apiurl + '/getAdBooking',
+        data:{
+            "doctorid":"1",
+            "limit":this.state.limit,
+            "pageno":this.state.pageno
+        }
+    }).then((response) => {
+        this.setState({
+            ad_details: response.data.data[0].details,
+            total_count:response.data.data[0].total_count
+        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.details))
+    }).catch((error) => {
+        alert(JSON.stringify(error))
+    })
+}
+
+
 componentWillMount() {
-    this.props.getAdvertiseList()
+    // this.props.getAdvertiseList()
+    this.getAdBooking()
+}
+
+
+getAdDetails = (data) => {
+    
+    Axios({
+        method: 'POST',
+        url: apiurl + '/getAdBooking',
+        data:{
+            "doctorid":"1",
+            "limit":this.state.limit,
+            "pageno":data+1
+        }
+    }).then((response) => {
+        console.log("sdfjhsdfjhsdjfhsdjlfhdf",response.data.data[0].total_count)
+        this.setState({
+            ad_details: response.data.data[0].details,
+        })
+    }).catch((error) => {
+        alert(JSON.stringify(error))
+    })
 }
 
     handleOpen = (data) => {
@@ -42,6 +95,8 @@ componentWillMount() {
     handleClose = () => {
         this.setState({ open: false })
     }
+
+
     handleChange = event => {
         this.setState({ id: event.target.value });
       }
@@ -52,8 +107,7 @@ componentWillMount() {
             method: 'POST',
             url: apiurl + '/deleteAdBooking',
             data: {
-                doctorid: 2,
-                // advendorId:2,
+                doctorid: 1,
             }
         }).then((response) => {
             console.log(response)
@@ -61,17 +115,21 @@ componentWillMount() {
             this.getDealsList()
     
         }).catch((error) => {
+            alert(JSON.stringify(error))
         })
+        console.log("deletedetails", details)
     }
 
 
     render(){
+        console.log("sdfjskdhfjsdkhfds",this.props)
         return(
          <>
             <div className="location_add_container">    
             {
-                this.props.ad_details && this.props.ad_details.length > 0 &&
-                                this.props.ad_details.map((bookingDetails,index) => {
+                this.state.ad_details && this.state.ad_details.length > 0 &&
+                                this.state.ad_details.map((bookingDetails,index) => {
+                                    console.log("sadfdshfjshdfjdfsh",bookingDetails)
               
                     return(
                         <div className="Ad_location_container">
@@ -115,7 +173,8 @@ componentWillMount() {
                             </div>
     
                                 <div>
-                                    <div> <img src={Full} /> </div>
+                                    <div className="advertise_image"> <img src={Full} /> </div>
+                                    <p className="image_size">Full</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
                                             <img src={Workflow} className="listdelete_icon" />
@@ -127,24 +186,39 @@ componentWillMount() {
                                         </div>
                                     {/* <img src={Full}/> */}
                                 </div>
-                             
-                           
+    
                         </div>
-                        {/* <Stepper businessDays={bookingDetails.business_days}  /> */}
+                        <Stepper businessDays={bookingDetails.business_days}/>
                        
                     </div>
                     
                     )
                 })}
 
+
+               
+
+
             </div>
-                          
+        
+         {this.state.total_count !== "" &&
+         <div className="pagination__container">
+            <div className="pagination__box">
+                    <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getAdDetails} />
+            </div>
+        </div>
+       }
+         
+
                 <div>
+                 
                         <Modalcomp xswidth={"xs"} clrchange="textclr" 
-                        title="Delete Media" visible={this.state.open} closemodal={this.handleClose}>
-                            <DeleteMedia  delid={this.state.del_id} listName="advertisement" getAdvertiseList={this.props.getAdvertiseList}
+                        title="Delete Advertisement" visible={this.state.open} closemodal = {this.handleClose}>
+
+                            <DeleteMedia  delid={this.state.del_id} listName="advertisement" getAdvertiseList={this.getAdBooking}
                             apiendpoint={"deleteAdBooking"} generateAlert={this.props.generateAlert}
-                            closemodal={this.handleClose} />
+                                           
+                                            closemodal = {this.handleClose} />
                         </Modalcomp>
                 </div>
 

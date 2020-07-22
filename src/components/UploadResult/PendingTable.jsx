@@ -6,6 +6,8 @@ import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import axios from 'axios';
 import { apiurl } from "../../App";
+import UploadView from "./UploadView";
+import dateformat from 'dateformat';
 
 import "./PendingTable.css";
 
@@ -16,6 +18,8 @@ class PendingTable extends React.Component {
     tableData:[],
     tableDatafull:[],
     uploaddata:[],
+    openuploadview:false,
+    viewdata:[],
   };
 
   componentDidMount(){
@@ -24,9 +28,10 @@ class PendingTable extends React.Component {
         method: 'POST', //get method 
         url: apiurl + '/getTestPendingResult',
         data:{
-          "lab_id":"2",
-          "date":"2020-06-22",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")
         }
     })
     .then((response) => {
@@ -41,7 +46,7 @@ class PendingTable extends React.Component {
               date: val.test_date,
               time: val.uploaded_time ? val.uploaded_time : '-',
             status: <span className="pending_clrred">{val.status}</span>,
-            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
             id:index
             })
             tableDatafull.push(val)
@@ -59,6 +64,7 @@ UNSAFE_componentWillReceiveProps(newProps){
   console.log(newProps.weekMonthYearDatapending,"pendingdata")
 
   // if(newProps.weekMonthYearDatapending.length!==0){
+    if(newProps.propsopen){
   this.setState({
     tableData:newProps.weekMonthYearDatapending,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
@@ -66,16 +72,22 @@ UNSAFE_componentWillReceiveProps(newProps){
   })
 // }
 }
+}
 
 openresultModel=(indexid)=>{
   var uploadcurrentdata = [this.state.tableDatafull[indexid]]
   this.setState({uploadview:true,uploaddata:uploadcurrentdata})
 }
 
+openuploadForpending=(id)=>{
+  this.setState({openuploadview:true,viewdata:this.state.tableDatafull[id]  });
 
-  modelopen = (data) => {
+}
+
+
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
+      this.setState({ openview: true,openuploadview:true,viewdata:this.state.tableDatafull[id]  });
     } else if (data === "edit") {
       this.setState({ editopen: true });
     } else if (data === "upload") {
@@ -84,7 +96,7 @@ openresultModel=(indexid)=>{
   };
 
   closemodal = () => {
-    this.setState({ openview: false, editopen: false, uploadview: false });
+    this.setState({ openview: false, editopen: false, uploadview: false,openuploadview:false });
   };
 
   render() {
@@ -98,7 +110,7 @@ openresultModel=(indexid)=>{
           date: data.test_date,
           time: data.uploaded_time ? data.uploaded_time : '-',
         status: <span className="pending_clrred">{data.status}</span>,
-        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index
         })
       }
@@ -109,7 +121,7 @@ openresultModel=(indexid)=>{
           date: data.test_date,
           time: data.uploaded_time ? data.uploaded_time : '-',
         status: <span className="pending_clrred">{data.status}</span>,
-        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index
         })
       }
@@ -128,7 +140,7 @@ openresultModel=(indexid)=>{
           ]}
           rowdata={searchdata}
           actionclose="close"
-          modelopen={(e) => this.modelopen(e)}
+          modelopen={(e,id) => this.modelopen(e,id)}
           props_loading={this.state.props_loading}    
         />
 
@@ -140,6 +152,8 @@ openresultModel=(indexid)=>{
         >
           <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} />
         </Modalcomp>
+
+        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
 
       </div>
     );

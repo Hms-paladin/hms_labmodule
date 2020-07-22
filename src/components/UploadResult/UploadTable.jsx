@@ -3,7 +3,7 @@ import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import UploadView from "./UploadView";
 import axios from 'axios';
 import { apiurl } from "../../App";
-
+import dateformat from 'dateformat';
 
 import "./UploadTable.css";
 
@@ -23,9 +23,10 @@ class UploadTable extends React.Component {
         method: 'POST', //get method 
         url: apiurl + '/getTestUploadResult',
         data:{
-          "lab_id":"2",
-          "date":"2020-06-23",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")
         }
     })
     .then((response) => {
@@ -56,11 +57,13 @@ class UploadTable extends React.Component {
 
 UNSAFE_componentWillReceiveProps(newProps){
   console.log(newProps.weekMonthYearData,"inside")
+  if(newProps.propsopen){
   this.setState({
     tableData:newProps.weekMonthYearData,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
     search:newProps.searchData,
   })
+}
 }
 
   modelopen = (data,id) => {

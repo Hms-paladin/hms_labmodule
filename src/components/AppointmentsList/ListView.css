@@ -1,110 +1,128 @@
-.doctor_dashboard_view{
- width:100%;
- height:100%;
- display: flex;
- align-items: flex-end;
- justify-content: center;
-  margin: 120px auto 30px;
+.doctor_dashboard_view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 85px auto 30px;
   background-color: #fff;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   text-align: center;
 }
+
 .doctor_popup_details .MuiDialog-paperWidthSm {
-  width:400px !important;
+  width: 400px !important;
 }
 
-.appointment_name{
+.appointment_name {
   font-size: 3rem !important;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 0px !important;
 }
-.appointment_age{
-  display:flex;
+
+.appointment_age {
+  display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color:grey;
+  color: grey;
   margin-bottom: 0px !important;
 }
-.appointment__details{
+
+.appointment__details {
   color: rgba(0, 0, 0, 0.87);
   font-size: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.appointment_date{
-  color:grey;
+
+.appointment_date {
+  color: grey;
   font-size: 1.5rem;
   margin-left: 20px;
 }
-.appointment__detailsdiv{
-  display:flex;
+
+.appointment__detailsdiv {
+  display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 0px 20px 0px 20px;
-  
+  justify-content: space-between;
+  /* padding: 0px 20px 0px 20px; */
+  padding: 0px 35px;
 }
-.appointment__details{
-  display:flex;
+
+.appointment__details {
+  display: flex;
   align-items: center;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
-.appointment__details_info{
-  display:flex;
+
+.appointment_master{
+  padding-bottom: 20px;
+}
+
+.appointment__details_info {
+  display: flex;
   align-items: center;
   justify-content: space-around;
-  position: relative;
-  right: 6px;
+  /* position: relative;
+  right: 6px; */
   font-size: 1.75rem;
-  color:#333;
+  color: #333;
 }
-.view_detailsbutton{
-  color:#fff !important;
+
+.view_detailsbutton {
+  color: #fff !important;
   font-size: 1.25rem !important;
-  padding:8px 20px !important;
+  padding: 8px 20px !important;
   background-color: rgb(71, 196, 88) !important;
 }
-.right_arrowview{
+
+.right_arrowview {
   font-size: 2rem !important;
 }
-.doctor_details_container{
-  width:100%;
-  padding:20px;
+
+.doctor_details_container {
+  width: 100%;
+  padding: 20px;
 }
-.doctor_detailsdiv{
-  width:100%;
-  height:100%;
+
+.doctor_detailsdiv {
+  width: 100%;
+  height: 100%;
 }
-.appointment{
+
+.appointment {
   border-radius: 50%;
   width: 100%;
   height: 100%;
-  padding:5px;
+  padding: 5px;
+}
 
- 
-}
-.dividerlist_root{
+.dividerlist_root {
   margin-top: 20px !important;
-  height:2px !important;
+  height: 2px !important;
 }
-.appointment:hover{
-transition: all 0.3s ease-in-out !important;
+
+.appointment:hover {
+  transition: all 0.3s ease-in-out !important;
   -webkit-transition: all 0.3s ease-in-out !important;
   -moz-transition: all 0.3s ease-in-out !important;
 }
-.profile_modal .MuiDialog-paperWidthSm
-{
-  width:35% !important;
+
+.profile_modal .MuiDialog-paperWidthSm {
+  width: 35% !important;
 }
-.doctor_details_container  p {
+
+.doctor_details_container p {
   margin-bottom: 7px !important;
 }
-.on_close{
+
+.on_close {
   position: relative;
   font-size: 2rem !important;
   left: 395px;
@@ -117,10 +135,12 @@ transition: all 0.3s ease-in-out !important;
 /* .on_close:hover{
   background-color: #bbb7b7 ;
 } */
-.doctor_popup_details .doctor_dashboard_view  {
+
+.doctor_popup_details .doctor_dashboard_view {
   margin-top: 50px;
 }
-.img_outline{
+
+.img_outline {
   height: 100%;
   width: 100%;
   border-radius: 50%;
@@ -129,14 +149,13 @@ transition: all 0.3s ease-in-out !important;
   top: -60px;
   z-index: 10000;
   left: 32%;
-  width:150px;
+  width: 150px;
   height: 150px;
-  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12) !important;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
 }
 
-@media only screen and (max-width: 768px){
-  .profile_modal .MuiDialog-paperWidthSm
-{
-  width:60% !important;
-}
+@media only screen and (max-width: 768px) {
+  .profile_modal .MuiDialog-paperWidthSm {
+    width: 60% !important;
+  }
 }

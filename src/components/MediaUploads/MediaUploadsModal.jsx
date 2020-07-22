@@ -106,9 +106,9 @@ export default class MediaUploadsModal extends Component {
         console.log(this.state.imageurl.name,"checking_imageurl_value")
         var formData = new FormData();
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype","image");
+        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
         formData.set("mediasortorder", 1)
-        formData.set("mediavendorId", 11)
+        formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
         formData.set("createdby", 1)
         formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
@@ -124,9 +124,9 @@ export default class MediaUploadsModal extends Component {
         console.log(this.state.imageurl.name,"checking_imageurl_value")
         var formData = new FormData();
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype","image");
+        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
         formData.set("mediasortorder", 1)
-        formData.set("mediavendorId", 11)
+        formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
         formData.set("createdby", 1)
         formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))

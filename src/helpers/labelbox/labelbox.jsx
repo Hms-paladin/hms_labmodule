@@ -80,7 +80,7 @@ export default class Labelbox extends Component {
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
 					<div>
-						<input className={`${data.error && "brdred"} brdrcls`} value={this.props.value} maxLength={this.props.maxlength} type="text" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} />
+						<input className={`${data.error && "brdred"} brdrcls`} value={this.props.value} maxLength={this.props.maxlength} type="text" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} placeholder={this.props.placeholder} />
 						{
 							<div className="Errormsg">
 								<div>{data.error && data.errmsg}</div>
@@ -169,11 +169,11 @@ export default class Labelbox extends Component {
 							/>
 						</MuiPickersUtilsProvider>
 
-						{
+						{/* {
 							<div className="Errormsg">
 								<div>{data.error && data.errmsg}</div>
 							</div>
-						}
+						} */}
 					</div>
 
 				</div>

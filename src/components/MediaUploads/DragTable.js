@@ -267,7 +267,8 @@ export default class DragdropTable extends Component {
       viewdata: null,
       type: "",
       title: "",
-      items: getItems(10)
+      items: getItems(10),
+      loader:this.props.props_loading
     };
   }
 
@@ -347,12 +348,16 @@ export default class DragdropTable extends Component {
     console.log(newProps, "componentWillReceivePropsrowdata")
     let tablebodydata = this.props.rowdata
     this.setState({
-      rows: newProps.rowdata
+      rows: newProps.rowdata,
+      loader:newProps.props_loading
     })
     console.log("current state", this.state.rows)
   }
 
   onDragEnd = (result) => {
+    this.setState({loader:true})
+    console.log(result, "result")
+
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -365,6 +370,36 @@ export default class DragdropTable extends Component {
       result.destination.index,
     );
 
+    console.log(rows, "dragrows")
+
+    var dragid = []
+
+    for (let i = result.source.index; i <= result.destination.index; i++) {
+      dragid.push({ "media_id": rows[i].id, "sort_order": i })
+    }
+
+    for (let j = result.destination.index; j <= result.source.index; j++) {
+      dragid.push({ "media_id": rows[j].id, "sort_order": j })
+    }
+
+    var self = this
+
+    axios({
+      method: 'put', //get method 
+      url: apiurl + '/mediaSortOrder',
+      data: {
+        "vendor_id": "2",
+        "sorting": dragid
+      }
+    })
+      .then((response) => {
+        console.log(response, "response")
+        self.setState({loader:false})
+      })
+
+    console.log(dragid, "dragid")
+
+
     this.setState({
       rows,
     });
@@ -376,7 +411,7 @@ export default class DragdropTable extends Component {
     console.log(this.props.rowdata, "rowdata")
 
     return (
-      <Spin className="spinner_align" spinning={this.props.props_loading}>
+      <Spin className="spinner_align" spinning={this.state.loader}>
         <div className={`dragMasterClass VendorDetailsDiv`}>
           <Paper className="paper">
             <div className="tableWrapper">
@@ -407,8 +442,8 @@ export default class DragdropTable extends Component {
                 alignheading={this.props.alignheading}
               />
               {
-                  this.state.rows.length === 0 && <TableCell className={"noFoundIconCenter"} colSpan={12}><img src={NotfoundIcon} /><div>No Data Found</div></TableCell>
-                }
+                this.state.rows.length === 0 && <TableCell className={"noFoundIconCenter"} colSpan={12}><img src={NotfoundIcon} /><div>No Data Found</div></TableCell>
+              }
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable">
                   {(provided, snapshot) => (
@@ -449,9 +484,9 @@ export default class DragdropTable extends Component {
                                       key={index}>
 
                                       <TableCell key={index} >
-                                        {page===0?<span {...provided.dragHandleProps}>
+                                        {page === 0 ? <span {...provided.dragHandleProps}>
                                           <AppsIcon style={{ fontSize: "22px" }} />
-                                        </span>:<AppsIcon style={{ fontSize: "22px" }}/>}
+                                        </span> : <AppsIcon style={{ fontSize: "22px" }} />}
                                       </TableCell>
                                       <TableCell>
                                         {this.state.rowsPerPage * this.state.page - 1 + index + 2}
@@ -459,7 +494,7 @@ export default class DragdropTable extends Component {
                                       <TableCell key={index}>{row.title}</TableCell>
                                       <TableCell key={index}>{row.type}</TableCell>
                                       <TableCell key={index}>{row.uploaded}</TableCell>
-                                      <TableCell key={index}>{row.status==1?"Active":"Inactive"}</TableCell>
+                                      <TableCell key={index}>{row.status == 1 ? "Active" : "Inactive"}</TableCell>
 
                                       <TableCell className={"dragIconFelx"}>
                                         <VisibilityIcon className="tableeye_icon" onClick={() => this.props.modelopen("view", row.id)} />

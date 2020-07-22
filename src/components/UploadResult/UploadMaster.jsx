@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select } from "antd";
+import { Select,notification } from "antd";
 import Moment from "react-moment";
 import UploadDetails from "./UploadDetails";
 import Paper from "@material-ui/core/Paper";
@@ -22,6 +22,8 @@ import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import ResultView from "./ResultView";
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import { Spin } from 'antd';
+import DateRangeSelect from "../../helpers/DateRange/DateRange";
+import dateformat from 'dateformat';
 
 
 import "./UploadMaster.css"
@@ -46,9 +48,18 @@ class UploadMaster extends Component {
   }
 
   generatepdf=()=>{
+
+    if(this.state.weekMonthYearData.length===0){
+      notification.info({
+        description:
+          'NO Data Found',
+          placement:"topRight",
+      });
+    }
+    else{
     const doc = new jsPDF("a4")
     var bodydata  = []
-    this.state.tableData.map((data,index)=>{
+    this.state.weekMonthYearData.map((data,index)=>{
       bodydata.push([index+1,data.name,data.test,data.date,data.time,data.status.props.children])
     })
     doc.autoTable({
@@ -63,7 +74,7 @@ class UploadMaster extends Component {
     })
      
     doc.save('UploadDeatails.pdf')
-    
+  }
   }
 
   componentDidMount(){
@@ -71,11 +82,12 @@ class UploadMaster extends Component {
     var self = this
     axios({
         method: 'POST', //get method 
-        url: apiurl + '/getTestUploadResult',
+        url: apiurl + endpoint,
         data:{
-          "lab_id":"2",
-          "date":"2020-06-23",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd") 
         }
     })
     .then((response) => {
@@ -100,7 +112,7 @@ class UploadMaster extends Component {
               date: val.test_date,
               time: val.uploaded_time ? val.uploaded_time : '-',
             status: <span className="pending_clrred">{val.status}</span>,
-            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
             id:index
             })
           }
@@ -114,146 +126,201 @@ class UploadMaster extends Component {
     })
 }
 
-  weekFun=()=>{
+dayReport=(data)=>{
     this.setState({spinner:true})
+  console.log(data,"itemdaterange")
+  var startdate = dateformat(data[0].startDate, "yyyy-mm-dd")
+  var enddate = dateformat(data[0].endDate, "yyyy-mm-dd")
+  var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
     var self = this
-    var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
     axios({
         method: 'POST', //get method 
         url: apiurl + endpoint,
         data:{
-          "lab_id":"2",
-          "date":"",
-          "period":"Week",  
-          }     
+          "lab_id": "2",
+          "date": startdate,
+          "period": "Day",
+          "date_to":enddate
+        }
     })
     .then((response) => {
-      console.log(response,"response_dataweek")
+      console.log(response,"response_data")
 
-      var weekData = [];
-      var weekDatafull = [];
-      response.data.data.map((val,index) => {
-        weekDatafull.push(val)
-        if(endpoint==='/getTestUploadResult'){
-        weekData.push({
-          name: val.customer,
-          test: val.test,
-          date: val.test_date,
-          time: val.uploaded_time,
-        status: <span className="uploader_clrgreen">{val.status}</span>,
-        id:index
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+          if(endpoint==='/getTestUploadResult'){
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time,
+            status: <span className="uploader_clrgreen">{val.status}</span>,
+            id:index
+            })
+          }else{
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time ? val.uploaded_time : '-',
+            status: <span className="pending_clrred">{val.status}</span>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
+            id:index
+            })
+          }
+            tableDatafull.push(val)
         })
-      }else{
-        weekData.push({
-          name: val.customer,
-          test: val.test,
-          date: val.test_date,
-          time: val.uploaded_time ? val.uploaded_time : '-',
-        status: <span className="pending_clrred">{val.status}</span>,
-        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
-        id:index
+
+        self.setState({
+          weekMonthYearData:tableData,
+          wk_Mn_Yr_Full_Data:tableDatafull,
+          spinner:false,
+          propsopen:true,
         })
-      }
-      })
-      self.setState({weekMonthYearData:weekData,tableData:weekData,wk_Mn_Yr_Full_Data:weekDatafull,spinner:false})
-  })
+    })
 }
 
-monthFun=()=>{
-  this.setState({spinner:true})
+//   weekFun=()=>{
+//     this.setState({spinner:true})
+//     var self = this
+//     var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
+//     axios({
+//         method: 'POST', //get method 
+//         url: apiurl + endpoint,
+//         data:{
+//           "lab_id":"2",
+//           "date":"",
+//           "period":"Week",  
+//           }     
+//     })
+//     .then((response) => {
+//       console.log(response,"response_dataweek")
 
-  var self = this
-  var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
+//       var weekData = [];
+//       var weekDatafull = [];
+//       response.data.data.map((val,index) => {
+//         weekDatafull.push(val)
+//         if(endpoint==='/getTestUploadResult'){
+//         weekData.push({
+//           name: val.customer,
+//           test: val.test,
+//           date: val.test_date,
+//           time: val.uploaded_time,
+//         status: <span className="uploader_clrgreen">{val.status}</span>,
+//         id:index
+//         })
+//       }else{
+//         weekData.push({
+//           name: val.customer,
+//           test: val.test,
+//           date: val.test_date,
+//           time: val.uploaded_time ? val.uploaded_time : '-',
+//         status: <span className="pending_clrred">{val.status}</span>,
+//         action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+//         id:index
+//         })
+//       }
+//       })
+//       self.setState({weekMonthYearData:weekData,tableData:weekData,wk_Mn_Yr_Full_Data:weekDatafull,spinner:false})
+//   })
+// }
 
-  axios({
-      method: 'POST', //get method 
-      url: apiurl + endpoint,
-      data:{
-        "lab_id":"2",
-        "date":"",
-        "period":"Month",  
-        }     
-  })
-  .then((response) => {
-    console.log(response,"response_data")
+// monthFun=()=>{
+//   this.setState({spinner:true})
 
-    var MonthData = [];
-    var MonthDatafull = [];
-    response.data.data.map((val,index) => {
-      MonthDatafull.push(val)
-      if(endpoint==='/getTestUploadResult'){
-      MonthData.push({
-        name: val.customer,
-        test: val.test,
-        date: val.test_date,
-        time: val.uploaded_time,
-      status: <span className="uploader_clrgreen">{val.status}</span>,
-      id:index
-      })
-    }else{
-      MonthData.push({
-        name: val.customer,
-        test: val.test,
-        date: val.test_date,
-        time: val.uploaded_time ? val.uploaded_time : '-',
-      status: <span className="pending_clrred">{val.status}</span>,
-      action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
-      id:index
-      })
-    }
-    })
+//   var self = this
+//   var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
+
+//   axios({
+//       method: 'POST', //get method 
+//       url: apiurl + endpoint,
+//       data:{
+//         "lab_id":"2",
+//         "date":"",
+//         "period":"Month",  
+//         }     
+//   })
+//   .then((response) => {
+//     console.log(response,"response_data")
+
+//     var MonthData = [];
+//     var MonthDatafull = [];
+//     response.data.data.map((val,index) => {
+//       MonthDatafull.push(val)
+//       if(endpoint==='/getTestUploadResult'){
+//       MonthData.push({
+//         name: val.customer,
+//         test: val.test,
+//         date: val.test_date,
+//         time: val.uploaded_time,
+//       status: <span className="uploader_clrgreen">{val.status}</span>,
+//       id:index
+//       })
+//     }else{
+//       MonthData.push({
+//         name: val.customer,
+//         test: val.test,
+//         date: val.test_date,
+//         time: val.uploaded_time ? val.uploaded_time : '-',
+//       status: <span className="pending_clrred">{val.status}</span>,
+//       action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+//       id:index
+//       })
+//     }
+//     })
     
-    self.setState({weekMonthYearData:MonthData,tableData:MonthData,wk_Mn_Yr_Full_Data:MonthDatafull,spinner:false})
-})
-}
+//     self.setState({weekMonthYearData:MonthData,tableData:MonthData,wk_Mn_Yr_Full_Data:MonthDatafull,spinner:false})
+// })
+// }
 
-yearFun=()=>{
-  this.setState({spinner:true})
+// yearFun=()=>{
+//   this.setState({spinner:true})
 
-  var self = this
-  var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
+//   var self = this
+//   var endpoint = this.state.tabindex?"/getTestPendingResult":'/getTestUploadResult'
 
-  axios({
-      method: 'POST', //get method 
-      url: apiurl + endpoint,
-      data:{
-        "lab_id":"2",
-        "date":"",
-        "period":"YEAR",  
-        }     
-  })
-  .then((response) => {
-    console.log(response,"response_data")
+//   axios({
+//       method: 'POST', //get method 
+//       url: apiurl + endpoint,
+//       data:{
+//         "lab_id":"2",
+//         "date":"",
+//         "period":"YEAR",  
+//         }     
+//   })
+//   .then((response) => {
+//     console.log(response,"response_data")
 
-    var yearData = [];
-    var yearDatafull = [];
-    response.data.data.map((val,index) => {
-      yearDatafull.push(val)
-      if(endpoint==='/getTestUploadResult'){
-      yearData.push({
-        name: val.customer,
-        test: val.test,
-        date: val.test_date,
-        time: val.uploaded_time,
-      status: <span className="uploader_clrgreen">{val.status}</span>,
-      id:index
-      })
-    }
-    else{
-      yearData.push({
-        name: val.customer,
-        test: val.test,
-        date: val.test_date,
-        time: val.uploaded_time ? val.uploaded_time : '-',
-      status: <span className="pending_clrred">{val.status}</span>,
-      action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
-      id:index
-      })
-    }
-    })
-    self.setState({weekMonthYearData:yearData,tableData:yearData,wk_Mn_Yr_Full_Data:yearDatafull,spinner:false})
-})
-}
+//     var yearData = [];
+//     var yearDatafull = [];
+//     response.data.data.map((val,index) => {
+//       yearDatafull.push(val)
+//       if(endpoint==='/getTestUploadResult'){
+//       yearData.push({
+//         name: val.customer,
+//         test: val.test,
+//         date: val.test_date,
+//         time: val.uploaded_time,
+//       status: <span className="uploader_clrgreen">{val.status}</span>,
+//       id:index
+//       })
+//     }
+//     else{
+//       yearData.push({
+//         name: val.customer,
+//         test: val.test,
+//         date: val.test_date,
+//         time: val.uploaded_time ? val.uploaded_time : '-',
+//       status: <span className="pending_clrred">{val.status}</span>,
+//       action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon /></div>,
+//       id:index
+//       })
+//     }
+//     })
+//     self.setState({weekMonthYearData:yearData,tableData:yearData,wk_Mn_Yr_Full_Data:yearDatafull,spinner:false})
+// })
+// }
 
 openresultModel=(indexid)=>{
   var uploadcurrentdata = [this.state.wk_Mn_Yr_Full_Data[indexid]]
@@ -264,15 +331,27 @@ closemodal = () => {
   this.setState({uploadview: false });
 };
 
+tabhandle=(data)=>{
+  this.setState({tabindex:data})
+}
+
+Notification=()=>{
+  notification.info({
+    description:
+      'NO Data Found',
+      placement:"topRight",
+  });
+}
+
 
 
   render() {
     const { Option } = Select;
     const { Search } = Input;
-    console.log(this.state.searchData,"tableData")
+    console.log(this.state.tabindex,"tabindex")
     
     var multiDataSetbody = []
-    this.state.tableData.map((xldata,index)=>{
+    this.state.weekMonthYearData.map((xldata,index)=>{
       if(index%2!==0){
         multiDataSetbody.push([{value:index+1,style:{alignment:{horizontal:"center"}}},{value:xldata.name},{value:xldata.test},{value:xldata.date},{value:xldata.time},{value:xldata.status.props.children}])
       }else{
@@ -303,7 +382,8 @@ closemodal = () => {
           <div
             style={{ fontSize: "14px", display: "flex", alignItems: "center" }}
           >
-            <ButtonGroup
+            <DateRangeSelect dynalign={"dynalign"} rangeDate={(item)=>this.dayReport(item)} setselectedDate={this.state.tabindex}/>
+            {/* <ButtonGroup
               className="clinic_group_details"
               size="small"
               aria-label="small outlined button group"
@@ -313,7 +393,7 @@ closemodal = () => {
               <Button className="clinic_details" onClick={this.yearFun}>This Year</Button>
             </ButtonGroup>
 
-            <Moment format="DD-MMM-YYYY" className="mr-5"></Moment>
+            <Moment format="DD-MMM-YYYY" className="mr-5"></Moment> */}
             <Search
               placeholder="Search"
               onSearch={(value) => console.log(value)}
@@ -327,21 +407,23 @@ closemodal = () => {
                 src={pdf}
                 style={{ marginRight: "15px", marginLeft: "15px" }}
               />
+                {this.state.weekMonthYearData.length===0?<ReactSVG  onClick={this.Notification} src={excel} style={{ marginRight: "15px" }} />:
               <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
                     <ExcelSheet dataSet={multiDataSet} name="Uploaded Details"/>
-                </ExcelFile>
+                </ExcelFile>}
               
-              
+                {this.state.weekMonthYearData.length===0?
+                <ReactSVG src={print} onClick={this.Notification} />:
               <ReactToPrint
           trigger={() => <ReactSVG src={print} />}
           content={() => this.componentRef}
-        />
-        <div style={{ display: "none" }}><PrintData printTableData={this.state.tableData} ref={el => (this.componentRef = el)} /></div>
+        />}
+        <div style={{ display: "none" }}><PrintData printTableData={this.state.weekMonthYearData} ref={el => (this.componentRef = el)} /></div>
             </div>
           </div>
         </div>
         <Paper>
-          <UploadDetails tabledataFun={(data)=>this.setState({tableData:data})} weekMonthYearData={this.state.weekMonthYearData} tabindex={(data)=>this.setState({tabindex:data})} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_Data} searchData={this.state.searchData} />
+          <UploadDetails tabledataFun={(data)=>this.setState({tableData:data})} weekMonthYearData={this.state.weekMonthYearData} tabindex={(data)=>this.tabhandle(data)} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_Data} searchData={this.state.searchData} propsopen={this.state.propsopen} />
         </Paper>
       </Paper>
               <Modalcomp

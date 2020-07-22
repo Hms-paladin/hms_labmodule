@@ -3,6 +3,7 @@ import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import dateformat from 'dateformat';
 
 import "./CancelAppointmentTable.css";
 
@@ -41,9 +42,10 @@ class CancelAppointmentTable extends React.Component {
         method: 'POST', //get method 
         url: apiurl + '/getPatientTestCancelled',
         data:{
-          "lab_id":"2",
-          "date":"2020-06-14",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")  
         }
     })
     .then((response) => {
@@ -55,8 +57,8 @@ class CancelAppointmentTable extends React.Component {
             tableData.push({
               name: val.customer,
               test: val.test,
-              Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
-              Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
+              Bookdate: moment(val.book_date).format('DD MMM YYYY'),
+              Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
               time:"-",
               id:index
             })
@@ -79,8 +81,8 @@ class CancelAppointmentTable extends React.Component {
         searchdata.push({
           name: data.customer,
           test: data.test,
-          Bookdate: moment(data.book_date).format('DD-MM-YYYY'),
-          Canceldate: moment(data.cancel_date).format('DD-MM-YYYY'),
+          Bookdate: moment(data.book_date).format('DD MMM YYYY'),
+          Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
           time:"-",
           id:index
           })
@@ -89,13 +91,14 @@ class CancelAppointmentTable extends React.Component {
         searchdata.push({
           name: data.customer,
           test: data.test,
-          Bookdate: moment(data.book_date).format('DD-MM-YYYY'),
-          Canceldate: moment(data.cancel_date).format('DD-MM-YYYY'),
+          Bookdate: moment(data.book_date).format('DD MMM YYYY'),
+          Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
           time:"-",
           id:index
         })
       }
   })
+  console.log(searchdata,"searchdata")
     return (
       <div>
         <Tablecomponent

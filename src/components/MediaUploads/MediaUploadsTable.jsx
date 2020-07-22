@@ -63,7 +63,7 @@ UNSAFE_componentWillReceiveProps(newProps) {
         method: 'POST', //get method 
         url: apiurl + '/mediauploaddetails',
         data:{
-          doctorid:11,
+          doctorid:2,
           // vendor_id:1,
           limit:100,
           offset:1,
@@ -76,7 +76,7 @@ UNSAFE_componentWillReceiveProps(newProps) {
       var tableData = [];
         response.data.data[0].details.map((val,index) => {
           // for(let i=0;i<50;i++){
-            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id,indexid:index.toString() })
+            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id,indexid:index.toString(),sortorder:val.media_sortorder })
             console.log(val.id,"idddddd")
           // }
 
