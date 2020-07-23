@@ -44,7 +44,7 @@ export default class MediaUploadsMaster extends Component {
                 />
                 
           </div>
-        <MediaUploadsTable />
+        <MediaUploadsTable truegetmethod={this.state.truegetmethod} falsegetmethod={()=>this.setState({truegetmethod:false})} />
         </Paper>
         <div className="Upload-modal-container">
           <Modalcomp
@@ -53,7 +53,8 @@ export default class MediaUploadsMaster extends Component {
             title={"New Media Uploads"}
           >
             <MediaUploadsModal visible={this.state.open}
-            closemodal={this.handleClickclose}/>
+            closemodal={this.handleClickclose}
+            getTableData={()=>this.setState({truegetmethod:true})} />
           </Modalcomp>
         </div>
       </div>

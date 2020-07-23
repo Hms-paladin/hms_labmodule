@@ -1,156 +1,235 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
-import Labelbox from "../../helpers/labelbox/labelbox";
-import Button from "@material-ui/core/Button";
-import { Paper } from "@material-ui/core";
-import "./AdvertiseList.css";
-import { Progress } from "antd";
-import Stepper from "./Stepper";
-import Workflow from "../../Images/workflow.svg";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Half from "../../Images/Half.svg";
-import Full from "../../Images/Full.svg";
-import DeleteMedia from "./DeleteMedia";
-import Modalcomp from "../../helpers/ModalComp/Modalcomp";
-import { MdModeEdit } from "react-icons/md";
-// import { Chart, Axis, Legend, Tooltip, Geom } from 'bizcharts';
-const data = [{ month: "Jan.", count: 69, city: "tokyo" }];
-const scale = {
-  month: { alias: "Month" },
-  count: { alias: "Sales" },
-};
-export default class DealList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { open: false, openmodal: false };
-  }
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-  flowOpen = () => {
-    this.setState({ openmodal: true, openmodal: false });
-  };
-  render() {
-    return (
-      <div className="location_add_container">
-        <Grid container className="Ad_location_container">
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">Ad Location</p>
-              <p className="list_subhead">App Home</p>
-            </div>
-            <div>
-              <p className="list_head">Days</p>
-              <p className="list_subhead">5</p>
-            </div>
-          </Grid>
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">Start Date</p>
-              <p className="list_subhead">11 Nov 2020</p>
-            </div>
-            <div>
-              <p className="list_head">Fee / Day (KWD)</p>
-              <p className="list_subhead">500</p>
-            </div>
-          </Grid>
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">End Date</p>
-              <p className="list_subhead">15 Nov 2020</p>
-            </div>
-            <div>
-              <p className="list_head">Total Cost (KWD)</p>
-              <p className="list_subhead">1000</p>
-            </div>
-          </Grid>
-          <Grid item xs={4} md={2}>
-            <div className="phone_icon">
-              {" "}
-              <img src={Half} />
-            </div>
-            <p className="full_half_textedit">Full</p>
-            <div className="icon_editing">
-              <img
-                src={Workflow}
-                className="listdelete_icon"
-                onClick={this.flowOpen}
-              />
-              <h3 className="edit_icon">
-                {" "}
-                <MdModeEdit />{" "}
-              </h3>
-              <DeleteIcon
-                className="listdelete_icon"
-                onClick={this.handleOpen}
-              />
-            </div>
-          </Grid>
-          <div className="stepper_par">
-            {this.state.openmodal === true ? <Stepper /> : ""}
-          </div>
-        </Grid>
 
-        <Grid container className="Ad_location_container">
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">Ad Location</p>
-              <p className="list_subhead">App Home</p>
+import './AdvertiseList.css'
+
+
+import Workflow from '../../Images/workflow.svg'
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Full from '../../Images/half.svg';
+
+import DeleteMedia from './DeleteMedia'
+import Modalcomp from '../../helpers/ModalComp/Modalcomp'
+import Axios from 'axios';
+// import apiservice from '../../helpers/apiservices'
+import { apiurl, imageUrl } from "../../App";
+import { Chart, Axis, Legend, Tooltip, Geom } from 'bizcharts';
+import Stepper from '../StepperStatus/Stepper'
+import ReactPagination from "../Pagination/Pagination";
+
+
+const data = [
+    { month: 'Jan.', count: 69, city: 'tokyo' }
+];
+const scale = {
+    month: { alias: 'Month', },
+    count: { alias: 'Sales', },
+};
+
+
+
+export default class AdvertiseList extends React.Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+             open: false,
+             del_id:"",
+             ad_details:[],
+             total_count:"",
+             limit:5,
+             pageno:1
+    }
+}
+
+
+getAdBooking = () => {
+    Axios({
+        method: 'POST',
+        url: apiurl + '/getAdBooking',
+        data:{
+            "doctorid":"1",
+            "limit":this.state.limit,
+            "pageno":this.state.pageno
+        }
+    }).then((response) => {
+        this.setState({
+            ad_details: response.data.data[0].details,
+            total_count:response.data.data[0].total_count
+        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.details))
+    }).catch((error) => {
+        alert(JSON.stringify(error))
+    })
+}
+
+
+componentWillMount() {
+    // this.props.getAdvertiseList()
+    this.getAdBooking()
+}
+
+
+getAdDetails = (data) => {
+    
+    Axios({
+        method: 'POST',
+        url: apiurl + '/getAdBooking',
+        data:{
+            "doctorid":"1",
+            "limit":this.state.limit,
+            "pageno":data+1
+        }
+    }).then((response) => {
+        console.log("sdfjhsdfjhsdjfhsdjlfhdf",response.data.data[0].total_count)
+        this.setState({
+            ad_details: response.data.data[0].details,
+        })
+    }).catch((error) => {
+        alert(JSON.stringify(error))
+    })
+}
+
+    handleOpen = (data) => {
+        this.setState({ open: true,del_id:data })
+    }
+    handleClose = () => {
+        this.setState({ open: false })
+    }
+
+
+    handleChange = event => {
+        this.setState({ id: event.target.value });
+      }
+
+
+      handleDelete = (details) => {
+        Axios({
+            method: 'POST',
+            url: apiurl + '/deleteAdBooking',
+            data: {
+                doctorid: 1,
+            }
+        }).then((response) => {
+            console.log(response)
+            // this.resetFormValue()
+            this.getDealsList()
+    
+        }).catch((error) => {
+            alert(JSON.stringify(error))
+        })
+        console.log("deletedetails", details)
+    }
+
+
+    render(){
+        console.log("sdfjskdhfjsdkhfds",this.props)
+        return(
+         <>
+            <div className="location_add_container">    
+            {
+                this.state.ad_details && this.state.ad_details.length > 0 &&
+                                this.state.ad_details.map((bookingDetails,index) => {
+                                    console.log("sadfdshfjshdfjdfsh",bookingDetails)
+              
+                    return(
+                        <div className="Ad_location_container">
+                        <div className="advertise_addlist_items">
+                      
+                            <div>
+                                <div>
+                                    <label className="list_head">Ad Location</label>
+                            <h5 className="list_subhead">{bookingDetails.ad_location}</h5>
+                                </div>
+                                
+                                <div>
+                                    <label className="list_head">Days</label>
+                            <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
+                                </div>
+                                
+                            </div>
+    
+    
+                            <div>
+                                <div>
+                                    <label className="list_head">Start Date</label>
+                            <h5 className="list_subhead">{bookingDetails.ad_start_date}</h5>
+                                </div>
+                                
+                                <div>
+                                    <label className="list_head">Fee / Day (KWD)</label>
+                                    <h5 className="list_subhead">{bookingDetails.ad_fee_per_day}</h5>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label className="list_head">End Date</label>
+                                    <h5 className="list_subhead">{bookingDetails.ad_end_date}</h5>
+                                </div>
+                                
+                                <div>
+                                    <label className="list_head">Total Cost (KWD)</label>
+                                    <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
+                                </div>
+                            </div>
+    
+                                <div>
+                                    <div className="advertise_image"> <img src={Full} /> </div>
+                                    <p className="image_size">Full</p>
+                                    {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
+                                        <div>
+                                            <img src={Workflow} className="listdelete_icon" />
+                                            <EditIcon className="list_edit" 
+                                            onClick={() => this.props.changeTab(bookingDetails)}
+                                            />
+                                            <DeleteIcon className="listdelete_icon" 
+                                            onClick={() => this.handleOpen(bookingDetails.id)} />
+                                        </div>
+                                    {/* <img src={Full}/> */}
+                                </div>
+    
+                        </div>
+                        <Stepper businessDays={bookingDetails.business_days}/>
+                       
+                    </div>
+                    
+                    )
+                })}
+
+
+               
+
+
             </div>
-            <div>
-              <p className="list_head">Days</p>
-              <p className="list_subhead">5</p>
+        
+         {this.state.total_count !== "" &&
+         <div className="pagination__container">
+            <div className="pagination__box">
+                    <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getAdDetails} />
             </div>
-          </Grid>
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">Start Date</p>
-              <p className="list_subhead">11 Nov 2020</p>
-            </div>
-            <div>
-              <p className="list_head">Fee / Day (KWD)</p>
-              <p className="list_subhead">500</p>
-            </div>
-          </Grid>
-          <Grid item xs={4} md={3}>
-            <div>
-              <p className="list_head">End Date</p>
-              <p className="list_subhead">15 Nov 2020</p>
-            </div>
-            <div>
-              <p className="list_head">Total Cost (KWD)</p>
-              <p className="list_subhead">1000</p>
-            </div>
-          </Grid>
-          <Grid item xs={4} md={2}>
-            <div className="phone_icon">
-              <img src={Full} />
-            </div>
-            <p className="full_half_textedit">Half</p>
-            <div className="icon_editing">
-              <img src={Workflow} className="listdelete_icon" />
-              <h3 className="edit_icon">
-                {" "}
-                <MdModeEdit />{" "}
-              </h3>
-              <DeleteIcon className="listdelete_icon" />
-            </div>
-          </Grid>
-        </Grid>
-        <Modalcomp
-          xswidth={"xs"}
-          clrchange="textclr"
-          title="Delete Media"
-          visible={this.state.open}
-          closemodal={this.handleClose}
-        >
-          <DeleteMedia />
-        </Modalcomp>
-      </div>
-    );
-  }
+        </div>
+       }
+         
+
+                <div>
+                 
+                        <Modalcomp xswidth={"xs"} clrchange="textclr" 
+                        title="Delete Advertisement" visible={this.state.open} closemodal = {this.handleClose}>
+
+                            <DeleteMedia  delid={this.state.del_id} listName="advertisement" getAdvertiseList={this.getAdBooking}
+                            apiendpoint={"deleteAdBooking"} generateAlert={this.props.generateAlert}
+                                           
+                                            closemodal = {this.handleClose} />
+                        </Modalcomp>
+                </div>
+
+
+                </>
+
+
+       
+               
+                    
+            
+        )
+    }
 }

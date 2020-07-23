@@ -101,54 +101,41 @@ export default class MediaUploadsModal extends Component {
       this.setState({mediaupload_lab})
     }
     onSubmitData = () => {
-      alert("test_file")
-      console.log(this.state.imageurl.name,"checking_imageurl_value")
-      var formData = new FormData();
-      formData.append('imageArray', this.state.imageurl)
-      formData.set("mediatype","image");
-      formData.set("mediasortorder", 1)
-      formData.set("mediavendorId", 2)
-      formData.set("activeflag", 1)
-      formData.set("createdby", 1)
-      formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
-      formData.set("modifiedby", 1)
-      formData.set("modifiedon", 1)
-      formData.set("ipaddress", "192.144.23")
-      formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
-      formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
-      formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
-      var mediaupload_labApiData = {
-        // mediatype:"image",
-        // mediasortorder:1,
-        // mediavendorId:2,
-        // activeflag:1,
-        // createdby:1,
-        // created_on: dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"),
-        // modifiedby:1,
-        // modifiedon:1,
-        // ipaddress:"192.144.23",
-        // mediatitle: this.state.mediaupload_lab.media_title.value,
-        // mediadescription:this.state.mediaupload_lab.media_description.value,
-        // imageArray:this.state.imageurl,
-        // isactive:this.state.mediaupload_active == true ? 1:0
-        // mediatype:"image",
-        // mediasortorder:1,
-        // mediavendorId:2,
-        // activeflag:1,
-        // createdby:1,
-        // created_on: dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"),
-        // modifiedby:1,
-        // modifiedon:1,
-        // ipaddress:"192.144.23",
-        // mediatitle: this.state.mediaupload_lab.media_title.value,
-        // mediadescription:this.state.mediaupload_lab.media_description.value,
-        // imageArray:this.state.imageurl,
-        // isactive:this.state.mediaupload_active == true ? 1:0,
-      }
-      console.log(this.state.media_description,"media_description_check")
+
       if(this.props.editData){
+        console.log(this.state.imageurl.name,"checking_imageurl_value")
+        var formData = new FormData();
+        formData.append('imageArray', this.state.imageurl)
+        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
+        formData.set("mediasortorder", 1)
+        formData.set("mediavendorId", 2)
+        formData.set("activeflag", 1)
+        formData.set("createdby", 1)
+        formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
+        formData.set("modifiedby", 1)
+        formData.set("modifiedon", 1)
+        formData.set("ipaddress", "192.144.23")
+        formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
+        formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
+        formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
+        formData.set( "id",this.props.editData.id)
         this.mediaupload_labUpdateApi(formData)   // Update Api Call
       }else{
+        console.log(this.state.imageurl.name,"checking_imageurl_value")
+        var formData = new FormData();
+        formData.append('imageArray', this.state.imageurl)
+        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
+        formData.set("mediasortorder", 1)
+        formData.set("mediavendorId", 2)
+        formData.set("activeflag", 1)
+        formData.set("createdby", 1)
+        formData.set("created_on", dateformat(new Date(), "yyyy-mm-dd hh:MM:ss"))
+        formData.set("modifiedby", 1)
+        formData.set("modifiedon", 1)
+        formData.set("ipaddress", "192.144.23")
+        formData.set("mediatitle", this.state.mediaupload_lab.media_title.value)
+        formData.set("mediadescription", this.state.mediaupload_lab.media_description.value)
+        formData.set("isactive", this.state.mediaupload_active == true ? 1:0)
         this.mediaupload_labAddApi(formData)   // Insert Api Call
       }
       this.props.closemodal()
@@ -164,19 +151,16 @@ export default class MediaUploadsModal extends Component {
       .then((response) => {
         console.log(response,"post_check_response")
         this.props.getTableData()
-      }).catch((error) => {
-        alert(JSON.stringify(error))
       })
+
     }
     // for put api
    mediaupload_labUpdateApi = (mediaupload_labApiData) => {
+     alert("testedit")
       axios({
         method:'PUT',
         url: apiurl+'/editMediaUpload',
-        data:{
-          id:this.props.editData.id,
-          ...mediaupload_labApiData
-        }
+        data:mediaupload_labApiData,
       })
       .then((response)=>{
         console.log(response,"response_checkingg")
@@ -197,7 +181,6 @@ componentDidMount(){
           var test = it[it.length-1].split('_')
           var dataa = test[test.length-1]
         }
-        // console.log(it,"it_check")
         console.log(dataa,"dataa")
         // this.state.media_filename = editData.media_filename
         this.state.media_filename = dataa
@@ -206,50 +189,22 @@ componentDidMount(){
         // console.log(this.state.mediaupload_lab.media_description.value,"descri_check")
       }
       this.setState({})
-      // console.log(editData.is_active,"is_active_check")
-      // alert(editData,"editdata_check")
-      console.log(this.state.imageurl.name,"get_imageurl_name_checkingggg")
-      console.log(this.state.media_filename,"mediafile_check")
-      console.log( editData,"edittt_dattaaa")
-      // console.log(editData.details[2].id,"id_get")  
 }
   // For checkbox api 
   dealActiveCheck = (e) => {
-    // console.log(e.target.checked, "mediaupload_checkbox")
     this.setState({
       mediaupload_active: e.target.checked
     })
   }
-  // for upload broswer
-  // handleChange = (e) => {
-  //   console.log("sdfjsdhfjdshflsdf",e.target.files[0])
-  //      this.setState({
-  //        file:e.target.files[0]
-  //      })
-  // };
+
     uploadFile=(e)=>{
-      // let files = e.target.files
-      // let reader = new FileReader()
-      // reader.readAsDataURL(files[0])
-      // reader.onload=(e)=>{
-      //   console.log(e.target.result,"imgurlresult")
-      //   this.setState({imageurl:e.target.result})
-      // }
-      console.log("sdfjsdhfjdshflsdf",e.target.files[0])
        this.setState({
         imageurl:e.target.files[0]
        })
     }
-  //new ranjith upload file
-  // onFileChange = (e) => {
-  //   console.log("sdfjsdhfjdshflsdf",e.target.files[0])
-  //   this.setState({
-  //     file:e.target.files[0]
-  //   })
-  // }
     render() {
       console.log(this.state.mediaupload_lab.media_description.value,"description")
-      console.log(this.state,"statevalue")
+      console.log(this.props.truegetmethod,"statevalue")
       const props = {
         name: 'file',
         action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -258,6 +213,7 @@ componentDidMount(){
           authorization: 'authorization-text',
         },
     }
+
         return (
             <>
             <div className={`lab_mediauploads ${this.state.open === true && "d-none"}`}>

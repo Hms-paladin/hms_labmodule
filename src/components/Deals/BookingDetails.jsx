@@ -29,10 +29,11 @@ export default class BookingDetails extends React.Component {
             activeKey: "1",
             serviceTypeAll: false,
             dealOption: "M",
-            deal_valid_from: '',
-            deal_valid_to: '',
+            deal_valid_from: new Date(),
+            deal_valid_to: new Date(),
             dealActive: false,
-            afteredit:false,
+            afteredit: false,
+            valideToerror:false,
             bookingDetails: {
                 'service_type': {
                     'value': '',
@@ -61,7 +62,7 @@ export default class BookingDetails extends React.Component {
         })
     }
     changeTabFun = (data) => {
-        console.log(data,"editdata")
+        console.log(data, "editdata")
         this.setState({
             activeKey: "1",
             editData: data,
@@ -79,36 +80,6 @@ export default class BookingDetails extends React.Component {
 
     }
 
-    // componentWillMount() {
-    //     Axios({
-    //         method: 'GET',
-    //         url: 'https://ipapi.co/json/',
-    //     }).then((response) => {
-    //         this.setState({
-    //             myIpAddress: response.data.ip
-    //         })
-    //     }).catch((error) => {
-    //         alert(JSON.stringify(error))
-    //     })
-
-    //     var self = this;
-    //     Axios({
-    //         method: 'GET',
-    //         url: apiurl + 'get_mas_doctor_service_type',
-    //     }).then((response) => {
-    //         response.data.data.map((val, index) => {
-    //             return (
-    //                 self.state.serviceType.push({ id: val.id, service_type: val.service_type })
-    //             )
-    //         })
-    //     }).catch((error) => {
-    //         alert(JSON.stringify(error))
-    //     })
-    //     this.setState({})
-    //     console.log(this.state.serviceType, "myservicetype")
-    // }
-
-
     checkValidation = () => {
         var bookingDetails = this.state.bookingDetails;
         var bookingKeys = Object.keys(bookingDetails);
@@ -122,11 +93,20 @@ export default class BookingDetails extends React.Component {
         var filtererr = bookingKeys.filter((obj) =>
             bookingDetails[obj].error == true);
         console.log(filtererr.length)
-        if (filtererr.length > 0) {
-            this.setState({ error: true })
+        if (filtererr.length > 0  ) {
+            // new Date(this.state.deal_valid_from) >= new Date(this.state.deal_valid_to)
+            // console.log(new Date(this.state.deal_valid_from),"fromdate")
+            // console.log(new Date(this.state.deal_valid_to),"fromdate")
+            // valideToerror:true 
+
+            
+            this.setState({ error: true})
         } else {
             this.setState({ error: false })
+            // if(new Date(this.state.deal_valid_from) >= new Date(this.state.deal_valid_to)){
+            // }else{
             this.onSubmitData()
+            // }
         }
         this.setState({ bookingDetails })
     }
@@ -138,7 +118,6 @@ export default class BookingDetails extends React.Component {
         bookingDetails[key].errmsg = errorcheck.msg;
         this.setState({ bookingDetails });
         if (key === "service_type" && data === 1) {
-            alert("true")
             var Data = [];
             this.state.serviceType.map(val => val.id > 1 && Data.push(val.id))
             console.log(Data.toString(), "myData")
@@ -174,8 +153,8 @@ export default class BookingDetails extends React.Component {
             dealvendorId: 2,
             dealservicetypeId: this.state.serviceTypeAll === false ? this.state.bookingDetails.service_type.value : this.state.serviceTypeAll,
             dealtitle: this.state.bookingDetails.deal_title.value,
-            dealvalidfrom: this.state.deal_valid_from===""?dateformat(new Date(), "yyyy-mm-dd"):this.state.deal_valid_from,
-            dealvalidto: this.state.deal_valid_to===""?dateformat(new Date(), "yyyy-mm-dd"):this.state.deal_valid_to,
+            dealvalidfrom: dateformat(this.state.deal_valid_from, "yyyy-mm-dd"),
+            dealvalidto: dateformat(this.state.deal_valid_to, "yyyy-mm-dd"),
             dealoptions: this.state.dealOption === "M" ? "Amount" : "Percentage",
             dealamount: this.state.bookingDetails.deal_amt.value,
             dealactive: this.state.dealActive === true ? 1 : 0,
@@ -187,32 +166,32 @@ export default class BookingDetails extends React.Component {
             modifiedon: dateformat(new Date(), "yyyy-mm-dd"),
         }
         if (this.state.edit === false) {
-            // alert("True")
             this.bookingDetailsInsertApi(bookingDetails)
         } else {
-            // alert("false")
             this.bookingDetailsEditApi(bookingDetails)
         }
     }
     // Once form submitted successfully then form resets happens here
-    resetFormValue = () => {return (
+    resetFormValue = () => {
+        return (
 
             // this.state.bookingDetails.service_type.value="",
-            this.state.bookingDetails.deal_title.value="",
-            this.state.deal_valid_from=dateformat(new Date(), "yyyy-mm-dd"),
-            this.state.deal_valid_to=dateformat(new Date(), "yyyy-mm-dd"),
-            // this.state.dealOption = "M",
-            this.state.bookingDetails.deal_amt.value="",
+            this.state.bookingDetails.deal_title.value = "",
+            this.state.deal_valid_from = dateformat(new Date(), "yyyy-mm-dd"),
+            this.state.deal_valid_to = dateformat(new Date(), "yyyy-mm-dd"),
+            this.state.dealOption = "M",
+            this.state.bookingDetails.deal_amt.value = "",
             this.state.dealActive = false,
             this.setState({
+                edit:false
             })
-    )
+        )
     }
 
     bookingDetailsInsertApi = (bookingDetails) => {
         Axios({
             method: 'POST',
-            url: apiurl + 'insertDeals',
+            url: apiurl + '/insertDeals',
             data: {
                 ...bookingDetails
             }
@@ -230,7 +209,7 @@ export default class BookingDetails extends React.Component {
     bookingDetailsEditApi = (bookingDetails) => {
         Axios({
             method: "PUT",
-            url: apiurl + "editDeals",
+            url: apiurl + "/editDeals",
             data: {
                 Id: this.state.editData.id,
                 ...bookingDetails
@@ -238,7 +217,7 @@ export default class BookingDetails extends React.Component {
         }).then((response) => {
             this.resetFormValue()
             this.getDealsList()
-            this.setState({afteredit:true,activeKey: "2"})
+            this.setState({ afteredit: true, activeKey: "2",edit:false })
 
         }).catch((error) => {
             alert(JSON.stringify(error))
@@ -259,8 +238,8 @@ export default class BookingDetails extends React.Component {
         })
     }
 
-    changedateFun=(data,name)=>{
-        this.setState({[name]:data})
+    changedateFun = (data, name) => {
+        this.setState({ [name]: data })
     }
 
     render() {
@@ -280,7 +259,7 @@ export default class BookingDetails extends React.Component {
                         <Tabs defaultActiveKey={"1"} activeKey={this.state.activeKey} onChange={this.callback}>
                             <TabPane tab="Create Deals" key={"1"}>
                                 <Grid container spacing={2} className="deal_container">
-                                    <Grid item xs={12} md={6}   >
+                                    <Grid item xs={6} md={6}>
                                         <Labelbox
                                             type="select"
                                             labelname="Service Type"
@@ -292,25 +271,9 @@ export default class BookingDetails extends React.Component {
                                             error={this.state.bookingDetails.service_type.error}
                                             errmsg={this.state.bookingDetails.service_type.errmsg}
                                         />
-                                        <Labelbox
-                                            type="datepicker"
-                                            labelname="Valid From"
-                                            value={this.state.deal_valid_from}
-                                            changeData={(data) => this.changedateFun(data, 'deal_valid_from')}
-                                        />
-
-                                        <div className="radio_buttons">
-                                            <Labelbox
-                                                labelname="Deal Options"
-                                                type="radio"
-                                                dealOption={this.state.dealOption}
-                                                changeDealOption={(data) => this.changeDealOption(data)}
-                                            />
-                                        </div>
-
                                     </Grid>
-                                    <Grid item xs={12} md={6} className="deal_container">
-                                        <Labelbox
+                                    <Grid item xs={6} md={6}>
+                                    <Labelbox
                                             type="text"
                                             labelname="Deal Title"
                                             valuelabel={'deal_title'}
@@ -319,23 +282,40 @@ export default class BookingDetails extends React.Component {
                                             error={this.state.bookingDetails.deal_title.error}
                                             errmsg={this.state.bookingDetails.deal_title.errmsg}
                                         />
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={7} md={7}>
-                                                <div className="datepicker_active">
-                                                    <Labelbox
-                                                        type="datepicker"
-                                                        labelname="Valid To"
-                                                        value={this.state.deal_valid_to}
-                                                        changeData={(data) => this.changedateFun(data, 'deal_valid_to')}
-                                                    />
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={5} md={5} className="validdate_picker">
-                                                <div className="Deal_activecheck">
-                                                    <Checkbox className="Deal_active_check" checked={this.state.dealActive} onChange={(e) => this.dealActiveCheck(e)} /><span>Deal Active</span></div>
-                                            </Grid>
-                                        </Grid>
-                                        <Labelbox
+                                    </Grid>
+
+                                    <Grid item xs={6} md={6}>
+                                    <Labelbox
+                                            type="datepicker"
+                                            labelname="Valid From"
+                                            value={this.state.deal_valid_from}
+                                            changeData={(data) => this.changedateFun(data, 'deal_valid_from')}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={6} md={6}>
+                                    <Labelbox
+                                    type="datepicker"
+                                    labelname="Valid To"
+                                    value={this.state.deal_valid_to}
+                                    changeData={(data) => this.changedateFun(data, 'deal_valid_to')}
+                                    />
+                                    {this.state.valideToerror && <div className="valid_toErrormsg">Value should be greater than from date</div > }
+                                    </Grid>
+
+                                    <Grid item xs={6} md={6}>
+                                    <div className="radio_buttons">
+                                            <Labelbox
+                                                labelname="Deal Options"
+                                                type="radio"
+                                                dealOption={this.state.dealOption}
+                                                changeDealOption={(data) => this.changeDealOption(data)}
+                                            />
+                                        </div>
+                                    </Grid>
+
+                                    <Grid item xs={6} md={6}>
+                                    <Labelbox
                                             type="number"
                                             labelname={this.state.dealOption === "M" ? "Deal Amount" : "Deal Percentage"}
                                             valuelabel={'deal_amt'}
@@ -345,19 +325,28 @@ export default class BookingDetails extends React.Component {
                                             errmsg={this.state.bookingDetails.deal_amt.errmsg}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    
+                                    <Grid item xs={12} md={12}>
+                                    <div className="Deal_activecheck">
+                                        <div>
+                                    <Checkbox className="Deal_active_check" checked={this.state.dealActive} onChange={(e) => this.dealActiveCheck(e)} /><span>Deal Active</span>
+                                    </div>
 
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <div className="createbutton-container">
+
+                                    <div className="createbutton-container">
                                             <Button className="create_cancel" onClick={this.resetFormValue}>Cancel</Button>
                                             <Button className="media_save" onClick={this.checkValidation}>
                                                 {
                                                     this.state.edit === true ? "Update" : "Save"
                                                 }
                                             </Button>
-                                        </div>
+                                    </div>
+
+                                    </div>
+
+
                                     </Grid>
+
                                 </Grid>
                             </TabPane>
                             <TabPane tab="Deal List" key="2">

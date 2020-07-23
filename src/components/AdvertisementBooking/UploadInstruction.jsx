@@ -1,9 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Labelbox from '../../helpers/labelbox/labelbox'
 import Button from '@material-ui/core/Button';
 import './UploadInstruction.css'
-// import Profile from '../../images/1.jpg'
+// import uploadimage from '../../Images/upload-button.png'
+import Profile from '../../Images/1.jpg'
 import Green from '../../Images/green.svg'
 import './UploadInstruction.css'
 
