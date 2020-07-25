@@ -60,7 +60,12 @@
     background-color: #bbb7b7 !important;
     color: black !important;
 }
-
+.closemodal_icon{
+    font-size: 2rem !important;
+}
 .customcloseicon:focus {
     outline: none;
+}
+.Dialogmodal .DialogContent{
+    overflow-y: scroll;
 }

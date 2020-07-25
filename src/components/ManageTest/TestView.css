@@ -1,107 +1,5 @@
-.service_type_container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 15px;
-  width: 100%;
-}
 
-.manage_test_button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 80px;
-  width: 99%;
-}
-
-.manage_test_button-containeredit {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-bottom: 15px;
-  width: 96%;
-}
-.manage_test_Cancel {
-  font-size: 1.25rem !important;
-  background-color: rgb(201, 201, 201) !important;
-  margin-right: 20px !important;
-  padding: 6px 16px !important;
-}
-
-.manage_test_Submit {
-  font-size: 1.25rem !important;
-  background-color: rgb(38, 128, 235) !important;
-  color: #fff !important;
-  padding: 6px 16px !important;
-}
-
-.service_type_container .MuiButton-text {
-  padding: 6px 16px !important;
-}
-
-.package_container .formdiv {
-  margin-bottom: 10px !important;
-}
-
-.instruction_area {
-  padding: 0px 12px 12px 12px;
-  width: 100%;
-}
-
-.add_test_container {
-  padding: 20px 10px 10px 20px;
-  border: 1px solid #ccc;
-  height: 100%;
-  box-shadow: 0 0 1.5px 0px #ccc;
-}
-
-.package_containerthird {
-  padding: 12px;
-}
-
-.test_add {
-  background-color: #82af3f;
-  font-size: 2.3rem !important;
-  color: #fff;
-  border-radius: 2px;
-  position: relative;
-  top: 7px;
-  left: 2px;
-  cursor: pointer;
-}
-
-.add_div {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.add_test {
-  width: 90% !important;
-}
-
-/* .testentry_container .formdiv .labeltxt {
- color:#666666 !important;
-} */
-
-.testentry_container .formdiv .brdrcls {
-  font-size: 1.5rem;
-}
-
-.add_test .formdiv {
-  padding-right: 10px !important;
-}
-
-.add_test .formdiv .brdrcls {
-  font-size: 1.25rem !important;
-  padding: 6px !important;
-}
-
-/* .add_test  .formdiv .labeltxt {
-  color:#666666 !important;
-  font-size:1.25rem !important;
- } */
-
+/* 
 .test_view_tag {
   border-radius: 2px !important;
   font-size: 0.9rem !important;
@@ -145,4 +43,111 @@
   color:#ec6060;
   cursor: pointer;
   margin-left: 5px;
+}  */
+
+
+
+/* tab css */
+.manage_test_main .ant-tabs-nav .ant-tabs-tab-active{
+  color:#86b149;
+}
+.manage_test_main .ant-tabs-nav-wrap{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.manage_test_main .ant-tabs-ink-bar{
+  background-color:#86b149;
+}
+.manage_test_main .ant-tabs-nav-container{
+  font-size: 17px;
+}
+.manage_test_main .ant-tabs-nav .ant-tabs-tab:hover {
+  color: #86b149;
+}
+.test_ch{
+  margin:5px 0px 0px 5px;
+}
+.test_view{
+  border: 1px solid #ccc;
+  padding:10px;
+}
+.parent_cnt{
+padding:25px;
+}
+.add{
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  width:100%;
+}
+.add_butt{
+  background-color: #5ECB56 !important;
+  text-transform: none !important;
+  font-size: 13px !important;
+  color:#fff !important;
+
+}
+ .manage_test_main .MuiButton-root{
+  min-width: 53px !important;
+}
+.test_cost{
+  background-color: #82af3f;
+  padding:10px;
+  width:30%;
+  text-align: center;
+  font-size: 15px;
+  color:#fff;
+}
+.manage_test_main .ant-card-body{
+  padding:0px !important;
+}
+.instruction{
+  padding:10px;
+  width:70%;
+  
+}
+.card_det{
+ 
+  width:100%;
+  position: relative;
+  border:0px !important;
+  background: #FFFFFF;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 2px;
+}
+.test_cnt{
+  display:flex;
+}
+.test_act{
+  text-align: right;
+  margin-bottom: 0px !important;
+  color: #86b149;
+}
+.close_icon{
+  position: absolute;
+  right: 8px;
+  top: -12px;
+  z-index: 34567;
+
+}
+.preview_data{
+  padding:10px;
+  margin-top: 10px;
+}
+.closeicontestview{
+    color: red !important;
+    background-color: #fff;
+    font-size: 2rem !important;
+    padding: 2px;
+    border-radius: 50px;
+    box-shadow: 0px 3px 6px #00000029;
+}
+.check_box .ant-checkbox-inner{
+  width:20px;
+  height:20px;
+  border:1px solid #ccc;
+}
+.check_box .ant-checkbox-checked .ant-checkbox-inner{
+background-color:#82ae3f;
 }

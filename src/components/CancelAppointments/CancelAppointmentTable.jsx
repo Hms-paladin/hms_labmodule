@@ -57,7 +57,7 @@ class CancelAppointmentTable extends React.Component {
             tableData.push({
               name: val.customer,
               test: val.test,
-              Bookdate: moment(val.book_date).format('DD MMM YYYY'),
+              Bookdate: moment(val.book_date).format('DD mmm YYYY'),
               Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
               time:"-",
               id:index
@@ -105,7 +105,7 @@ class CancelAppointmentTable extends React.Component {
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
-            { id: "test", label: "Test" },
+            { id: "test", label: "Test Name" },
             { id: "Bookdate", label: "Booked Date" },
             { id: "Canceldate", label: "Cancelled Date" },
             { id: "time", label: "Time" },

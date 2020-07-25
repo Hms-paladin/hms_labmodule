@@ -149,7 +149,7 @@
 .profileContainer{
     width: 50%;
     background-color: #fff;
-    border: 1px solid #b1acac;
+    /* border: 1px solid #b1acac; */
     top: 150px;
     position: absolute;
 }

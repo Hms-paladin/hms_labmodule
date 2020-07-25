@@ -46,8 +46,16 @@ button:focus {
 .MuiInput-underline:after{
   border-bottom:0px !important;
 }
-.label{
-  font-weight: none !important;
+label{
+  font-weight: 100 !important;
+}
+body *::-webkit-scrollbar {
+  width: 6px;
+  height: 4px;
+  transition: 0.3s ;
+}
+body *::-webkit-scrollbar-thumb {
+  background: #ADAAA8;
 }
 
 .MuiButton-root{

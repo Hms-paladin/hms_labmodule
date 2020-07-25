@@ -6,13 +6,13 @@ import { Tag } from 'antd';
 import AddIcon from '@material-ui/icons/Add';
 import ValidationLibrary from "../../helpers/validationfunction";
 import CloseIcon from '@material-ui/icons/Close';
+import { Paper } from "@material-ui/core";
 import { apiurl } from "../../App";
 import axios from 'axios';
 import dateFormat from 'dateformat';
-
 import "./TestView.css";
-
-
+import { Tabs,Checkbox,Card } from 'antd';
+const { TabPane } = Tabs;
 export default class TestView extends Component {
   constructor(props)
   {
@@ -34,17 +34,21 @@ export default class TestView extends Component {
           error: null,
           errmsg: null,
         }, 
-        },
-        labmanage_addtestcost:{
-          lab_test_name:{
+          'lab_test_name':{
             'value': '',
             validation: [{ 'name': 'required' }],
             error: null,
             errmsg: null,
           },
-          lab_cost:{
+          'lab_cost':{
             'value': '',
             validation: [{ 'name': 'required' },{"name":"allowNumaricOnly"}],
+            error: null,
+            errmsg: null,
+          }, 
+          'test_instruction':{
+            'value': '',
+            validation: [{ 'name': 'required' }],
             error: null,
             errmsg: null,
           }, 
@@ -69,11 +73,20 @@ export default class TestView extends Component {
           var labcostobjarr = []
           this.state.lab_test_list.map((data,index)=>{
 
-              testcostdelarr.push(<div className={"texttag"}>{data.lab_test_name}<span className="bar_tag">-</span><span>{data.lab_cost}<CloseIcon className={"closeicontestview"} onClick={()=>this.deletetag(index)} /></span></div>)
+              testcostdelarr.push(
+                <div className="col-sm-6 preview_data" >
+                <div className="close_icon"><CloseIcon className="closeicontestview" onClick={()=>this.deletetag(index)} /></div>
+                  <Paper className="card_det">
+              <div className="test_cnt"><div className="test_cost"><p>{this.state.labmanage_test.lab_test_name.value}</p><p>{this.state.labmanage_test.lab_cost.value}</p></div>
+              <div className="instruction"><label>{this.state.labmanage_test.test_instruction.value}</label><p className="test_act">Active</p></div></div>
+                  </Paper>
+                </div>  
+              )
 
               labcostobjarr.push({
           "lab_test_name":data.lab_test_name,
-          "lab_cost":data.lab_cost
+          "lab_cost":data.lab_cost,
+          "test_instruction":data.test_instruction
           })
           })
 
@@ -125,9 +138,11 @@ export default class TestView extends Component {
           this.setState({ error: false })
           if(this.props.edithide){
             this.update()
+            this.props.closemodal(true)
           }else{
-          this.props.closemodal(true)
+         
           var self=this
+          console.log(this.state.lab_test_list,"fdgh")
           axios({
             method:'POST',
             url: apiurl+'/insert_mas_lab_test',
@@ -152,6 +167,29 @@ export default class TestView extends Component {
         }
     
         }
+        var testCost = []
+        var lab_test_list = []
+        var customid =this.state.testCost.length
+
+        testCost.push(...this.state.testCost,
+          <div className="col-sm-6 preview_data" >
+          <div className="close_icon"><CloseIcon className="closeicontestview" onClick={()=>this.deletetag(customid)} /></div>
+            <Paper className="card_det">
+        <div className="test_cnt"><div className="test_cost"><p>{this.state.labmanage_test.lab_test_name.value}</p><p>{this.state.labmanage_test.lab_cost.value}</p></div>
+        <div className="instruction"><label>{this.state.labmanage_test.test_instruction.value}</label><p className="test_act">Active</p></div></div>
+            </Paper>
+          </div>  
+        )
+
+        lab_test_list.push(...this.state.lab_test_list,{
+        "lab_test_name":this.state.labmanage_test.lab_test_name.value,
+        "lab_cost":this.state.labmanage_test.lab_cost.value,
+        })
+        // this.state.labmanage_addtestcost.lab_test_name.value=""
+        // this.state.labmanage_addtestcost.lab_cost.value="" 
+        
+        this.setState({testCost:testCost,lab_test_list:lab_test_list})
+      
         this.setState({ labmanage_test })
       }
 
@@ -197,22 +235,7 @@ export default class TestView extends Component {
       else {
           this.setState({ error: false })
           
-          var testCost = []
-          var lab_test_list = []
-          var customid =this.state.testCost.length
-
-          testCost.push(...this.state.testCost,
-                  <div className={"texttag"}>{this.state.labmanage_addtestcost.lab_test_name.value}<span className="bar_tag">-</span><span>{this.state.labmanage_addtestcost.lab_cost.value}<CloseIcon className={"closeicontestview"} onClick={()=>this.deletetag(customid)} /></span></div>
-          )
-
-          lab_test_list.push(...this.state.lab_test_list,{
-          "lab_test_name":this.state.labmanage_addtestcost.lab_test_name.value,
-          "lab_cost":this.state.labmanage_addtestcost.lab_cost.value
-          })
-          this.state.labmanage_addtestcost.lab_test_name.value=""
-          this.state.labmanage_addtestcost.lab_cost.value="" 
           
-          this.setState({testCost:testCost,lab_test_list:lab_test_list})
         
         }
         this.setState({ labmanage_addtestcost })
@@ -239,78 +262,157 @@ export default class TestView extends Component {
           self.props.callget()
         })
       }
-      
+
+
+callback=(key)=>{
+  console.log(key);
+}
   
-  render() {
-    console.log(this.state.lab_test_list,"lab_test_list")
-    return (
-      <div className="testentry_container mt-4">
+//   render() {
+//     console.log(this.state.lab_test_list,"lab_test_list")
+//     return (
+//       <div className="testentry_container mt-4">
          
             
-         <Grid container spacing={2}>
-         <Grid item xs={12} md={!this.props.edithide ? 7 : 12}>
+//          <Grid container spacing={2}>
+//          <Grid item xs={12} md={!this.props.edithide ? 7 : 12}>
            
            
-         <div className="instruction_area">
-           <Labelbox
-              type="text" 
-              labelname="Test Category"
-              changeData={(data) => this.changeDynamic(data,'lab_test_category')}
-              value={this.state.labmanage_test.lab_test_category.value}
-              error={this.state.labmanage_test.lab_test_category.error}
-              errmsg={this.state.labmanage_test.lab_test_category.errmsg}/>
-           </div>
+//          <div className="instruction_area">
+//            <Labelbox
+//               type="text" 
+//               labelname="Test Category"
+//               changeData={(data) => this.changeDynamic(data,'lab_test_category')}
+//               value={this.state.labmanage_test.lab_test_category.value}
+//               error={this.state.labmanage_test.lab_test_category.error}
+//               errmsg={this.state.labmanage_test.lab_test_category.errmsg}/>
+//            </div>
 
-           <div className="instruction_area">
-            <Labelbox 
-              type="textarea" 
-              labelname="Patient Instruction"
-              changeData={(data) => this.changeDynamic(data,'lab_instruction')}
-              value={this.state.labmanage_test.lab_instruction.value}
-              error={this.state.labmanage_test.lab_instruction.error}
-              errmsg={this.state.labmanage_test.lab_instruction.errmsg}/>
-            </div>
+//            <div className="instruction_area">
+//             <Labelbox 
+//               type="textarea" 
+//               labelname="Patient Instruction"
+//               changeData={(data) => this.changeDynamic(data,'lab_instruction')}
+//               value={this.state.labmanage_test.lab_instruction.value}
+//               error={this.state.labmanage_test.lab_instruction.error}
+//               errmsg={this.state.labmanage_test.lab_instruction.errmsg}/>
+//             </div>
           
-         </Grid>
-         {!this.props.edithide &&
-         <Grid item xs={12} md={5} className="package_containerthird">
-           <div  className="add_test_container">
-             <div className="add_div">
-              <div  className="add_test">
-              <Labelbox 
-                type="text" 
-                labelname="Test Name"
-                changeData={(data) => this.addtestcostchangedyn(data,'lab_test_name')}
-                value={this.state.labmanage_addtestcost.lab_test_name.value}
-                error={this.state.labmanage_addtestcost.lab_test_name.error}
-                errmsg={this.state.labmanage_addtestcost.lab_test_name.errmsg}/>
-              </div> 
-             <div  className="add_test">
-              <Labelbox 
-                type="text" 
-                labelname="Cost (KWD)"
-                changeData={(data) => this.addtestcostchangedyn(data,'lab_cost')}
-                value={this.state.labmanage_addtestcost.lab_cost.value}
-                error={this.state.labmanage_addtestcost.lab_cost.error}
-                errmsg={this.state.labmanage_addtestcost.lab_cost.errmsg}/>
-              </div>
-             <AddIcon className="test_add" onClick={this.addtestcostcheckValidation} /></div>
-             <div className="test_viewtag_div">
-               {this.state.testCost}
-               </div>
+//          </Grid>
+//          {!this.props.edithide &&
+//          <Grid item xs={12} md={5} className="package_containerthird">
+//            <div  className="add_test_container">
+//              <div className="add_div">
+//               <div  className="add_test">
+//               <Labelbox 
+//                 type="text" 
+//                 labelname="Test Name"
+//                 changeData={(data) => this.addtestcostchangedyn(data,'lab_test_name')}
+//                 value={this.state.labmanage_addtestcost.lab_test_name.value}
+//                 error={this.state.labmanage_addtestcost.lab_test_name.error}
+//                 errmsg={this.state.labmanage_addtestcost.lab_test_name.errmsg}/>
+//               </div> 
+//              <div  className="add_test">
+              // <Labelbox 
+              //   type="text" 
+              //   labelname="Cost (KWD)"
+              //   changeData={(data) => this.addtestcostchangedyn(data,'lab_cost')}
+              //   value={this.state.labmanage_addtestcost.lab_cost.value}
+              //   error={this.state.labmanage_addtestcost.lab_cost.error}
+              //   errmsg={this.state.labmanage_addtestcost.lab_cost.errmsg}/>
+//               </div>
+//              <AddIcon className="test_add" onClick={this.addtestcostcheckValidation} /></div>
+//              <div className="test_viewtag_div">
+//                {this.state.testCost}
+//                </div>
   
-           </div>
+//            </div>
 
-         </Grid>
-  }
-          <div className={`${this.props.edithide==="edithide" ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
-            <Button className="manage_test_Cancel" onClick={()=>this.props.closemodal(false)}>Cancel</Button>
-            <Button className="manage_test_Submit" onClick={this.checkValidation} >Submit</Button>
-          </div>
+//          </Grid>
+//   }
+//           <div className={`${this.props.edithide==="edithide" ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
+//             <Button className="manage_test_Cancel" onClick={()=>this.props.closemodal(false)}>Cancel</Button>
+//             <Button className="manage_test_Submit" onClick={this.checkValidation} >Submit</Button>
+//           </div>
           
-          </Grid>
+//           </Grid>
           
-      </div>
-    );
-  }
+//       </div>
+//     );
+//   }
+// }
+render(){
+  console.log(this.state.lab_test_list,"divya")
+  return(
+    <div className="manage_test_main">
+         <Tabs defaultActiveKey="1" onChange={this.callback}>
+             <TabPane tab="Entry" key="1">
+               <Grid container spacing={5} className="parent_cnt">
+                 <Grid item xs={12} md={6} spacing={2}>
+                 <Labelbox
+                 type="text" 
+                 labelname="Test Category"
+                  changeData={(data) => this.changeDynamic(data,'lab_test_category')}
+                  value={this.state.labmanage_test.lab_test_category.value}
+                  error={this.state.labmanage_test.lab_test_category.error}
+                  errmsg={this.state.labmanage_test.lab_test_category.errmsg}
+                  />
+                   <Labelbox 
+               type="textarea" 
+               labelname="Patient Instruction"
+               changeData={(data) => this.changeDynamic(data,'lab_instruction')}
+               value={this.state.labmanage_test.lab_instruction.value}
+               error={this.state.labmanage_test.lab_instruction.error}
+               errmsg={this.state.labmanage_test.lab_instruction.errmsg}
+               />
+                 <div>Active</div>
+                  <div className="test_ch"><Checkbox className="check_box"/></div>
+                 </Grid>
+               
+                 <Grid item xs={12} md={6}>
+                   <Grid container spacing={2} className="test_view">
+                     
+                     <Grid item xs={8} md={8}>
+                    
+                 <Labelbox 
+                 type="text" 
+                 labelname="Test Name"
+                 changeData={(data) => this.changeDynamic(data,'lab_test_name')}
+                 value={this.state.labmanage_test.lab_test_name.value}
+                 error={this.state.labmanage_test.lab_test_name.error}
+                 errmsg={this.state.labmanage_test.lab_test_name.errmsg}
+                 />
+                 </Grid>
+                 <Grid item xs={4} md={4}>
+                 <Labelbox 
+                type="number" 
+                labelname="Cost (KWD)"
+                changeData={(data) => this.changeDynamic(data,'lab_cost')}
+                value={this.state.labmanage_test.lab_cost.value}
+                error={this.state.labmanage_test.lab_cost.error}
+                errmsg={this.state.labmanage_test.lab_cost.errmsg}/>
+                 </Grid>
+                 <Grid item={12} md={12}>
+                 <Labelbox 
+               type="textarea" 
+               labelname="Patient Instruction"
+               changeData={(data) => this.changeDynamic(data,'test_instruction')}
+               value={this.state.labmanage_test.test_instruction.value}
+               error={this.state.labmanage_test.test_instruction.error}
+               errmsg={this.state.labmanage_test.test_instruction.errmsg}
+               />
+                 </Grid>
+                 <div className="add"><Button className="add_butt" onClick={this.checkValidation}>Add</Button></div>
+                 </Grid>
+             
+               </Grid>
+               </Grid>
+            </TabPane>
+            <TabPane tab="Preview" key="2">
+           {this.state.testCost}
+             </TabPane> 
+          </Tabs>  
+    </div>
+  )
+}
 }

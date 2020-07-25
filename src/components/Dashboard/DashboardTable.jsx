@@ -9,8 +9,6 @@ import Clientsmodal from "../UploadResult/clientsmodal";
 import axios from 'axios';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
-
-
 export default class DashboardTable extends Component {
   state = {
     openview: false,
@@ -155,7 +153,7 @@ export default class DashboardTable extends Component {
             heading={[
               { id: "", label: "S.No" },
               { id: "name", label: " Customer" },
-              { id: "test", label: "Test Type" },
+              { id: "test", label: "Test Name" },
               { id: "time", label: "Time" },
               { id: "charge", label: "Charge(KWD)" },
               { id: "", label: "Action" },

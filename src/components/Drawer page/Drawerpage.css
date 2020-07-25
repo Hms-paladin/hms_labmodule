@@ -186,13 +186,13 @@ body {
     overflow-y: scroll;
 }
 
-.appbar_sideicons .MuiListItem-button:hover .MuiListItemText-root span {
+/* .appbar_sideicons .MuiListItem-button:hover .MuiListItemText-root span {
     color: #86B149;
 }
 
 .appbar_sideicons .MuiMenuItem-root:hover path {
     fill: #86b149;
-}
+} */
 
 /* .appbar_sideicons .MuiMenuItem-root:hover rect {
     fill: #86b149;
@@ -383,3 +383,10 @@ body {
     stroke: none;
     fill:#b1b1b1 !important;
 }
+.activecolor .MuiTypography-root{
+    color: #86b149 !important;
+ }
+
+ .activecolor path{
+    fill: #86b149;
+ }

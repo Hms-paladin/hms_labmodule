@@ -35,7 +35,7 @@ export default class Login extends Component {
     this.setState({
       draweropen:true
     })
-    this.props.history.push("/Home/Dashboard");
+    this.props.history.push("/Home/dashboard");
   }
   fogotpush = () => {
     this.props.history.push("/forgot")

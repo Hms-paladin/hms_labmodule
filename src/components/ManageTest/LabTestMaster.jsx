@@ -39,7 +39,7 @@ export default class LabTestMaster extends Component {
            
               <div style={{fontSize:"16px"}}>
               
-              <Moment format="DD-MMM-YYYY" className="mr-4 ml-4"></Moment>
+            
             <Search
               placeholder=" search "
               onSearch={value => console.log(value)}

@@ -1,12 +1,7 @@
 import React from 'react'
 import './Packagedetails.css';
 import { Paper } from "@material-ui/core";
-
-
-
 class Packagedetails extends React.Component{
-
-
     render(){
 
         const {viewdata}=this.props
@@ -18,8 +13,9 @@ class Packagedetails extends React.Component{
                 {/* Button Edit */}
                 <div className="butt_parent"> 
         <button className="general_button">{viewdata[0].lab_test_category}</button>
+      
                 </div>
-
+                <div className="p_active">Active</div>
                 {/* Instruction Edit */}
                 <div className="common_row">
                 <div style={{width:"50%"}}>
@@ -38,10 +34,15 @@ class Packagedetails extends React.Component{
                 <div className="overall_paper_div">
                     <div className="Instruction_text_edit">Test</div>
                     <div>
-                        <Paper className="Paper_edit">
+                        <Paper>
                         <div >
-                            <button className="kwd_edit">{viewdata[0].lab_test_name}</button>
-                            <span className="blood_edit">{viewdata[0].lab_cost}</span>
+{/*                             
+                            <button className="kwd_edit">{viewdata[0].lab_test_name} <label>dfgh</label></button>
+                           
+                        
+                            <span className="blood_edit">{viewdata[0].lab_cost}</span> */}
+                             <div className="test_cnt"><div className="test_cost"><label>{viewdata[0].lab_test_name}</label><div>{viewdata[0].lab_cost +"KWD"}</div></div>
+                <div className="instruction"><label>{viewdata[0].lab_instruction}</label></div></div>
                         </div>
                         </Paper>
 

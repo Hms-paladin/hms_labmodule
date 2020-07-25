@@ -394,7 +394,9 @@ export default class Tablecomponent extends Component {
               </TableBody>
             </Table>
           </div>
-          
+          {this.props.grandtotal==="total"?
+          <div className="docrevenue_total"><div className="totalkwd"><p className="grand_total">Grand Total</p><span className="grand_total">:</span><p className="revtotal_amt">4800 KWD</p></div></div>
+         :""}
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
                   colSpan={3}

@@ -2,10 +2,13 @@ import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import "./RevenueTable.css";
+import DateRangeSelect from "../../helpers/DateRange/DateRange";
+import { FaHourglassEnd } from "react-icons/fa";
 
 class RevenueTable extends React.Component {
   state = {
     openview: false,
+    props_loading:false
   };
   createData = (parameter) => {
     var keys = Object.keys(parameter);
@@ -55,6 +58,7 @@ class RevenueTable extends React.Component {
               insurance: "20",
               wallet: "0",
               charge: "60",
+              cost:"20"
             }),
             this.createData({
               customer: "MOHAMED",
@@ -65,7 +69,20 @@ class RevenueTable extends React.Component {
               insurance: "20",
               wallet: "10",
               charge: "50",
+              cost:"20"
             }),
+            this.createData({
+              customer: "MOHAMED",
+              test: "Hemoglobin Test",
+              age: "18 Dec 2019",
+              cash: "0",
+              card: "40",
+              insurance: "20",
+              wallet: "10",
+              charge: "50",
+              cost:"20"
+            }),
+        
           ]}
           tableicon_align={"cell_eye"}
           VisibilityIcon="close"
@@ -73,6 +90,8 @@ class RevenueTable extends React.Component {
           EditIcon="close"
           UploadIcon="close"
           Workflow="close"
+          grandtotal="total"
+          props_loading={this.state.props_loading}
           modelopen={(e) => this.modelopen(e)}
         />
         {/* <div className="docrevenue_total">

@@ -101,7 +101,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: " Customer Name" },
-            { id: "test", label: "Test" },
+            { id: "test", label: "Test Name" },
             { id: "date", label: "Date" },
             { id: "time", label: "Time" },
             { id: "", label: "Action" },

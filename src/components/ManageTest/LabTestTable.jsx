@@ -7,10 +7,7 @@ import TestView from "../ManageTest/TestView";
 import axios from 'axios';
 import { apiurl } from "../../App";
 import DeleteMedia from '../../helpers/ModalComp/deleteModal';
-
-
 var moment = require('moment');
-
 class LabTestTable extends React.Component {
   state = {
     openview: false,
@@ -19,7 +16,6 @@ class LabTestTable extends React.Component {
     viewdata:[],
     editdata:[]
   };
-
   componentDidMount(){
     this.getTableData()
   }
@@ -167,7 +163,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           visible={this.state.editopen}
           title={"EDIT DETAILS"}
           closemodal={(e) => this.closemodal(e)}
-          xswidth={"xs"}
+         
         >
           <TestView visible={this.state.open}
             closemodal={this.handleClickclose}

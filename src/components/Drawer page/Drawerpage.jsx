@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route ,NavLink } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -34,9 +34,9 @@ import Profilepage from "../LabProfile/Profilepage";
 import ProfileLogout from "../../components/ProfileLogout/ProfileLogout";
 import uploadresult from "../../Images/uploadresult.svg";
 import deals from "../../Images/deals.svg";
-import managetest from "../../Images/managetest.svg";
+import manage from "../../Images/manage.svg";
 import upload_svg from "../../Images/upload_svg.svg";
-import appointmentlist from "../../Images/lab/appointmentlist.svg";
+import appointmentlist from "../../Images/Appoint.svg";
 import cancelledappointments from "../../Images/lab/cancelledappointments.svg";
 import advertisementbooking from "../../Images/lab/advertisementbooking.svg";
 import revenue from "../../Images/lab/revenue.svg";
@@ -125,8 +125,12 @@ class Drawerpage extends React.Component {
     open: false,
     logout: false,
     custom_hide: true,
+    current_location:""
   };
-
+  active=()=>
+  {
+    this.setState({current_location:window.location.pathname})
+  }
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -156,7 +160,8 @@ class Drawerpage extends React.Component {
         });
       }
     }
-
+    const { current_location } = this.state
+    const location=window.location.href
     return (
       <div className="drawerpage_container">
         <div className={classes.root}>
@@ -263,24 +268,30 @@ class Drawerpage extends React.Component {
             </div>
             <Divider />
 
-            <MenuList className="appbar_sideicons">
-              <MenuItem component={Link} to="/Home/dashboard">
+            <MenuList className="appbar_sideicons" onClick={this.active}>
+            <MenuItem component={Link} to="/Home/dashboard"  className={`${location.endsWith("dashboard") && "activecolor"}`}>
+            
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={home_svg} />
                   </div>
                 </ListItemIcon>
                 <ListItemText primary="Home" />
+               
               </MenuItem>
-              <MenuItem component={Link} to="/Home/AppointmentsList">
+             
+              <MenuItem component={Link} to="/Home/AppointmentsList" className={`${location.endsWith("AppointmentsList") && "activecolor"}`}>
+             
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={appointmentlist} />
                   </div>
                 </ListItemIcon>
-                <ListItemText primary="Appointment List" />
+                <ListItemText primary="Appointment List" /> 
+              
+
               </MenuItem>
-              <MenuItem component={Link} to="/Home/uploadresults">
+              <MenuItem component={Link} to="/Home/uploadresults" className={`${location.endsWith("uploadresults") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={uploadresult} />
@@ -288,7 +299,7 @@ class Drawerpage extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Upload Result" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/CancelAppointments">
+              <MenuItem component={Link} to="/Home/CancelAppointments" className={`${location.endsWith("CancelAppointments") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={cancelledappointments} />
@@ -296,7 +307,7 @@ class Drawerpage extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Cancelled Appointments" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/Advertisementbooking">
+              <MenuItem component={Link} to="/Home/Advertisementbooking" className={`${location.endsWith("Advertisementbooking") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={advertisementbooking} />
@@ -305,7 +316,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Advertisement Booking" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Deal">
+              <MenuItem component={Link} to="/Home/Deal" className={`${location.endsWith("Deal") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={deals} />
@@ -314,7 +325,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Deals" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Revenue">
+              <MenuItem component={Link} to="/Home/Revenue" className={`${location.endsWith("Revenue") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={revenue} />
@@ -323,16 +334,16 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Revenue" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Test">
+              <MenuItem component={Link} to="/Home/Test" className={`${location.endsWith("Test") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
-                    <ReactSVG src={managetest} />
+                    <ReactSVG src={manage} />
                   </div>
                 </ListItemIcon>
                 <ListItemText primary="Manage Test" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/mediauploads">
+              <MenuItem component={Link} to="/Home/mediauploads" className={`${location.endsWith("mediauploads") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={upload_svg} />
@@ -341,7 +352,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Media Uploads" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/profile">
+              <MenuItem component={Link} to="/Home/profile" className={`${location.endsWith("profile") && "activecolor"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={profile} onClick={this.viewmodalOpen} />
@@ -356,7 +367,7 @@ class Drawerpage extends React.Component {
                     <ReactSVG src={report} />
                   </div>
                 </ListItemIcon>
-                <ListItemText primary="Report" />
+                <ListItemText primary="Report"/>
               </MenuItem>
             </MenuList>
           </Drawer>
