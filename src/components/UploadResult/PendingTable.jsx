@@ -99,6 +99,12 @@ openuploadForpending=(id)=>{
     this.setState({ openview: false, editopen: false, uploadview: false,openuploadview:false });
   };
 
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+}
+
   render() {
     const searchdata = []
     this.state.tableDatafull.filter((data,index) => {
@@ -107,19 +113,19 @@ openuploadForpending=(id)=>{
         searchdata.push({
           name: data.customer,
           test: data.test,
-          date: data.test_date,
-          time: data.uploaded_time ? data.uploaded_time : '-',
+          date: dateformat(data.test_date, "dd mmm yyyy"),
+          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
         action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index
         })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && dateformat(data.test_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
-          date: data.test_date,
-          time: data.uploaded_time ? data.uploaded_time : '-',
+          date: dateformat(data.test_date, "dd mmm yyyy"),
+          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
         action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index

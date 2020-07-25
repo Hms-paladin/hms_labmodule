@@ -6,6 +6,9 @@ import { withStyles } from "@material-ui/core/styles";
 import "./ProfileView.css";
 import Patient from '../../Images/11.jpg'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+var moment = require('moment');
+
+
 const styles = {};
 export default class ProfileView extends React.Component {
   constructor(props) {
@@ -23,9 +26,18 @@ export default class ProfileView extends React.Component {
   {
     this.setState({view:false})
   }
+
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
   render() {
     const styles = "";
     const { classes, onClose, cancel, selectedValue, ...other } = this.props;
+    const {viewdata} = this.props 
+    console.log(this.props.viewdata,"viewdata")
 
     return (
       <div className="lab_popup_details">
@@ -36,16 +48,16 @@ export default class ProfileView extends React.Component {
           {...other}
           className="lab_profile_modal"
         >
-            <div><img src={Patient} className="lab"/></div>
+            <div><img src={viewdata && viewdata.profile_image ? viewdata.profile_image : Patient} className="lab"/></div>
          <div className="lab_dashboard_view">
          <div className="lab_details_container">
             <div className="lab_detailsdiv">
-           <h3 className="lab_name">Abdul Khadher</h3>
-           <p className="lab_age">45 Years</p>
+    <h3 className="lab_name">{viewdata && viewdata.customer}</h3>
+           <p className="lab_age">{viewdata && viewdata.age + " " + "Years"}</p>
            <p className="labappointment_details">Appointment Details</p>
            
-           <div className="labappointment_details"><p className="labappointment_details">Date<span className="lab_date">08 Dec 2019</span></p></div>
-           <div className="labappointment_details-div"><p className="labappointment_details">Time<span className="lab_date">09:15AM</span></p></div>
+           <div className="labappointment_details"><p className="labappointment_details">Date<span className="lab_date">{viewdata && moment(viewdata.test_date).format('DD MMM YYYY')}</span></p></div>
+           <div className="labappointment_details-div"><p className="labappointment_details">Time<span className="lab_date">{viewdata && this.formatTimeShow(viewdata.test_time)}</span></p></div>
           
            <div className="labappointment_details"><Button variant="contained" className="view_detailsbutton">View Details<ChevronRightIcon className="right_arrowview"/></Button></div>
            <Divider className="divider_root"/>

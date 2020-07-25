@@ -151,6 +151,19 @@ export default class AdBooking extends React.Component {
 
 
     changeTabFun = (data) => {
+        if(new Date (data.ad_start_date) < new Date() && new Date (data.ad_end_date) < new Date() ){
+            notification.info({
+                description:
+                  'Advertisement expired',
+                  placement:"topRight",
+              });
+        }else if(new Date (data.ad_start_date) < new Date() && new Date (data.ad_end_date) > new Date() ){
+            notification.info({
+                description:
+                  "Advertisement already posted",
+                  placement:"topRight",
+              });
+        }else{
         console.log("sdfjhdsjfhsldjfhdsfj", data)
         this.setState({
             activeKey: "1",
@@ -171,6 +184,7 @@ export default class AdBooking extends React.Component {
         this.state.imagedata = data.ad_filename
 
         this.setState({})
+    }
 
     }
 
@@ -529,8 +543,6 @@ export default class AdBooking extends React.Component {
         console.log("sdfkjsdfksdf", this.state.imagedata)
         const { TabPane } = Tabs;
 
-
-
         return (
             <div className="booking_createlist booking_createlist--advertisement">
                 <Grid container className="calendar_container" spacing={3}>
@@ -548,6 +560,7 @@ export default class AdBooking extends React.Component {
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
                                             <Labelbox type="datepicker" labelname="Start Date" value={this.state.startdate}
+                                            changeData={(date) => this.datepickerChange(date,'startdate')}
                                             /></div>
                                         <div className="validation__error">{this.state.startdateError && this.state.startdateError}</div>
 
@@ -582,7 +595,8 @@ export default class AdBooking extends React.Component {
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
                                             <Labelbox type="datepicker" labelname="End Date"
-                                                value={this.state.endDate} />
+                                                value={this.state.endDate} 
+                                                changeData={(data) => this.datepickerChange(data,'enddate')}/>
                                         </div>
                                         <div className="validation__error">{this.state.enddateError && this.state.enddateError}</div>
 
@@ -605,7 +619,7 @@ export default class AdBooking extends React.Component {
                                     </Grid>
 
                                     <Grid item xs={12} md={12} className="create_container">
-                                        <div><label>Upload Advertisement</label>
+                                        <div className="advertise_upload"><label>Upload Advertisement</label>
                                             <span><FiInfo className="info_icon" onClick={this.handleOpen} /></span>
 
                                         </div>

@@ -106,7 +106,7 @@ export default class MediaUploadsModal extends Component {
         console.log(this.state.imageurl.name,"checking_imageurl_value")
         var formData = new FormData();
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
+        formData.set("mediatype",this.state.imageurl && this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
         formData.set("mediasortorder", 1)
         formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
@@ -124,7 +124,7 @@ export default class MediaUploadsModal extends Component {
         console.log(this.state.imageurl.name,"checking_imageurl_value")
         var formData = new FormData();
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype",this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
+        formData.set("mediatype",this.state.imageurl && this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
         formData.set("mediasortorder", 1)
         formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
@@ -142,6 +142,7 @@ export default class MediaUploadsModal extends Component {
     }
     // POST API FOR ADD MEDIA
     mediaupload_labAddApi = (mediaupload_labApiData) => {
+      this.props.getTableData()
       axios({
         method: 'POST',
         url: apiurl + '/insertMediaUpload',
@@ -150,13 +151,14 @@ export default class MediaUploadsModal extends Component {
       })
       .then((response) => {
         console.log(response,"post_check_response")
-        this.props.getTableData()
+        this.props.getTableData("Added")
+
       })
 
     }
     // for put api
    mediaupload_labUpdateApi = (mediaupload_labApiData) => {
-     alert("testedit")
+    this.props.getTableData()
       axios({
         method:'PUT',
         url: apiurl+'/editMediaUpload',
@@ -164,7 +166,7 @@ export default class MediaUploadsModal extends Component {
       })
       .then((response)=>{
         console.log(response,"response_checkingg")
-        this.props.getTableData()
+        this.props.getTableData("Updated")
       }).catch((error)=>{
         alert(JSON.stringify(error))
       })

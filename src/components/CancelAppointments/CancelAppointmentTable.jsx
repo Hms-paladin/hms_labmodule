@@ -83,17 +83,17 @@ class CancelAppointmentTable extends React.Component {
           test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
-          time:"-",
+          time:data.uploaded_time?this.formatTimeShow(data.uploaded_time):"-",
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
-          time:"-",
+          time:data.uploaded_time?this.formatTimeShow(data.uploaded_time):"-",
           id:index
         })
       }

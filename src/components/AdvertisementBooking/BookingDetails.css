@@ -219,6 +219,31 @@
     display: block;
     font-size: 14px;
     font-weight: 100;
+    margin-bottom: 4px;
+}
+
+.advertise_cost{
+    margin-top: 25px;
+}
+
+.advertise_upload{
+    margin-top: 15px;
+}
+
+.advertise_upload label{
+    font-weight: 100;
+}
+
+.deal_radiopercent{
+    display: flex;
+}
+
+.deal_kwdalign{
+    margin-top: 30px;
+}
+
+.deal_radiopercent .brdrcls{
+    width: 93% !important;
 }
 
 .booking_createlist .formdiv .labeltxt {
@@ -290,20 +315,15 @@
 }
 
 .select_location {
-    /* width: 150px;
-       height: 30px;
-       color:  #666666;
-       font-size: 15px;
-       margin-bottom: 1.3rem; */
-    font-size: 1.3rem;
-    border: 1px solid #ccc;
-    padding-left: 5px;
-    border-radius: 2px;
-    box-shadow: 0 0 1.5px 0px #ccc;
-    color: #797777;
-    height: 33px;
     width: 100%;
-    background-color: transparent;
+    /* background-color: transparent; */
+    /* box-shadow: 0 0 1.5px 0px #ccc; */
+    border: none;
+}
+
+.advertise_location .ant-select-selection{
+    border-radius: 2px !important;
+    box-shadow: 0 0 1.5px 0px #ccc;
 }
 
 .html__input {

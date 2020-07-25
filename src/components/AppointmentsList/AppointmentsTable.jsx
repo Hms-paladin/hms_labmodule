@@ -72,6 +72,13 @@ UNSAFE_componentWillReceiveProps(newProps){
   })
 }
 
+    
+formatTimeShow=(h_24)=> {
+  var h = Number(h_24.substring(0, 2)) % 12;
+  if (h === 0) h = 12;
+  return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+}
+
   render() {
     const searchdata = []
     this.state.tableDatafull.filter((data,index) => {
@@ -81,16 +88,16 @@ UNSAFE_componentWillReceiveProps(newProps){
             name: data.customer,
             test: data.test,
             date: dateformat(data.test_date, "dd mmm yyyy"),
-            time: data.uploaded_time ? data.uploaded_time : '-',
+            time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
-          time: data.uploaded_time ? data.uploaded_time : '-',
+          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
         id:index
         })
       }
@@ -101,7 +108,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: " Customer Name" },
-            { id: "test", label: "Test" },
+            { id: "test", label: "Test Name" },
             { id: "date", label: "Date" },
             { id: "time", label: "Time" },
             { id: "", label: "Action" },

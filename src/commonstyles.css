@@ -107,3 +107,6 @@
     position: relative;
     bottom: 16px;
 }
+.lab_dashboard_buttons_wrap a{
+  text-decoration: none;
+}

@@ -8,13 +8,16 @@ import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import Clientsmodal from "../UploadResult/clientsmodal";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import ProfileView from "./ProfileView"
 import dateformat from 'dateformat';
+import { Spin } from "antd"
 
 
 export default class DashboardTable extends Component {
   state = {
     openview: false,
-    tableData:[]
+    tableData:[],
+    loading:true,
   };
 
 
@@ -25,7 +28,7 @@ export default class DashboardTable extends Component {
       url: apiurl + '/Dashboard',
       data: {
         lab_id: 2,
-        date: "2020-07-22",
+        date: dateformat(new Date(), "yyyy-mm-dd"),
         period: "day"
       }
     })
@@ -53,7 +56,7 @@ export default class DashboardTable extends Component {
             tableData.push({
               name: val.customer,
               test: val.test,
-              time: val.test_time,
+              time: this.formatTimeShow(val.test_time),
               charge: val.Charge,
               id:index
             })
@@ -63,19 +66,19 @@ export default class DashboardTable extends Component {
         self.setState({
           tableData:tableData,
           tableDatafull:tableDatafull,
-          props_loading:false,
           total_appointments:total_appointments,
           Manage_test:Manage_test,
           cancel_count:cancel_count,
-          totalrevenue:totalrevenue
+          totalrevenue:totalrevenue,
+          loading:false
 
         })
     })
 }
 
-  modelopen = (data) => {
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
+      this.setState({ openview: true,viewdata:this.state.tableDatafull[id] });
     } else if (data === "edit") {
       this.setState({ editopen: true });
     }
@@ -83,10 +86,17 @@ export default class DashboardTable extends Component {
   closemodal = () => {
     this.setState({ openview: false, editopen: false });
   };
+
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
   render() {
     console.log(this.state.total_appointments,"total_appointments")
     return (
-      <>
+      <Spin className="spinner_align" spinning={this.state.loading}>
         <div>
           <div className="lab_dashboard_buttons_wrap">
             <Card
@@ -155,7 +165,7 @@ export default class DashboardTable extends Component {
             heading={[
               { id: "", label: "S.No" },
               { id: "name", label: " Customer" },
-              { id: "test", label: "Test Type" },
+              { id: "test", label: "Test Name" },
               { id: "time", label: "Time" },
               { id: "charge", label: "Charge(KWD)" },
               { id: "", label: "Action" },
@@ -163,21 +173,24 @@ export default class DashboardTable extends Component {
             rowdata={this.state.tableData && this.state.tableData}
             EditIcon="close"
             DeleteIcon="close"
-            modelopen={(e) => this.modelopen(e)}
+            modelopen={(e,id) => this.modelopen(e,id)}
             props_loading={false}
-
           />
 
           {/* <Modalcomp  visible={this.state.openview} title={"CLIENTS"} closemodal={(e)=>this.closemodal(e)}>          
        < Clientsmodal />
         </Modalcomp> */}
 
-          <Modalcomp
-            visible={this.state.editopen}
+<ProfileView open={this.state.openview} onClose={this.closemodal} viewdata={this.state.viewdata}/>
+
+
+          {/* <Modalcomp
+            visible={this.state.openview}
             title={"Edit details"}
             closemodal={(e) => this.closemodal(e)}
             xswidth={"xs"}
-          ></Modalcomp>
+          >
+          </Modalcomp> */}
         </div>
         <div className="page_button_container">
           <div className="butt_container">
@@ -197,7 +210,7 @@ export default class DashboardTable extends Component {
             </Button>
           </div>
         </div>
-      </>
+      </Spin>
     );
   }
 }

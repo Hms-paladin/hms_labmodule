@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Labelbox from "../../helpers/labelbox/labelbox";
 import Button from "@material-ui/core/Button";
-import { Paper } from "@material-ui/core";
-import { Tabs } from 'antd';
+import { Tabs,notification } from 'antd';
 import Checkbox from '@material-ui/core/Checkbox';
 // import Report from '../../images/report.jpg'
 import './BookingDetails.css'
@@ -129,6 +128,7 @@ export default class BookingDetails extends React.Component {
     }
 
     changeDealOption = (data) => {
+        console.log(data,"dataradio")
         this.setState({ dealOption: data });
     }
 
@@ -199,6 +199,11 @@ export default class BookingDetails extends React.Component {
             console.log(response)
             this.resetFormValue()
             this.getDealsList()
+            notification.info({
+                description:
+                  'Record Added Successfully',
+                  placement:"topRight",
+              });
 
         }).catch((error) => {
             alert(JSON.stringify(error))
@@ -218,6 +223,11 @@ export default class BookingDetails extends React.Component {
             this.resetFormValue()
             this.getDealsList()
             this.setState({ afteredit: true, activeKey: "2",edit:false })
+            notification.info({
+                description:
+                  'Record Updated Successfully',
+                  placement:"topRight",
+              });
 
         }).catch((error) => {
             alert(JSON.stringify(error))
@@ -308,13 +318,14 @@ export default class BookingDetails extends React.Component {
                                             <Labelbox
                                                 labelname="Deal Options"
                                                 type="radio"
-                                                dealOption={this.state.dealOption}
-                                                changeDealOption={(data) => this.changeDealOption(data)}
+                                                checked={this.state.dealOption}
+                                                changeGender={(data) => this.changeDealOption(data)}
                                             />
                                         </div>
                                     </Grid>
 
                                     <Grid item xs={6} md={6}>
+                                        <div className="deal_radiopercent">
                                     <Labelbox
                                             type="number"
                                             labelname={this.state.dealOption === "M" ? "Deal Amount" : "Deal Percentage"}
@@ -324,6 +335,10 @@ export default class BookingDetails extends React.Component {
                                             error={this.state.bookingDetails.deal_amt.error}
                                             errmsg={this.state.bookingDetails.deal_amt.errmsg}
                                         />
+                                            <div className="deal_kwdalign">
+                                            {this.state.dealOption === "M" ? "KWD" : "%"}
+                                            </div>
+                                            </div>
                                     </Grid>
                                     
                                     <Grid item xs={12} md={12}>
@@ -349,7 +364,7 @@ export default class BookingDetails extends React.Component {
 
                                 </Grid>
                             </TabPane>
-                            <TabPane tab="Deal List" key="2">
+                            <TabPane tab="Deals List" key="2">
                                 <DealList
                                     dealsList={this.state.dealsList} // list data
                                     getDealsList={this.getDealsList} // get api function

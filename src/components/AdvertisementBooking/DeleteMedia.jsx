@@ -24,6 +24,7 @@ export default class DeleteMedia extends Component {
 
  
   deleteRecord = () => {
+    this.props.loader(true)
       var data = {
           "id":this.state.del_id
       }

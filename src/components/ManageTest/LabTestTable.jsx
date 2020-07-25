@@ -7,6 +7,7 @@ import TestView from "../ManageTest/TestView";
 import axios from 'axios';
 import { apiurl } from "../../App";
 import DeleteMedia from '../../helpers/ModalComp/deleteModal';
+import {notification} from "antd"
 
 
 var moment = require('moment');
@@ -35,7 +36,8 @@ class LabTestTable extends React.Component {
     this.setState({ open: false });
   }
 
-  getTableData = () => {
+  getTableData = (notifyMsg) => {
+  this.setState({ props_loading: true })
     var self = this
     axios({
         method: 'POST', //get method 
@@ -59,6 +61,13 @@ class LabTestTable extends React.Component {
           responseAllData:responseAllData,
           props_loading:false
         })
+                if(notifyMsg){
+        notification.info({
+          description:
+            'Record ' + notifyMsg + ' Successfully',
+            placement:"topRight",
+        });
+      }
     })
 }
 
@@ -103,7 +112,7 @@ deleterow = () => {
       }
   })
       .then(function (response) {
-          self.getTableData()
+          self.getTableData("Deleted")
       })
       .catch(function (error) {
       });
@@ -124,15 +133,15 @@ UNSAFE_componentWillReceiveProps(newProps){
         searchdata.push({
           test: data.lab_test_name,
           cost:data.lab_cost,
-          date:moment(data.lab_created_on).format('DD-MM-YYYY'),
+          date:moment(data.lab_created_on).format('DD MMM YYYY'),
           id: data.lab_id
           })
       }
-      else if (data.lab_test_name !== null && data.lab_test_name.toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_cost !== null && data.lab_cost.toString().toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_created_on !== null && data.lab_created_on.toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.lab_test_name !== null && data.lab_test_name.toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_cost !== null && data.lab_cost.toString().toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_created_on !== null && moment(data.lab_created_on).format('DD MMM YYYY').toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           test: data.lab_test_name,
           cost:data.lab_cost,
-          date:moment(data.lab_created_on).format('DD-MM-YYYY'),
+          date:moment(data.lab_created_on).format('DD MMM YYYY'),
           id: data.lab_id
         })
       }
