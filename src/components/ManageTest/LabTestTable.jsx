@@ -6,9 +6,10 @@ import Packagedetails from "./Packagedetails";
 import TestView from "../ManageTest/TestView";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import DeleteMedia from '../../helpers/ModalComp/deleteModal';
+
+
 var moment = require('moment');
-
-
 
 class LabTestTable extends React.Component {
   state = {
@@ -23,11 +24,10 @@ class LabTestTable extends React.Component {
     this.getTableData()
   }
 
-  componentWillReceiveProps(){
-    console.log(this.props,"getdatacall")
-
-    if(this.props.getdatacall){
+  UNSAFE_componentWillReceiveProps(newProps) {
+    if(newProps.getdatacall){
       this.getTableData()
+      this.props.falsegetmethod()
     }
   }
 
@@ -81,10 +81,63 @@ modelopen = (data,id) => {
 };
 
 closemodal = (editbol) => {
-  this.setState({ openview: false, editopen: false,props_loading:editbol });
+  this.setState({ openview: false, editopen: false,props_loading:editbol,deleteopen:false });
 };
 
+deleteopen = (type,id) => {
+
+  this.setState({
+      deleteopen: true,
+      iddata: id
+  })
+}
+
+deleterow = () => {
+  this.setState({ props_loading: true })
+  var self = this
+  axios({
+      method: 'delete',
+      url: apiurl + '/delete_mas_lab_singletest',
+      data: {
+          "lab_test_id": this.state.iddata,
+      }
+  })
+      .then(function (response) {
+          self.getTableData()
+      })
+      .catch(function (error) {
+      });
+  this.setState({ props_loading: false })
+}
+
+UNSAFE_componentWillReceiveProps(newProps){
+  this.setState({
+    search:newProps.searchData,
+  })
+}
+
   render() {
+    const searchdata = []
+    this.state.responseAllData.filter((data,index) => {
+      console.log(data,"datadata")
+      if (this.state.search === undefined || this.state.search === null){
+        searchdata.push({
+          test: data.lab_test_name,
+          cost:data.lab_cost,
+          date:moment(data.lab_created_on).format('DD-MM-YYYY'),
+          id: data.lab_id
+          })
+      }
+      else if (data.lab_test_name !== null && data.lab_test_name.toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_cost !== null && data.lab_cost.toString().toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_created_on !== null && data.lab_created_on.toLowerCase().includes(this.state.search.toLowerCase())) {
+        searchdata.push({
+          test: data.lab_test_name,
+          cost:data.lab_cost,
+          date:moment(data.lab_created_on).format('DD-MM-YYYY'),
+          id: data.lab_id
+        })
+      }
+  })
+
     return (
       <div>
         <Tablecomponent
@@ -95,9 +148,11 @@ closemodal = (editbol) => {
             { id: "date", label: "Created Date" },
             { id: "", label: "Action" },
           ]}
-          rowdata={this.state.tableData}
+          rowdata={searchdata}
           modelopen={(e,currentid) => this.modelopen(e,currentid)}
           props_loading={this.state.props_loading}
+          deleteopen={this.deleteopen}
+
         />
         <Modalcomp
           visible={this.state.openview}
@@ -122,6 +177,11 @@ closemodal = (editbol) => {
             closemodal={(editbol) => this.closemodal(editbol)}
             />
         </Modalcomp>
+
+        <Modalcomp  visible={this.state.deleteopen} title={"Delete"} closemodal={this.closemodal} xswidth={"xs"}>
+           <DeleteMedia deleterow={this.deleterow} closemodal={this.closemodal}  />
+         </Modalcomp>
+
       </div>
     );
   }

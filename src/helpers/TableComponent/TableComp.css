@@ -213,3 +213,22 @@
 .spinner_align span i {
   background-color: #82AE3F;
 }
+
+.noFoundIconCenter{
+  text-align: center !important;
+}
+
+.noFoundIconCenter img{
+  width: 100px;
+  margin-top: 40px;
+  margin-right: 100px;
+}
+
+.noFoundIconCenter div{
+  margin-right: 100px;
+}
+
+.VendorDetailsDiv .noFoundIconCenter {
+border: 1px solid #e2dddd !important;
+padding-bottom: 85px;
+}

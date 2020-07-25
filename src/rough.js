@@ -1,273 +1,505 @@
-import React, { Component } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
-import dateFormat from 'dateformat';
-import moment from 'moment';
-import {
-	MuiPickersUtilsProvider,
-	KeyboardTimePicker,
-	KeyboardDatePicker,
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-// import DateFnsUtils from '@date-io/date-fns';
-// import {
-//   MuiPickersUtilsProvider,
-//   KeyboardTimePicker,
-//   KeyboardDatePicker,
-// } from '@material-ui/pickers';
-import { DatePicker, Select, TimePicker } from 'antd';
+import React, { Component } from "react";
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from "prop-types";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Paper from "@material-ui/core/Paper";
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import AppsIcon from '@material-ui/icons/Apps';
+// import Modalcomp from "../../helper/Modalcomp";
+// import DeleteMedia from "../../helper/deletemodel";
+import { Icon, message, Popconfirm } from "antd";
+import { Spin } from 'antd';
+import ReactDOM from "react-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 
-export default class Labelbox extends Component {
-	constructor(props) {
-		super(props);
-		console.log("valid date", props.value)
-		this.state = { gender: 'M', open: false, value: null, selectedtime: props.value ? props.value : new Date(), selecteddate: props.value ? props.value : new Date() };
-	}
-	changeGender = (data) => {
-		this.setState({ gender: data });
-		this.props.changeGender && this.props.changeGender(data);
-	}
-	datepickerChange = (date) => {
-		if (date == "Invalid Date") {
-			this.props.invalidate && this.props.invalidate(date);
-		} else {
-			var datefmt = dateFormat(date, 'yyyy-mm-dd');
-			this.props.changeData && this.props.changeData(datefmt);
-		}
-
-	}
-	timepickerChange = (time) => {
-		console.log("time", time);
-		var timeformat = dateFormat(time, "hh:MM:ss");
-		console.log("timeformat", timeformat)
-		this.setState({ selectedtime: time });
-		this.props.changeData && this.props.changeData(timeformat);
-	};
-
-	componentWillReceiveProps(props) {
-
-		if (props.type == "datepicker") {
-			if (isNaN(new Date(props.value).getTime())) {
-
-			}
-			else {
-				var datefmt = dateFormat(props.value && props.value, 'yyyy-mm-dd');
-				this.setState({ selecteddate: datefmt })
-			}
-		}
-		if (props.gendervalue) {
-			this.setState({ gender: props.gendervalue });
-		}
-	}
-	onChange = (time) => {
-		this.setState({ value: time });
-		this.props.changeData && this.props.changeData(time)
-	};
-	handleSearch = value => {
-		if (value) {
-			fetch(value, data => this.setState({ data }));
-		} else {
-			this.setState({ data: [] });
-		}
-	};
-
-	renderinput = (data) => {
-		if (data.type == 'text') {
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div>
-						<input className={`${data.error && "brdred"} brdrcls`} value={this.props.value} maxLength={this.props.maxlength} type="text" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} />
-						{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
-					</div>
-
-				</div>
-
-			)
-		} else if (data.type == 'number') {
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div>
-						<input className={`${data.error && "brdred"} brdrcls`} min="0" value={this.props.value} type="number" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} onKeyDown={e => (e.key === "e" || e.key === "." || e.key === "+" || e.key === "-") && e.preventDefault()} />
-						{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
-					</div>
-
-				</div>
-
-			)
-		} else if (data.type == 'textarea') {
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div>
-						<textarea className={`${data.error && "brdred"} brdrcls`} rows="3" cols="50" value={this.props.value} onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)}></textarea>
-						{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
-					</div>
-
-				</div>
-
-			)
-		} else if (data.type == 'radio') {
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div>
-						<FormControlLabel control={<Radio className="radiobtncolor" icon={<RadioButtonUncheckedIcon fontSize="small" />}
-							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('M')} checked={this.state.gender == 'M'} fontSize="small" />} label="Amount" />
-						<FormControlLabel value="female" control={<Radio className="radiobtncolor" icon={<RadioButtonUncheckedIcon fontSize="small" />}
-							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('F')} checked={this.state.gender == 'F'} fontSize="small" />} label="Percentage" />
-					</div>
-
-				</div>
-			)
-		} else if (data.type == 'datepicker') {
-			function onChange(date, dateString) {
-				console.log(date, dateString);
-
-			}
-
-			const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
-
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div >
-
-						{/*<DatePicker value={moment(this.props.value)?moment(this.props.value):new Date()} open={this.state.open}  onFocus={()=>this.setState({open:true})} onChange={(date)=>this.datepickerChange(date)}  className="datepickerchnge" style={{width:'100%',}} format="YYYY-MM-DD"  />*/}
-						<MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<KeyboardDatePicker
-								disableToolbar={true}
-								autoOk={true}
-								clearable={false}
-								disableUnderline={true}
-								// disableFuture={this.props.disableFuture ? this.props.disableFuture : false}
-								// disablePast={this.props.disablePast ? this.props.disablePast : false}
-
-								// variant="variant"
-								// format="yyyy-MM-dd"
-								// margin="normal"
-								// id="date-picker-inline"
-								margin="normal"
-								id="date-picker-dialog"
-								format="dd/MM/yyyy"
-								KeyboardButtonProps={{
-									'aria-label': 'change date',
-								}}
-								value={this.state.selecteddate}
-								onChange={(value) => this.props.changeData && this.props.changeData(value)}
-
-							/>
-						</MuiPickersUtilsProvider>
-
-						{/* {
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						} */}
-					</div>
-
-				</div>
-			)
-		} else if (data.type == 'timepicker') {
-			function onChange(date, dateString) {
-				console.log(date, dateString);
-
-			}
-
-			const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
-
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-					<div >
-
-						{/*<TimePicker value={this.props.value} onChange={(time)=>this.onChange(time)} />*/}
-						<MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<KeyboardTimePicker
-								margin="normal"
-								id="time-picker"
-								value={this.state.selectedtime}
-								onChange={(time) => this.timepickerChange(time)}
-								KeyboardButtonProps={{
-									'aria-label': 'change time',
-								}}
-							/>
-						</MuiPickersUtilsProvider>
-						{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
-					</div>
-
-				</div>
-			)
-		} else if (data.type == 'select') {
-			function onChange(value) {
-				console.log(`selected ${value}`);
-			}
-			const { Option } = Select;
-			function onBlur() {
-				console.log('blur');
-			}
-
-			function onFocus() {
-				console.log('focus');
-			}
-
-			function onSearch(val) {
-				console.log('search:', val);
-			}
-
-			return (
-				<div className="formdiv">
-					<label className="labeltxt">{data.labelname}</label>
-
-					<Select showSearch value={data.value ? data.value : 'Select'} optionLabelProp="label"
-						optionFilterProp="label" className="selectbox" onChange={(value) => this.props.changeData && this.props.changeData(value)}>
-						{data.dropdown && data.dropdown.length > 0 && data.dropdown.map((item, index) => {
-							return (
-								<Option label={item[data.valuelabel]} value={item[data.valuebind]}>{item[data.valuelabel]}</Option>
-								// <Option  value={index} >{item}</Option>
-
-							)
-						})}
+// standard icons
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { apiurl } from "../../../src/App.js";
 
 
-					</Select>{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
 
 
-				</div>
-			)
-		}
-	}
-	render() {
+import "../../helpers/TableComponent/TableComp.css";
+import "./DragTable.css"
+// import { arrayRemoveAll } from "redux-form";
+const axios = require('axios');
 
-		const labelcss = require('./labelbox.css');
-		return (
-			<div>
-				{this.renderinput(this.props)}
-			</div>
-		);
-	}
+
+
+
+function desc(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function stableSort(array, cmp) {
+  console.log("sort", array);
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = cmp(a[0], b[0]);
+    console.log("order", order);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
+function getSorting(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => desc(a, b, orderBy)
+    : (a, b) => -desc(a, b, orderBy);
+}
+
+
+
+function EnhancedTableHead(props) {
+  const {
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort
+  } = props;
+  const createSortHandler = property => event => {
+    onRequestSort(event, property);
+  };
+  // const headRows = [
+  //   { id: "sno", label: "S.No" },
+  //   { id: "patient", label: "Customer" },
+  //   { id: "gender", label: "Gender" },
+  //   { id: "age", label: "Age" },
+  //   { id: "time", label: "Time" },
+  //   { id: "service", label: "Service" },
+  //   { id: "action", label: "Action" }
+  // ];
+  // console.log(props.heading, "heading")
+
+  return (
+
+    <TableHead className={props.alignheading}>
+      <TableRow>
+        {props.heading.map(row => (
+          <TableCell
+            key={row.id}
+            align={row.numeric ? "right" : "left"}
+            padding={row.disablePadding ? "none" : "default"}
+            sortDirection={orderBy === row.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === row.id}
+              direction={order}
+              onClick={createSortHandler(row.id)}
+            >
+              {row.label}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired
+};
+
+
+const actionsStyles = theme => ({
+  root: {
+    flexShrink: 0,
+    color: theme.palette.text.secondary,
+    marginLeft: theme.spacing.unit * 2.5,
+  },
+});
+
+class TablePaginationActions extends React.Component {
+  handleFirstPageButtonClick = event => {
+    this.props.onChangePage(event, 0);
+  };
+
+  handleBackButtonClick = event => {
+    this.props.onChangePage(event, this.props.page - 1);
+  };
+
+  handleNextButtonClick = event => {
+    this.props.onChangePage(event, this.props.page + 1);
+  };
+
+  handleLastPageButtonClick = event => {
+    this.props.onChangePage(
+      event,
+      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
+    );
+  };
+
+  render() {
+    const { classes, count, page, rowsPerPage, theme } = this.props;
+
+    return (
+      <div className={classes.root}>
+        <IconButton
+          onClick={this.handleFirstPageButtonClick}
+          disabled={page === 0}
+          aria-label="First Page"
+        >
+          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleBackButtonClick}
+          disabled={page === 0}
+          aria-label="Previous Page"
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleNextButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Next Page"
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleLastPageButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Last Page"
+        >
+          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        </IconButton>
+      </div>
+    );
+  }
+}
+
+TablePaginationActions.propTypes = {
+  classes: PropTypes.object.isRequired,
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  theme: PropTypes.object.isRequired,
+};
+
+const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(
+  TablePaginationActions,
+);
+
+// fake data generator
+const getItems = count =>
+  Array.from({ length: count }, (v, k) => k).map(k => ({
+    id: `item-${k}`,
+    content: `item ${k}`
+  }));
+
+// a little function to help us with reordering the result
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const grid = 3;
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+  // padding: grid * 2,
+  margin: `0 0 ${grid}px 0`,
+
+  // change background colour if dragging
+  background: isDragging && "#becbda",
+  // backgroundImage:isDragging && "linear-gradient(90deg, #028ce1 0%, #6acbe0 100%)",
+  // border:isDragging && "1px solid #5776af",
+  borderRadius: 5,
+  height: 52,
+
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
+
+const getListStyle = isDraggingOver => ({
+  //   background: isDraggingOver ? "lightblue" : "lightgrey",
+  padding: grid,
+  // width: "100%",
+});
+
+
+export default class DragdropTable extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      order: "",
+      open: false,
+      orderBy: "media_title",
+      selected: [],
+      page: 0,
+      dense: false,
+      rowsPerPage: 5,
+      viewmodal: false,
+      rows: this.props.rowdata,
+      viewdata: null,
+      type: "",
+      title: "",
+      items: getItems(10)
+    };
+  }
+
+
+  handleRequestSort = (event, property) => {
+    const isDesc =
+      this.state.orderBy === property && this.state.order === "desc";
+    this.setState({ order: isDesc ? "asc" : "desc" });
+    this.setState({ orderBy: property });
+  };
+
+  closemodal = () => {
+    this.setState({ view: false, DeleteView: false });
+  };
+
+  handleClick = (event, name) => {
+    const selectedIndex = this.state.selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected.push(this.state.selected, name);
+    } else if (selectedIndex === 0) {
+      // newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === this.state.selected.length - 1) {
+      // newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      // newSelected = newSelected.concat(
+      //   selected.slice(0, selectedIndex),
+      //   selected.slice(selectedIndex + 1),
+      // );
+    }
+    this.setState({ selected: newSelected });
+  };
+
+  handleChangePage = (event, newPage) => {
+    this.setState({ page: newPage });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: +event.target.value });
+    this.setState({ page: 0 });
+  };
+
+  handleChangeDense(event) {
+    this.setState({ dense: event.target.checked });
+  }
+
+  receiveapprovaldata = (data, data1) => {
+    console.log("receiveapproval", data);
+    console.log("data1", data1);
+    if (data1 == 1) {
+      this.setState({ viewmodal: false });
+      message.success("Your Leave Approved");
+      this.loadVendorDetails();
+    } else if (data1 == 2) {
+      this.setState({ viewmodal: false });
+      message.success("Your Leave Rejected");
+      this.loadVendorDetails();
+    }
+  };
+  receivedocdelete = data => {
+    console.log("receivedocdelete", data);
+    if (data.status == 0) {
+      this.setState({ viewmodal: false });
+      message.success(data.msg);
+      this.loadDoctorDetails();
+    }
+  };
+  sendapprovadata = data => {
+    if (data.status == 0) {
+      this.setState({ viewmodal: false });
+      message.success(data.msg);
+      this.loadDoctorDetails();
+    }
+  };
+
+  UNSAFE_componentWillReceiveProps(newProps) {
+    console.log(newProps, "componentWillReceivePropsrowdata")
+    let tablebodydata = this.props.rowdata
+    this.setState({
+      rows: newProps.rowdata
+    })
+    console.log("current state", this.state.rows)
+  }
+
+  onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const rows = reorder(
+      //   this.state.items,
+      this.state.rows,
+      result.source.index,
+      result.destination.index,
+    );
+
+    this.setState({
+      rows,
+    });
+  }
+
+  render() {
+    const isSelected = name => this.state.selected.indexOf(name) !== -1;
+    const { rows, rowsPerPage, page } = this.state;
+    console.log(this.props.rowdata, "rowdata")
+
+    return (
+      <Spin className="spinner_align" spinning={this.props.props_loading}>
+        <div className={`dragMasterClass VendorDetailsDiv`}>
+          <Paper className="paper">
+            <div className="tableWrapper">
+              {/* <Table
+              className="table"
+              aria-labelledby="tableTitle"
+              size={this.state.dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                numSelected={this.state.selected.length}
+                order={this.state.order}
+                orderBy={this.state.orderBy}
+                // onSelectAllClick={this.handleSelectAllClick}
+                heading={this.props.heading}
+                onRequestSort={this.handleRequestSort}
+                rowCount={this.state.rows &&this.state.rows.length}
+                alignheading={this.props.alignheading}
+              /> */}
+
+              <EnhancedTableHead
+                numSelected={this.state.selected.length}
+                order={this.state.order}
+                orderBy={this.state.orderBy}
+                // onSelectAllClick={this.handleSelectAllClick}
+                heading={this.props.heading}
+                onRequestSort={this.handleRequestSort}
+                rowCount={this.state.rows && this.state.rows.length}
+                alignheading={this.props.alignheading}
+              />
+
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                    >
+                      {
+                        this.state.rows.slice(
+                          this.state.page * this.state.rowsPerPage,
+                          this.state.page * this.state.rowsPerPage +
+                          this.state.rowsPerPage
+                        ).map((row, index) => (
+                          <Draggable key={row.indexid} draggableId={row.indexid} index={index}>
+
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                // {...provided.dragHandleProps}
+                                style={getItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style
+                                )}
+                              >
+                                <Table
+                                  className="table"
+                                  aria-labelledby="tableTitle"
+                                  size={this.state.dense ? "small" : "medium"}
+                                >
+
+                                  <TableBody>
+                                    <TableRow
+                                      hover
+                                      role="checkbox"
+                                      tabIndex={-1}
+                                      key={index}>
+
+                                      <TableCell key={index} >
+                                        <span {...provided.dragHandleProps}>
+                                          <AppsIcon style={{ fontSize: "22px" }} />
+                                        </span>
+                                      </TableCell>
+                                      <TableCell>
+                                        {this.state.rowsPerPage * this.state.page - 1 + index + 2}
+                                      </TableCell>
+                                      <TableCell key={index}>{row.title}</TableCell>
+                                      <TableCell key={index}>{row.type}</TableCell>
+                                      <TableCell key={index}>{row.uploaded}</TableCell>
+                                      <TableCell key={index}>{row.status==1?"Active":"Inactive"}</TableCell>
+
+                                      <TableCell className={"dragIconFelx"}>
+                                        <VisibilityIcon className="tableeye_icon" onClick={() => this.props.modelopen("view", row.id)} />
+                                        <EditIcon className="tableedit_icon" onClick={() => this.props.modelopen("edit", row.id)} />
+                                        <DeleteIcon className="tabledelete_icon" onClick={() => this.props.deleteopen("delete", row.id)} />
+                                      </TableCell>
+
+                                    </TableRow>
+                                  </TableBody>
+                                </Table>
+
+                              </div>
+                            )}
+                          </Draggable>
+                        ))
+                      }
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+
+            </div>
+
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              colSpan={3}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                native: true,
+              }}
+              component="div"
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActionsWrapped}
+            />
+
+          </Paper>
+
+        </div>
+      </Spin>
+    );
+  }
 }

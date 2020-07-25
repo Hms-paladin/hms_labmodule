@@ -12,12 +12,10 @@ export default class DashboardMaster extends Component {
     console.log(dateFormat(new Date(),"dd mmm yyyy"))
     return (
       <div >
-        <Paper>
+        <Paper style={{height:"400px"}}>
         <div className="dashboard_header">
               <div className="dashboard_title">LAB DASHBOARD</div>           
-              
           </div>
-      
         <DashboardTable />
         </Paper>
       </div>

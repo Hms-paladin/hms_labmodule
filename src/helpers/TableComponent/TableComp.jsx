@@ -18,6 +18,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 // import DeleteMedia from "../../helper/deletemodel";
 import { Icon, message, Popconfirm } from "antd";
 import { Spin } from 'antd';
+import NotfoundIcon from "../../Images/NotFound.svg"
 
 
 // standard icons
@@ -329,7 +330,11 @@ export default class Tablecomponent extends Component {
                 rowCount={this.state.rows &&this.state.rows.length}
                 alignheading={this.props.alignheading}
               />
+
               <TableBody>
+              {
+                  this.state.rows.length === 0 && <TableCell className={"noFoundIconCenter"} colSpan={12}><img src={NotfoundIcon} /><div>No Data Found</div></TableCell>
+                }
                 {stableSort(
                   this.state.rows,
                   getSorting(this.state.order, this.state.orderBy)

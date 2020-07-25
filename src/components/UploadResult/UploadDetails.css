@@ -1,31 +1,16 @@
-.ant-tabs-bar {
-  border-bottom: 0px !important;
+.tabfontUploadResult .MuiTab-wrapper{
+ color: #595959 !important;
+ font-size: 18px;
 }
-.ant-tabs-nav .ant-tabs-tab-active {
-  color: #86b149 !important;
-}
-.ant-tabs-nav {
-  font-size: 2.5rem !important;
-}
-.ant-tabs-nav .ant-tabs-tab:active {
-  color: #096dd9;
-}
-.ant-tabs-nav .ant-tabs-tab:hover {
-  color: none !important;
-}
-.ant-tabs-ink-bar {
-  height: 4px !important;
-  background-color: #86b149 !important;
-}
-.ant-tabs-nav-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.ant-tabs-nav-container {
-  border-bottom: 1.5px dashed #ddd;
-}
-.ant-tabs-nav .ant-tabs-tab {
-  padding: 16px 25px !important;
-  font-size: 24px;
-}
+
+
+
+.tabfontUploadResult .Mui-selected .MuiTab-wrapper{
+  color: #82AE3F !important;
+  font-size: 18px;
+ }
+
+ .tabfontUploadResult .MuiTabs-indicator{
+   background-color: #82AE3F;
+   height: 3px;
+ }

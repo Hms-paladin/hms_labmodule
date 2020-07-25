@@ -1,23 +1,19 @@
 import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
+import axios from 'axios';
+import { apiurl } from "../../App";
+import dateformat from 'dateformat';
+
 import "./CancelAppointmentTable.css";
+
+var moment = require('moment');
 
 class CancelAppointmentTable extends React.Component {
   state = {
     openview: false,
-  };
-
-  createData = (parameter) => {
-    var keys = Object.keys(parameter);
-    var values = Object.values(parameter);
-
-    var returnobj = {};
-
-    for (var i = 0; i < keys.length; i++) {
-      returnobj[keys[i]] = values[i];
-    }
-    return returnobj;
+    tableData:[],
+    tableDatafull:[],
   };
 
   modelopen = (data) => {
@@ -32,7 +28,77 @@ class CancelAppointmentTable extends React.Component {
     this.setState({ openview: false, editopen: false });
   };
 
+  UNSAFE_componentWillReceiveProps(newProps){
+    this.setState({
+      tableData:newProps.weekMonthYearData,
+      tableDatafull:newProps.wk_Mn_Yr_Full_Data,
+      search:newProps.searchData,
+    })
+  }
+
+  componentDidMount(){
+    var self = this
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getPatientTestCancelled',
+        data:{
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")  
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
+
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              Bookdate: moment(val.book_date).format('DD MMM YYYY'),
+              Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
+              time:"-",
+              id:index
+            })
+            tableDatafull.push(val)
+        })
+
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+    })
+}
+
   render() {
+    const searchdata = []
+    this.state.tableDatafull.filter((data,index) => {
+      console.log(data,"datadata")
+      if (this.state.search === undefined || this.state.search === null){
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          Bookdate: moment(data.book_date).format('DD MMM YYYY'),
+          Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
+          time:"-",
+          id:index
+          })
+      }
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase())) {
+        searchdata.push({
+          name: data.customer,
+          test: data.test,
+          Bookdate: moment(data.book_date).format('DD MMM YYYY'),
+          Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
+          time:"-",
+          id:index
+        })
+      }
+  })
+  console.log(searchdata,"searchdata")
     return (
       <div>
         <Tablecomponent
@@ -40,64 +106,14 @@ class CancelAppointmentTable extends React.Component {
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
             { id: "test", label: "Test" },
-            { id: "bookeddate", label: "Booked Date" },
-
-            { id: "date", label: "Cancelled Date" },
+            { id: "Bookdate", label: "Booked Date" },
+            { id: "Canceldate", label: "Cancelled Date" },
             { id: "time", label: "Time" },
-            // { id: "", label: "Action" }
           ]}
-          rowdata={[
-            this.createData({
-              name: "ABDHUL-KHAAFID",
-              test: "Blood Test",
-              bookeddate: "15 Dec 2019",
-              date: "18 Dec 2019",
-              time: "09:00 AM",
-            }),
-            this.createData({
-              name: "AHMED",
-              test: "Blood Test",
-              bookeddate: "15 Dec 2019",
-              date: "18 Dec 2019",
-              time: "09:30 AM",
-            }),
-            this.createData({
-              name: "IRFAN",
-              test: "Electrocardiogram",
-              bookeddate: "15 Dec 2019",
-              date: "17 Dec 2019",
-              time: "09:45 AM",
-            }),
-            this.createData({
-              name: "ZAINAB",
-              test: "Galactosemia Test",
-              bookeddate: "15 Dec 2019",
-              date: "17 Dec 2019",
-              time: "10:05 AM",
-            }),
-            this.createData({
-              name: "SAMREEN",
-              test: "Immunoglobulins",
-              bookeddate: "15 Dec 2019",
-              date: "16 Dec 2019",
-              time: "10:47 AM",
-            }),
-            this.createData({
-              name: "RASHID",
-              test: "Skull X-Ray",
-              bookeddate: "15 Dec 2019",
-              date: "15 Dec 2019",
-              time: "11:15 AM",
-            }),
-          ]}
-          tableicon_align={"cell_eye"}
-          VisibilityIcon="close"
-          EditIcon="close"
-          DeleteIcon="close"
-          UploadIcon="close"
-          GrandTotal="close"
-          Workflow="close"
+          rowdata={searchdata}
+          actionclose="close"
           modelopen={(e) => this.modelopen(e)}
+          props_loading={this.state.props_loading}
         />
 
         <Modalcomp
