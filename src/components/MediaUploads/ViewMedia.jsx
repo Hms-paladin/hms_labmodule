@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import "./ViewMedia.css";
 import uploadimage from "../../Images/upload-button.png";
 // import View from "../../Images/view_media.png";
-import Stepper from "../AdvertisementBooking/Stepper";
+// import Stepper from "../AdvertisementBooking/Stepper";
 export default class ViewMedia extends Component {
   render() {
     const{viewData,viewopenModal} = this.props
@@ -30,7 +30,7 @@ export default class ViewMedia extends Component {
               labelname="Media Title"
               value="Top Five Heart Tips"
             /> */}
-            <Stepper />
+            {/* <Stepper /> */}
           </Grid>
         </Grid>
       </div>

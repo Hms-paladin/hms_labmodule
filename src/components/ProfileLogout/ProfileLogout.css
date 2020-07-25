@@ -1,16 +1,13 @@
-.avatar_div{
+/* .avatar_div{
     position: relative;
 }
 .avatar_container{
     position: absolute;
     top: 64px;
     right: -42px;
-    /* height: 330px; */
     width: 345px;
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175); 
-    /* box-shadow: 0 6px 12px rgba(0,0,0,.175); */
     background-clip: padding-box;
-    /* box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),  0px 1px 10px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12) !important; */
 }
 .profile_logout_image{
     box-shadow: 0px 0px 5px #333333a6;
@@ -59,4 +56,4 @@
 }
 .profile_logout_butt p{
     margin-bottom: 0px !important;
-}
+} */

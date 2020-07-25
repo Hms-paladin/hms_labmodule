@@ -37,13 +37,13 @@
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  margin-left: 37%;
+  margin-left: 45%;
 }
 
 .iconsdiv img,.iconsdiv svg{
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  /* margin-right: 10px; */
   cursor: pointer;
 }
 
@@ -75,11 +75,12 @@
 
 .aligndeallistdata div div{
   color:#989898; 
+  font-size: 13.7px;
  }
 
  .aligndeallistdataRow2{
   display: flex;
-  padding: 0px 10px 0px 10px;
+  padding: 0px 5px 0px 10px;
  }
 
  .aligndeallistdataRow2 div span{
@@ -88,6 +89,7 @@
  
  .aligndeallistdataRow2 div div{
    color:#989898; 
+  font-size: 13.7px;
   }
  
 .dyndeallistPaper{
@@ -108,4 +110,13 @@
   width: 74.5%;
 }
 
- 
+.noFoundIconCenter_deal{
+  text-align: center !important;
+  margin-right: 20px;
+}
+
+.noFoundIconCenter_deal img{
+  width: 100px;
+  margin-top: 40px;
+  /* margin-right: 100px; */
+}

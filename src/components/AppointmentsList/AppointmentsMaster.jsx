@@ -8,7 +8,7 @@ import pdf from "../../Images/pdf.svg";
 import excel from "../../Images/excel.svg";
 import ReactSVG from 'react-svg';
 import Paper from "@material-ui/core/Paper";
-import { Input } from "antd";
+import { Input,notification } from "antd";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import axios from 'axios';
@@ -19,6 +19,8 @@ import 'jspdf-autotable';
 import ReactToPrint from "react-to-print";
 import ReactExport from 'react-data-export';
 import DateRangeSelect from "../../helpers/DateRange/DateRange";
+import dateformat from 'dateformat';
+
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -35,54 +37,71 @@ class AppointmentsList extends Component {
       weekMonthYearData: [],
       wk_Mn_Yr_Full_Data: [],
       dateRangeOpen:false,
+      openDateRange:false,
     };
   }
 
   componentDidMount() {
-    var self = this
-    axios({
-      method: 'POST', //get method 
-      url: apiurl + '/getTestPendingResult',
-      data: {
-        "lab_id": "2",
-        "date": "2020-06-18",
-        "period": "Day"
-      }
-    })
-      .then((response) => {
-        console.log(response, "response_data")
-
-        var tableData = [];
-        var tableDatafull = [];
-        response.data.data.map((val, index) => {
-          tableData.push({
-            name: val.customer,
-            test: val.test,
-            date: val.test_date,
-            time: val.uploaded_time ? val.uploaded_time : '-',
-            id: index
-          })
-          tableDatafull.push(val)
-        })
-
-        self.setState({
-          weekMonthYearData: tableData,
-          wk_Mn_Yr_Full_Data: tableDatafull,
-          props_loading: false
-        })
-      })
+    this.dayReport([{
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+  }],true)
+    
   }
 
-  weekFun = (period) => {
+  // daygetmethod=()=>{
+  //   var self = this
+  //   axios({
+  //     method: 'POST', //get method 
+  //     url: apiurl + '/getTestPendingResult',
+  //     data: {
+  //       "lab_id": "2",
+  //       "date": "2020-06-18",
+  //       "period": "Day",
+  //       "date_to":"2020-07-18"        
+  //     }
+  //   })
+  //     .then((response) => {
+  //       console.log(response, "response_data")
+
+  //       var tableData = [];
+  //       var tableDatafull = [];
+  //       response.data.data.map((val, index) => {
+  //         tableData.push({
+  //           name: val.customer,
+  //           test: val.test,
+  //           date: val.test_date,
+  //           time: val.uploaded_time ? val.uploaded_time : '-',
+  //           id: index
+  //         })
+  //         tableDatafull.push(val)
+  //       })
+
+  //       self.setState({
+  //         weekMonthYearData: tableData,
+  //         wk_Mn_Yr_Full_Data: tableDatafull,
+  //         props_loading: false
+  //       })
+  //     })
+  // }
+
+  dayReport=(data,firstOpen)=>{
+    console.log(data,"itemdaterange")
+    var startdate = dateformat(data[0].startDate, "yyyy-mm-dd")
+    var enddate = dateformat(data[0].endDate, "yyyy-mm-dd")
+    if(!firstOpen){
     this.setState({ spinner: true })
+    }
     var self = this
     axios({
       method: 'POST', //get method 
       url: apiurl + "/getTestPendingResult",
       data: {
         "lab_id": "2",
-        "date": "",
-        "period": period,
+        "date": startdate,
+        "period": "Day",
+        "date_to":enddate
       }
     })
       .then((response) => {
@@ -95,16 +114,58 @@ class AppointmentsList extends Component {
           weekData.push({
             name: val.customer,
             test: val.test,
-            date: val.test_date,
+            date: dateformat(val.test_date, "dd mmm yyyy"),
             time: val.uploaded_time ? val.uploaded_time : '-',
             id: index
           })
         })
         self.setState({ weekMonthYearData: weekData, wk_Mn_Yr_Full_Data: weekDatafull, spinner: false })
       })
+
   }
 
+  // weekFun = (period) => {
+  //   this.setState({ spinner: true })
+  //   var self = this
+  //   axios({
+  //     method: 'POST', //get method 
+  //     url: apiurl + "/getTestPendingResult",
+  //     data: {
+  //       "lab_id": "2",
+  //       "date": "",
+  //       "period": period,
+  //       "date_to":""
+  //     }
+  //   })
+  //     .then((response) => {
+  //       console.log(response, "response_dataweek")
+
+  //       var weekData = [];
+  //       var weekDatafull = [];
+  //       response.data.data.map((val, index) => {
+  //         weekDatafull.push(val)
+  //         weekData.push({
+  //           name: val.customer,
+  //           test: val.test,
+  //           date: val.test_date,
+  //           time: val.uploaded_time ? val.uploaded_time : '-',
+  //           id: index
+  //         })
+  //       })
+  //       self.setState({ weekMonthYearData: weekData, wk_Mn_Yr_Full_Data: weekDatafull, spinner: false })
+  //     })
+  // }
+
   generatepdf = () => {
+
+    if(this.state.weekMonthYearData.length===0){
+    notification.info({
+      description:
+        'No Data Found',
+        placement:"topRight",
+    });
+  }
+  else{
     const doc = new jsPDF("a4")
     var bodydata = []
     this.state.weekMonthYearData.map((data, index) => {
@@ -122,14 +183,23 @@ class AppointmentsList extends Component {
     })
 
     doc.save('AppoinmentDeatails.pdf')
+  }
 
   }
 
-  rangedataFun=(date)=>{
-    this.setState({
-      rangedate:date,
-      dateRangeOpen:false,
-    })
+  // rangedataFun=(date)=>{
+  //   this.setState({
+  //     rangedate:date,
+  //     dateRangeOpen:false,
+  //   })
+  // }
+
+  Notification=()=>{
+    notification.info({
+      description:
+        'No Data Found',
+        placement:"topRight",
+    });
   }
 
 
@@ -162,18 +232,20 @@ class AppointmentsList extends Component {
     ];
     return (
       <Spin className="spinner_align" spinning={this.state.spinner}>
-        {this.state.dateRangeOpen && <DateRangeSelect dynalign={"dynalign"} rangeDate={(data)=>this.rangedataFun(data)} />}
+        {/* {this.state.dateRangeOpen && <DateRangeSelect dynalign={"dynalign"} rangeDate={(data)=>this.rangedataFun(data)} />} */}
 
         <Paper>
           <div className="dashboard_header">
             <div className="dashboard_title">APPOINTMENT LIST</div>
             <div style={{ fontSize: "14px", display: "flex", alignItems: "center", }} >
-              <ButtonGroup className="clinic_group_details" size="small" aria-label="small outlined button group">
+              <DateRangeSelect openDateRange={this.state.openDateRange} DateRange={()=>this.setState({openDateRange:!this.state.openDateRange})} dynalign={"dynalign"} rangeDate={(item)=>this.dayReport(item)} />
+
+              {/* <ButtonGroup className="clinic_group_details" size="small" aria-label="small outlined button group">
                 <Button className="clinic_details" onClick={() => this.weekFun("WEEK")} >This Week</Button>
                 <Button className="clinic_details" onClick={() => this.weekFun("Month")}>This Month</Button>
                 <Button className="clinic_details" onClick={() => this.weekFun("YEAR")}>This Year</Button>
               </ButtonGroup>
-              <Moment format="DD-MMM-YYYY" className="mr-5 "onClick={()=>this.setState({dateRangeOpen:true})} ></Moment>
+              <Moment format="DD-MMM-YYYY" className="mr-5 "onClick={()=>this.setState({dateRangeOpen:true})} ></Moment> */}
               <Search
                 placeholder="Search"
                 onSearch={value => console.log(value)}
@@ -187,15 +259,17 @@ class AppointmentsList extends Component {
                   src={pdf}
                   style={{ marginRight: "15px", marginLeft: "15px" }}
                 />
+                {this.state.weekMonthYearData.length===0?<ReactSVG  onClick={this.Notification} src={excel} style={{ marginRight: "15px" }} />:
                 <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
                   <ExcelSheet dataSet={multiDataSet} name="Appoinment Details" />
-                </ExcelFile>
+                </ExcelFile>}
 
-
+                {this.state.weekMonthYearData.length===0?
+                <ReactSVG src={print} onClick={this.Notification} />:
                 <ReactToPrint
                   trigger={() => <ReactSVG src={print} />}
                   content={() => this.componentRef}
-                />
+                />}
                 <div style={{ display: "none" }}><PrintData printTableData={this.state.weekMonthYearData} ref={el => (this.componentRef = el)} /></div>
               </div>
             </div>

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Labelbox from "../../helpers/labelbox/labelbox";
 import Button from "@material-ui/core/Button";
-import { Paper } from "@material-ui/core";
-import { Tabs } from 'antd';
+import { Tabs,notification } from 'antd';
 import Checkbox from '@material-ui/core/Checkbox';
 // import Report from '../../images/report.jpg'
 import './BookingDetails.css'
@@ -29,10 +28,11 @@ export default class BookingDetails extends React.Component {
             activeKey: "1",
             serviceTypeAll: false,
             dealOption: "M",
-            deal_valid_from: '',
-            deal_valid_to: '',
+            deal_valid_from: new Date(),
+            deal_valid_to: new Date(),
             dealActive: false,
             afteredit: false,
+            valideToerror:false,
             bookingDetails: {
                 'service_type': {
                     'value': '',
@@ -92,11 +92,20 @@ export default class BookingDetails extends React.Component {
         var filtererr = bookingKeys.filter((obj) =>
             bookingDetails[obj].error == true);
         console.log(filtererr.length)
-        if (filtererr.length > 0) {
-            this.setState({ error: true })
+        if (filtererr.length > 0  ) {
+            // new Date(this.state.deal_valid_from) >= new Date(this.state.deal_valid_to)
+            // console.log(new Date(this.state.deal_valid_from),"fromdate")
+            // console.log(new Date(this.state.deal_valid_to),"fromdate")
+            // valideToerror:true 
+
+            
+            this.setState({ error: true})
         } else {
             this.setState({ error: false })
+            // if(new Date(this.state.deal_valid_from) >= new Date(this.state.deal_valid_to)){
+            // }else{
             this.onSubmitData()
+            // }
         }
         this.setState({ bookingDetails })
     }
@@ -108,7 +117,6 @@ export default class BookingDetails extends React.Component {
         bookingDetails[key].errmsg = errorcheck.msg;
         this.setState({ bookingDetails });
         if (key === "service_type" && data === 1) {
-            alert("true")
             var Data = [];
             this.state.serviceType.map(val => val.id > 1 && Data.push(val.id))
             console.log(Data.toString(), "myData")
@@ -120,6 +128,7 @@ export default class BookingDetails extends React.Component {
     }
 
     changeDealOption = (data) => {
+        console.log(data,"dataradio")
         this.setState({ dealOption: data });
     }
 
@@ -144,8 +153,8 @@ export default class BookingDetails extends React.Component {
             dealvendorId: 2,
             dealservicetypeId: this.state.serviceTypeAll === false ? this.state.bookingDetails.service_type.value : this.state.serviceTypeAll,
             dealtitle: this.state.bookingDetails.deal_title.value,
-            dealvalidfrom: this.state.deal_valid_from === "" ? dateformat(new Date(), "yyyy-mm-dd") : this.state.deal_valid_from,
-            dealvalidto: this.state.deal_valid_to === "" ? dateformat(new Date(), "yyyy-mm-dd") : this.state.deal_valid_to,
+            dealvalidfrom: dateformat(this.state.deal_valid_from, "yyyy-mm-dd"),
+            dealvalidto: dateformat(this.state.deal_valid_to, "yyyy-mm-dd"),
             dealoptions: this.state.dealOption === "M" ? "Amount" : "Percentage",
             dealamount: this.state.bookingDetails.deal_amt.value,
             dealactive: this.state.dealActive === true ? 1 : 0,
@@ -170,7 +179,7 @@ export default class BookingDetails extends React.Component {
             this.state.bookingDetails.deal_title.value = "",
             this.state.deal_valid_from = dateformat(new Date(), "yyyy-mm-dd"),
             this.state.deal_valid_to = dateformat(new Date(), "yyyy-mm-dd"),
-            // this.state.dealOption = "M",
+            this.state.dealOption = "M",
             this.state.bookingDetails.deal_amt.value = "",
             this.state.dealActive = false,
             this.setState({
@@ -190,6 +199,11 @@ export default class BookingDetails extends React.Component {
             console.log(response)
             this.resetFormValue()
             this.getDealsList()
+            notification.info({
+                description:
+                  'Record Added Successfully',
+                  placement:"topRight",
+              });
 
         }).catch((error) => {
             alert(JSON.stringify(error))
@@ -209,6 +223,11 @@ export default class BookingDetails extends React.Component {
             this.resetFormValue()
             this.getDealsList()
             this.setState({ afteredit: true, activeKey: "2",edit:false })
+            notification.info({
+                description:
+                  'Record Updated Successfully',
+                  placement:"topRight",
+              });
 
         }).catch((error) => {
             alert(JSON.stringify(error))
@@ -286,11 +305,12 @@ export default class BookingDetails extends React.Component {
 
                                     <Grid item xs={6} md={6}>
                                     <Labelbox
-                                                        type="datepicker"
-                                                        labelname="Valid To"
-                                                        value={this.state.deal_valid_to}
-                                                        changeData={(data) => this.changedateFun(data, 'deal_valid_to')}
-                                                    />
+                                    type="datepicker"
+                                    labelname="Valid To"
+                                    value={this.state.deal_valid_to}
+                                    changeData={(data) => this.changedateFun(data, 'deal_valid_to')}
+                                    />
+                                    {this.state.valideToerror && <div className="valid_toErrormsg">Value should be greater than from date</div > }
                                     </Grid>
 
                                     <Grid item xs={6} md={6}>
@@ -298,13 +318,14 @@ export default class BookingDetails extends React.Component {
                                             <Labelbox
                                                 labelname="Deal Options"
                                                 type="radio"
-                                                dealOption={this.state.dealOption}
-                                                changeDealOption={(data) => this.changeDealOption(data)}
+                                                checked={this.state.dealOption}
+                                                changeGender={(data) => this.changeDealOption(data)}
                                             />
                                         </div>
                                     </Grid>
 
                                     <Grid item xs={6} md={6}>
+                                        <div className="deal_radiopercent">
                                     <Labelbox
                                             type="number"
                                             labelname={this.state.dealOption === "M" ? "Deal Amount" : "Deal Percentage"}
@@ -314,6 +335,10 @@ export default class BookingDetails extends React.Component {
                                             error={this.state.bookingDetails.deal_amt.error}
                                             errmsg={this.state.bookingDetails.deal_amt.errmsg}
                                         />
+                                            <div className="deal_kwdalign">
+                                            {this.state.dealOption === "M" ? "KWD" : "%"}
+                                            </div>
+                                            </div>
                                     </Grid>
                                     
                                     <Grid item xs={12} md={12}>
@@ -339,7 +364,7 @@ export default class BookingDetails extends React.Component {
 
                                 </Grid>
                             </TabPane>
-                            <TabPane tab="Deal List" key="2">
+                            <TabPane tab="Deals List" key="2">
                                 <DealList
                                     dealsList={this.state.dealsList} // list data
                                     getDealsList={this.getDealsList} // get api function

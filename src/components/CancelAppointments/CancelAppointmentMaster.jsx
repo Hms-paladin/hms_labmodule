@@ -12,12 +12,14 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import axios from 'axios';
 import { apiurl } from "../../App";
-import { Spin } from 'antd';
+import { Spin,notification } from 'antd';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ReactToPrint from "react-to-print";
 import ReactExport from 'react-data-export';
 import PrintData from "./printdataCancel";
+import dateformat from 'dateformat';
+import DateRangeSelect from "../../helpers/DateRange/DateRange";
 
 var moment = require('moment');
 const ExcelFile = ReactExport.ExcelFile;
@@ -36,14 +38,30 @@ class CancelAppointmentMaster extends Component {
   }
 
   componentDidMount() {
+    this.dayReport([{
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+  }],true)
+    
+  }
+
+  dayReport=(data,firstOpen)=>{
+    console.log(data,"itemdaterange")
+    var startdate = dateformat(data[0].startDate, "yyyy-mm-dd")
+    var enddate = dateformat(data[0].endDate, "yyyy-mm-dd")
+    if(!firstOpen){
+    this.setState({ spinner: true })
+    }
     var self = this
     axios({
       method: 'POST', //get method 
       url: apiurl + '/getPatientTestCancelled',
       data: {
         "lab_id": "2",
-        "date": "2020-06-14",
-        "period": "Day"
+        "date": startdate,
+        "period": "Day",
+        "date_to":enddate
       }
     })
       .then((response) => {
@@ -55,8 +73,8 @@ class CancelAppointmentMaster extends Component {
           tableData.push({
             name: val.customer,
             test: val.test,
-            Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
-            Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
+            Bookdate: moment(val.book_date).format('DD MMM YYYY'),
+            Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
             time: "-",
             id: index
           })
@@ -66,44 +84,54 @@ class CancelAppointmentMaster extends Component {
         self.setState({
           weekMonthYearData: tableData,
           wk_Mn_Yr_Full_Data: tableDatafull,
-          props_loading: false
+          props_loading: false,
+          spinner:false
         })
       })
   }
 
-  weekFun = (period) => {
-    this.setState({ spinner: true })
-    var self = this
-    axios({
-      method: 'POST', //get method 
-      url: apiurl + "/getPatientTestCancelled",
-      data: {
-        "lab_id": "2",
-        "date": "",
-        "period": period,
-      }
-    })
-      .then((response) => {
-        console.log(response, "response_dataweek")
+  // weekFun = (period) => {
+  //   this.setState({ spinner: true })
+  //   var self = this
+  //   axios({
+  //     method: 'POST', //get method 
+  //     url: apiurl + "/getPatientTestCancelled",
+  //     data: {
+  //       "lab_id": "2",
+  //       "date": "",
+  //       "period": period,
+  //     }
+  //   })
+  //     .then((response) => {
+  //       console.log(response, "response_dataweek")
 
-        var weekData = [];
-        var weekDatafull = [];
-        response.data.data.map((val, index) => {
-          weekDatafull.push(val)
-          weekData.push({
-            name: val.customer,
-            test: val.test,
-            Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
-            Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
-            time: "-",
-            id: index
-          })
-        })
-        self.setState({ weekMonthYearData: weekData, wk_Mn_Yr_Full_Data: weekDatafull, spinner: false })
-      })
-  }
+  //       var weekData = [];
+  //       var weekDatafull = [];
+  //       response.data.data.map((val, index) => {
+  //         weekDatafull.push(val)
+  //         weekData.push({
+  //           name: val.customer,
+  //           test: val.test,
+  //           Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
+  //           Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
+  //           time: "-",
+  //           id: index
+  //         })
+  //       })
+  //       self.setState({ weekMonthYearData: weekData, wk_Mn_Yr_Full_Data: weekDatafull, spinner: false })
+  //     })
+  // }
 
   generatepdf = () => {
+
+    if(this.state.weekMonthYearData.length===0){
+      notification.info({
+        description:
+          'No Data Found',
+          placement:"topRight",
+      });
+    }
+    else{
     const doc = new jsPDF("a4")
     var bodydata = []
     this.state.weekMonthYearData.map((data, index) => {
@@ -121,7 +149,15 @@ class CancelAppointmentMaster extends Component {
     })
 
     doc.save('CancelledAppoinment.pdf')
+  }
+  }
 
+  Notification=()=>{
+    notification.info({
+      description:
+        'N0 Data Found',
+        placement:"topRight",
+    });
   }
 
   render() {
@@ -162,7 +198,8 @@ class CancelAppointmentMaster extends Component {
                   alignItems: "center",
                 }}
               >
-                <ButtonGroup
+              <DateRangeSelect dynalign={"dynalign"} rangeDate={(item)=>this.dayReport(item)} />
+                {/* <ButtonGroup
                   className="clinic_group_details"
                   size="small"
                   aria-label="small outlined button group"
@@ -171,7 +208,7 @@ class CancelAppointmentMaster extends Component {
                   <Button className="clinic_details" onClick={() => this.weekFun("Month")} >This Month</Button>
                   <Button className="clinic_details" onClick={() => this.weekFun("YEAR")}>This Year</Button>
                 </ButtonGroup>
-                <Moment format="DD-MMM-YYYY" className="mr-5 "></Moment>
+                <Moment format="DD-MMM-YYYY" className="mr-5 "></Moment> */}
 
                 <Search
                   placeholder="Search"
@@ -186,14 +223,17 @@ class CancelAppointmentMaster extends Component {
                     src={pdf}
                     style={{ marginRight: "15px", marginLeft: "15px" }}
                   />
+                {this.state.weekMonthYearData.length===0?<ReactSVG  onClick={this.Notification} src={excel} style={{ marginRight: "15px" }} />:
                   <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
                     <ExcelSheet dataSet={multiDataSet} name="Uploaded Details" />
-                  </ExcelFile>
+                  </ExcelFile>}
 
+                  {this.state.weekMonthYearData.length===0?
+                <ReactSVG src={print} onClick={this.Notification} />:
                   <ReactToPrint
                     trigger={() => <ReactSVG src={print} />}
                     content={() => this.componentRef}
-                  />
+                  />}
                   <div style={{ display: "none" }}><PrintData printTableData={this.state.weekMonthYearData} ref={el => (this.componentRef = el)} /></div>
                 </div>
               </div>

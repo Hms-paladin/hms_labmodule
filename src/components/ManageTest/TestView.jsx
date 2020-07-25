@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Labelbox from "../../helpers/labelbox/labelbox";
 import Button from "@material-ui/core/Button";
-import { Tag } from 'antd';
+import { notification } from 'antd';
 import AddIcon from '@material-ui/icons/Add';
 import ValidationLibrary from "../../helpers/validationfunction";
 import CloseIcon from '@material-ui/icons/Close';
@@ -127,6 +127,7 @@ export default class TestView extends Component {
             this.update()
           }else{
           this.props.closemodal(true)
+          this.props.callget()
           var self=this
           axios({
             method:'POST',
@@ -147,7 +148,7 @@ export default class TestView extends Component {
           })
           .then((response)=>{
             console.log(response,"response_checkingg")
-            self.props.callget()
+            self.props.callget("Added")
           })
         }
     
@@ -220,6 +221,7 @@ export default class TestView extends Component {
 
       update=()=>{
         this.props.closemodal(true)
+        this.props.callget()
         var self = this
         axios({
             method: 'PUT',
@@ -236,7 +238,7 @@ export default class TestView extends Component {
         })
         .then((response) => {
           console.log(response,"response_data")
-          self.props.callget()
+          self.props.callget("Updated")
         })
       }
       

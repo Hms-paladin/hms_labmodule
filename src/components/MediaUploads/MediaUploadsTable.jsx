@@ -11,6 +11,7 @@ import { apiurl } from "../../App";
 import dateformat from 'dateformat';
 import DeleteMedia from '../../helpers/ModalComp/deleteModal';
 import DragdropTable from "./DragTable.js"
+import { notification,Spin } from "antd";
 
 class MediaUploadsTable extends React.Component {
   state = {
@@ -19,6 +20,7 @@ class MediaUploadsTable extends React.Component {
     tableData:[],
     editData: "",
     viewData:"",
+    loading:true
     // workflow:false,
   };
   componentDidMount() {
@@ -57,13 +59,14 @@ UNSAFE_componentWillReceiveProps(newProps) {
     }
 }
    // get table data
-   getTableData = () => {
+   getTableData = (notifyMsg) => {
+     this.setState({loading:true})
     var self = this
     axios({
         method: 'POST', //get method 
         url: apiurl + '/mediauploaddetails',
         data:{
-          doctorid:11,
+          doctorid:2,
           // vendor_id:1,
           limit:100,
           offset:1,
@@ -76,7 +79,7 @@ UNSAFE_componentWillReceiveProps(newProps) {
       var tableData = [];
         response.data.data[0].details.map((val,index) => {
           // for(let i=0;i<50;i++){
-            tableData.push({ title: val.media_title,type:val.media_type,uploaded:val.created_on,status:val.is_active,id: val.id,indexid:index.toString() })
+            tableData.push({ title: val.media_title,type:val.media_type,uploaded:dateformat(val.created_on, "dd mmm yyyy hh:MM"),status:val.is_active,id: val.id,indexid:index.toString(),sortorder:val.media_sortorder })
             console.log(val.id,"idddddd")
           // }
 
@@ -84,8 +87,16 @@ UNSAFE_componentWillReceiveProps(newProps) {
         self.setState({
             tableData:tableData,
             props_loading: false,
-            totalData:response.data.data
+            totalData:response.data.data,
+            loading:false
         })
+        if(notifyMsg){
+        notification.info({
+          description:
+            'Record ' + notifyMsg + ' Successfully',
+            placement:"topRight",
+        });
+      }
         // console.log(tableData,"table")
         console.log(response.data.data[0].details,"iddd_checkkk")
     }).catch((error) => {
@@ -102,7 +113,7 @@ deleteopen = (type,id) => {
   console.log(id,"type")
 }
 deleterow = () => {
-  this.setState({ props_loading: true })
+  this.setState({ loading: true })
   var self = this
   axios({
       method: 'delete',
@@ -112,7 +123,7 @@ deleterow = () => {
       }
   })
       .then(function (response) {
-          self.getTableData()
+          self.getTableData("Deleted")
       })
       .catch(function (error) {
       });
@@ -121,7 +132,7 @@ deleterow = () => {
   render() {
     const img_var = <ReactSVG src={order} />;
     return (
-      <div>
+      <Spin className="spinner_align" spinning={this.state.loading}>
         {/* <Tablecomponent
           heading={[
             //  {id:"order", label:"Order"},
@@ -168,10 +179,10 @@ deleterow = () => {
           <MediaUploadsModal getTableData={this.getTableData} closemodal ={this.closemodal} editData={this.state.editData} editopenModal ={this.state.editopen && true} />
         </Modalcomp>
 
-        <Modalcomp  visible={this.state.deleteopen} title={"Delete"} closemodal={this.closemodal} xswidth={"xs"}>
+        <Modalcomp  visible={this.state.deleteopen} title={"Delete Media"} closemodal={this.closemodal} xswidth={"xs"}>
            <DeleteMedia deleterow={this.deleterow} closemodal={this.closemodal}  />
          </Modalcomp>
-      </div>
+      </Spin>
     );
   }
 }

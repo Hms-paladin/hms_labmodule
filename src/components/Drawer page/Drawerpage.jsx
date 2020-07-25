@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route,NavLink } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -56,6 +56,9 @@ import MediaUploadsMaster from "../MediaUploads/MediaUploadsMaster";
 import ProfileComp from "../LabProfile/ProfileComp";
 import PaymentReceived from "../PaymentReceived/PaymentReceived";
 import CancelPayment from "../CancelPayment/CancelPayment";
+import { apiurl } from "../../App";
+import Axios from "axios";
+
 
 const drawerWidth = 260;
 const styles = (theme) => ({
@@ -120,12 +123,41 @@ const styles = (theme) => ({
   },
 });
 
+var today = new Date();
+
+var date=today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+var time = today.toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true })
+
 class Drawerpage extends React.Component {
   state = {
     open: false,
     logout: false,
     custom_hide: true,
+    ProfileData:[],
+    date: date,
+    time: time,
   };
+
+  componentDidMount(){
+    this.ProfileGetApi()
+  }
+  ProfileGetApi=()=>{
+    var self=this
+    Axios({
+      method: 'post',
+      url: apiurl + '/Lab/getlabprofiledetails',
+      data: {
+        labId: "2",
+      }
+    })
+  .then((response) => {
+    var ProfileData=[]
+    console.log(response,"getdetails")
+    ProfileData=response.data.data
+    this.setState({ProfileData}) 
+  }).catch((error) => {
+      })
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -156,6 +188,8 @@ class Drawerpage extends React.Component {
         });
       }
     }
+
+    console.log(this.state.ProfileData,"ProfileData")
 
     return (
       <div className="drawerpage_container">
@@ -202,9 +236,10 @@ class Drawerpage extends React.Component {
                   <Dropdown.Toggle
                     variant="my_style"
                     id="dropdown-basic"
-                    onClick={this.logoutOpen}
+                    // onClick={this.logoutOpen}
                   >
-                    My Profile
+                    {/* My Profile */}
+                    {this.state.ProfileData && this.state.ProfileData[0] && this.state.ProfileData[0].vendor_name}
                   </Dropdown.Toggle>
 
                   {/* <Dropdown.Menu className="dropdown-menu" > */}
@@ -213,29 +248,98 @@ class Drawerpage extends React.Component {
      <Dropdown.Item href="#/action-3">Log out</Dropdown.Item>  */}
 
                   {/* </Dropdown.Menu>   */}
-                  {this.state.logout === true && (
+                  {/* {this.state.logout === true && (
                     <div>
                       <ProfileLogout
                         open={this.state.logout}
                         onClose={this.logoutClose}
                       />
                     </div>
-                  )}
+                  )} */}
+               <Dropdown.Menu className="dropdown-menu">
+                  {this.state.ProfileData.map((val)=>{
+               return(
+                    <div className="dropdown-img">
+                    {/* <NavLink activeClassName="active" to="/Home/profilepage"> */}
+                   
+                      <img
+                      
+                        className="Avatar"
+                        alt="avatar-missing"
+                        // src={val.vendor_filename ? val.vendor_filename : "" }
+                        src={avatar}
+                      />
+             
+                      {/* </NavLink> */}
+                      
+                     
+                    </div>
+                    )})}
+                    {this.state.ProfileData.map((val)=>{
+               return(
+                    <div className="name_email">
+                      <NavLink activeClassName="active" to="/Home/profile">
+                   <div className="username" style={{color:'black',textDecoration:'none'}}>{val.vendor_name}</div>
+                   </NavLink>
+                   <NavLink activeClassName="active" to="/Home/profile">
+
+                   <div style={{color:'#757575',textDecoration:'none'}}>{val.vendor_email}</div>
+                   </NavLink>
+                   </div>
+               )})}
+                    <Divider />
+                    <div className="profile_logout_butt">
+                    <NavLink activeClassName="active" to="/Home/profile">
+                      <p>Profile</p>
+                      </NavLink>
+                      {/* <Button
+                        className="logout_butt"
+                        // onClick={this.handleClose}
+                        onClose={this.props.onClose}
+                        onClick={this.logoutclick}
+                      >
+                        Logout
+                      </Button> */}
+                      <a
+                        component={NavLink}
+                        href="/"
+                        className="logout_butt"
+                        // onClick={this.handleClose}
+                        onClose={this.props.onClose}
+                      >
+                        Logout
+                      </a>
+                    </div>
+                    <Divider />
+                    <div className="profile_logout_privacy ">
+                      <p>Privacy Policy Terms of Service</p>
+                    </div>
+                  </Dropdown.Menu>
+
                 </Dropdown>
 
                 <div className="date-wrapper1">
                   <div className="date-wrapper2">
-                    <large className="date">04-09-2019 10.00am</large>
+                  <large className="date">{this.state.date+" "+this.state.time}</large>
                   </div>
                 </div>
               </div>
-              <Avatar
+              {/* <Avatar
                 className="Avatar-image"
                 alt="avatar-missing"
                 src={avatar}
                 onClick={this.viewmodalOpen}
                 className={classes.avatar}
+              /> */}
+      {this.state.ProfileData.map((val)=>{
+               return(
+              <Avatar
+                className="Avatar-image"
+                alt="avatar-missing"
+                src={val.vendor_filename?val.vendor_filename:avatar}
+                className={classes.avatar}
               />
+               )})}
             </Toolbar>
           </AppBar>
           <Drawer
@@ -286,7 +390,7 @@ class Drawerpage extends React.Component {
                     <ReactSVG src={uploadresult} />
                   </div>
                 </ListItemIcon>
-                <ListItemText primary="Upload Result" />
+                <ListItemText primary="Upload Results" />
               </MenuItem>
               <MenuItem component={Link} to="/Home/CancelAppointments">
                 <ListItemIcon>

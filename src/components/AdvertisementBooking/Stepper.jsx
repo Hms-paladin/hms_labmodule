@@ -14,6 +14,7 @@ import { MdDone } from "react-icons/md";
 import "./Stepper.css";
 import StepConnector from '@material-ui/core/StepConnector';
 import Button from '@material-ui/core/Button';
+import dateformat from "dateformat";
 // import Typography from '@material-ui/core/Typography';
 
 const ColorlibConnector = withStyles({
@@ -54,7 +55,7 @@ const useColorlibStepIconStyles = makeStyles({
   },
   active: {
     backgroundImage:
-    'linear-gradient( 136deg,rgb(117, 232, 155 ) 0%, rgb(117, 232, 155 ) 50%, rgb(117, 232, 155 ) 100%)',
+      'linear-gradient( 136deg,rgb(117, 232, 155 ) 0%, rgb(117, 232, 155 ) 50%, rgb(117, 232, 155 ) 100%)',
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
   },
   completed: {
@@ -70,7 +71,7 @@ function ColorlibStepIcon(props) {
   const icons = {
     1: <div className="icon_settings"><MdDone /></div>,
     2: <div className="icon_settings"><MdDone /></div>,
-    // 3: <div className="icon_settings"><MdDone /></div>
+    3: <div className="icon_settings"><MdDone /></div>
     // 2: <GroupAddIcon />,
     // 3: <VideoLabelIcon />,
   };
@@ -97,38 +98,63 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function getSteps() {
-    
-  return [ 'Booked', 'Approved', 'Ad posted'];
+
+  return ['Booked', 'Approved', 'Ad posted'];
 }
 
-export default function CustomizedSteppers() {
+export default function CustomizedSteppers(props) {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-  };
+  // const handleNext = () => {
+  //   setActiveStep(prevActiveStep => prevActiveStep + 1);
+  // };
 
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep(prevActiveStep => prevActiveStep - 1);
+  // };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  // const handleReset = () => {
+  //   setActiveStep(0);
+  // };
+  // if(props.businessDays){
 
+  // }
+  console.log(props.businessDays, "businessDays")
   return (
-    <div >
-      
+    <div className="steeper_Container">
+
       <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
         {steps.map(label => (
-          <Step key={label}className="booked_text_edit">
+          <Step key={label} className="booked_text_edit">
             <StepLabel StepIconComponent={ColorlibStepIcon} >{label}</StepLabel>
           </Step>
         ))}
       </Stepper>
-      <div className="btn_par_hide" >
+      {
+        <div className="steeper_info">
+          <div className="">
+            {props.businessDays.ad_start_date && dateformat(props.businessDays.ad_start_date,"dd mmm yyyy")}
+          </div>
+
+          <div className="">
+            {props.businessDays.ad_approval_time}
+            {/* {"11 jun 2020"} */}
+          </div>
+          <div className="">
+            {props.businessDays.ad_start_date && dateformat(props.businessDays.ad_start_date,"dd")}{"\xa0-\xa0"}{props.businessDays.ad_end_date && dateformat(props.businessDays.ad_end_date,"dd mmm yy")}
+          </div>
+        </div>
+      }
+                <div className="stepper__days">
+            <label>{props.businessDays.business_days} Business Days</label>
+          </div>
+    </div>
+  );
+}
+
+{/* <div className="btn_par_hide" >
         {activeStep === steps.length ? (
           <div>
          
@@ -153,7 +179,4 @@ export default function CustomizedSteppers() {
             </div>
           </div>
         )}
-      </div>
-    </div>
-  );
-}
+      </div> */}

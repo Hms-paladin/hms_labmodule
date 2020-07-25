@@ -32,16 +32,16 @@ export default class UploadView extends React.Component {
          <div className="lab_details_container">
             <div className="lab_detailsdiv">
            <h3 className="patient_name">{viewdata.customer}</h3>
-           <p className="patient_age">{viewdata.age + "Years"}</p>
+           <p className="patient_age">{viewdata.age +" "+ "Years"}</p>
            <p className="patientappointment_details">Appointment Details</p>
            <div className="head_text_edit">
            <div className="date_uploadetext_edit">
              <p className="uploadeddate_text_date">Uploaded Date</p>
-             <p className="date_text_date" >{viewdata.uploaded_date}</p>
+             <p className="date_text_date" >{viewdata.uploaded_date?viewdata.uploaded_date:"---"}</p>
            </div>
            <div className="date_uploadetext_edit">
              <p className="uploadeddate_text_date">Time</p>
-             <p className="date_text_date">{viewdata.uploaded_time}</p>
+             <p className="date_text_date">{viewdata.uploaded_time?viewdata.uploaded_time:"---"}</p>
            </div>
            </div>
           
@@ -49,9 +49,10 @@ export default class UploadView extends React.Component {
            <Divider className="dividerlist_root"/>
            <div className="test_details_head">Test Details</div>
            <div className="test_report_container">
-              <p>Galactosemia Test<span><DescriptionIcon className="file_attach"/><span className="line_edit">|</span></span></p>
+           <p>{viewdata.test}<span><DescriptionIcon className="file_attach"/></span></p>
+              {/* <p>Galactosemia Test<span><DescriptionIcon className="file_attach"/><span className="line_edit">|</span></span></p>
               <p>Electrocardiogram<span><DescriptionIcon className="file_attach"/><span className="line_edit">|</span></span></p>
-              <p className="blood_test_edit">Blood Test<span><DescriptionIcon className="file_attach" className="no_border"/></span></p>
+              <p className="blood_test_edit">Blood Test<span><DescriptionIcon className="file_attach" className="no_border"/></span></p> */}
            </div>
          </div>
          </div>

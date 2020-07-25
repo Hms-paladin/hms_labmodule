@@ -8,10 +8,16 @@ import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import Clientsmodal from "../UploadResult/clientsmodal";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import ProfileView from "./ProfileView"
+import dateformat from 'dateformat';
+import { Spin } from "antd"
+
 
 export default class DashboardTable extends Component {
   state = {
     openview: false,
+    tableData:[],
+    loading:true,
   };
 
 
@@ -22,38 +28,57 @@ export default class DashboardTable extends Component {
       url: apiurl + '/Dashboard',
       data: {
         lab_id: 2,
-        date: "2020-01-07",
+        date: dateformat(new Date(), "yyyy-mm-dd"),
         period: "day"
       }
     })
     .then((response) => {
       console.log(response,"response_data")
 
-      // var tableData = [];
-      // var tableDatafull = [];
-      //   response.data.data.map((val,index) => {
-      //       tableData.push({
-      //         name: val.customer,
-      //         test: val.test,
-      //         Bookdate: moment(val.book_date).format('DD-MM-YYYY'),
-      //         Canceldate: moment(val.cancel_date).format('DD-MM-YYYY'),
-      //         time:"-",
-      //         id:index
-      //       })
-      //       tableDatafull.push(val)
-      //   })
+      var tableData = [];
+      var tableDatafull = [];
+      var total_appointments = []
+      var Manage_test = []
+      var cancel_count = []
+      var totalrevenue = []
 
-      //   self.setState({
-      //     tableData:tableData,
-      //     tableDatafull:tableDatafull,
-      //     props_loading:false
-      //   })
+      response.data.data.map((data,index) => {
+        console.log(data.dashboard,"resdata")
+        // tableDatafull.push(val)
+        total_appointments.push(data.dashboard.total_appointments)
+        Manage_test.push(data.dashboard.Manage_test)
+        cancel_count.push(data.dashboard.cancel_count)
+        totalrevenue.push(data.dashboard.totalrevenue)
+
+    })
+
+    response.data.data && response.data.data[0] && response.data.data[0].today_appointments.map((val,index) => {
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              time: this.formatTimeShow(val.test_time),
+              charge: val.Charge,
+              id:index
+            })
+            tableDatafull.push(val)
+        })
+
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          total_appointments:total_appointments,
+          Manage_test:Manage_test,
+          cancel_count:cancel_count,
+          totalrevenue:totalrevenue,
+          loading:false
+
+        })
     })
 }
 
-  modelopen = (data) => {
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
+      this.setState({ openview: true,viewdata:this.state.tableDatafull[id] });
     } else if (data === "edit") {
       this.setState({ editopen: true });
     }
@@ -61,9 +86,17 @@ export default class DashboardTable extends Component {
   closemodal = () => {
     this.setState({ openview: false, editopen: false });
   };
+
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
   render() {
+    console.log(this.state.total_appointments,"total_appointments")
     return (
-      <>
+      <Spin className="spinner_align" spinning={this.state.loading}>
         <div>
           <div className="lab_dashboard_buttons_wrap">
             <Card
@@ -76,7 +109,7 @@ export default class DashboardTable extends Component {
                 <div className="divider_1px"></div>
               </div>
               <div className="lab_dash_numeric_wrap">
-                <p className="lab_dash_numeric_value">18</p>
+    <p className="lab_dash_numeric_value">{this.state.total_appointments && this.state.total_appointments.length !== 0 ? this.state.total_appointments[0] : 0}</p>
               </div>
             </Card>
             <Card
@@ -89,7 +122,7 @@ export default class DashboardTable extends Component {
                 <div className="divider_1px"></div>
               </div>
               <div className="lab_dash_numeric_wrap">
-                <p className="lab_dash_numeric_value">6</p>
+                <p className="lab_dash_numeric_value">{this.state.Manage_test && this.state.Manage_test.length !== 0 ? this.state.Manage_test[0] : 0}</p>
               </div>
             </Card>
             <Card
@@ -102,7 +135,7 @@ export default class DashboardTable extends Component {
                 <div className="divider_1px"></div>
               </div>
               <div className="lab_dash_numeric_wrap">
-                <p className="lab_dash_numeric_value">5</p>
+                <p className="lab_dash_numeric_value">{this.state.cancel_count && this.state.cancel_count.length !== 0 ? this.state.cancel_count[0] : 0}</p>
               </div>
             </Card>
             <Card
@@ -115,7 +148,7 @@ export default class DashboardTable extends Component {
                 <div className="divider_1px"></div>
               </div>
               <div className="lab_dash_numeric_wrap">
-                <p className="lab_dash_numeric_value">1050</p>
+                <p className="lab_dash_numeric_value">{this.state.totalrevenue && this.state.totalrevenue[0]}</p>
               </div>
             </Card>
           </div>
@@ -125,36 +158,39 @@ export default class DashboardTable extends Component {
           <span className="todays_appointment">
             <b>Today's Appointment</b>
           </span>{" "}
-          <span>18 Dec 2019</span>
+          <span>{dateformat(new Date(), "dd mmm yyyy")}</span>
         </div>
         <div>
           <Tablecomponent
             heading={[
               { id: "", label: "S.No" },
               { id: "name", label: " Customer" },
-              { id: "test", label: "Test Type" },
+              { id: "test", label: "Test Name" },
               { id: "time", label: "Time" },
               { id: "charge", label: "Charge(KWD)" },
               { id: "", label: "Action" },
             ]}
-            rowdata={[]}
+            rowdata={this.state.tableData && this.state.tableData}
             EditIcon="close"
             DeleteIcon="close"
-            modelopen={(e) => this.modelopen(e)}
-          props_loading={false}
-
+            modelopen={(e,id) => this.modelopen(e,id)}
+            props_loading={false}
           />
 
           {/* <Modalcomp  visible={this.state.openview} title={"CLIENTS"} closemodal={(e)=>this.closemodal(e)}>          
        < Clientsmodal />
         </Modalcomp> */}
 
-          <Modalcomp
-            visible={this.state.editopen}
+<ProfileView open={this.state.openview} onClose={this.closemodal} viewdata={this.state.viewdata}/>
+
+
+          {/* <Modalcomp
+            visible={this.state.openview}
             title={"Edit details"}
             closemodal={(e) => this.closemodal(e)}
             xswidth={"xs"}
-          ></Modalcomp>
+          >
+          </Modalcomp> */}
         </div>
         <div className="page_button_container">
           <div className="butt_container">
@@ -174,7 +210,7 @@ export default class DashboardTable extends Component {
             </Button>
           </div>
         </div>
-      </>
+      </Spin>
     );
   }
 }

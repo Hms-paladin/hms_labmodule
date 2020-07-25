@@ -1,9 +1,9 @@
 import React from "react";
 import Tablecomponent from "../../helpers/TableComponent/TableComp";
-import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import ListView from "./ListView";
 import axios from 'axios';
 import { apiurl } from "../../App";
+import dateformat from 'dateformat';
 
 import "./AppointmentsTable.css";
 
@@ -14,9 +14,9 @@ class Approvalmanagement extends React.Component {
     tableDatafull:[],
   };
 
-  modelopen = (data) => {
+  modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true });
+      this.setState({ openview: true,viewdata:this.state.tableDatafull[id] });
     } else if (data === "edit") {
       this.setState({ editopen: true });
     }
@@ -27,14 +27,16 @@ class Approvalmanagement extends React.Component {
   };
 
   componentDidMount(){
+    
     var self = this
     axios({
         method: 'POST', //get method 
         url: apiurl + '/getTestPendingResult',
         data:{
-          "lab_id":"2",
-          "date":"2020-06-18",
-          "period":"Day"        
+          "lab_id": "2",
+          "date": dateformat(new Date(), "yyyy-mm-dd"),
+          "period": "Day",
+          "date_to":dateformat(new Date(), "yyyy-mm-dd")
         }
     })
     .then((response) => {
@@ -46,7 +48,7 @@ class Approvalmanagement extends React.Component {
             tableData.push({
               name: val.customer,
               test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.uploaded_time ? val.uploaded_time : '-',
               id:index
             })
@@ -70,6 +72,13 @@ UNSAFE_componentWillReceiveProps(newProps){
   })
 }
 
+    
+formatTimeShow=(h_24)=> {
+  var h = Number(h_24.substring(0, 2)) % 12;
+  if (h === 0) h = 12;
+  return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+}
+
   render() {
     const searchdata = []
     this.state.tableDatafull.filter((data,index) => {
@@ -78,17 +87,17 @@ UNSAFE_componentWillReceiveProps(newProps){
         searchdata.push({
             name: data.customer,
             test: data.test,
-            date: data.test_date,
-            time: data.uploaded_time ? data.uploaded_time : '-',
+            date: dateformat(data.test_date, "dd mmm yyyy"),
+            time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && data.uploaded_time.toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
-          date: data.test_date,
-          time: data.uploaded_time ? data.uploaded_time : '-',
+          date: dateformat(data.test_date, "dd mmm yyyy"),
+          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
         id:index
         })
       }
@@ -99,7 +108,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: " Customer Name" },
-            { id: "test", label: "Test" },
+            { id: "test", label: "Test Name" },
             { id: "date", label: "Date" },
             { id: "time", label: "Time" },
             { id: "", label: "Action" },
@@ -107,22 +116,11 @@ UNSAFE_componentWillReceiveProps(newProps){
           rowdata={searchdata}
           EditIcon="close"
           DeleteIcon="close"
-          modelopen={(e) => this.modelopen(e)}
+          modelopen={(e,id) => this.modelopen(e,id)}
           props_loading={this.state.props_loading}
 
         />
-        <ListView open={this.state.openview} onClose={this.closemodal} />
-        {/* <Modalcomp  visible={this.state.openview} className="modal"  closemodal={(e)=>this.closemodal(e)}   xswidth={"xs"}
-
-        >
-            <ListView onClose={this.closemodal} />
-    
-        </Modalcomp> */}
-
-        {/* <Modalcomp  visible={this.state.editopen} title={"Edit details"} closemodal={(e)=>this.closemodal(e)}
-        xswidth={"xs"}
-        >
-        </Modalcomp> */}
+        <ListView open={this.state.openview} onClose={this.closemodal} viewdata={this.state.viewdata}  />
       </div>
     );
   }

@@ -158,21 +158,26 @@ font-size: 1.25rem;
 }
 .list_subhead{
     color:#989898 !important;
+    font-size: 13.6px;
 }
 .Ad_location_container{
-   
+    border: 2px dashed #D1D1D1;
     overflow-y: scroll;
     margin-right: 5px;
-  
+    margin-bottom: 10px;
 }
+
+.Ad_location_container .MuiStepper-horizontal{
+    padding: 35px 0px 0px 0px;
+}
+
 .advertise_addlist_items{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:10px;
-    border: 2px dashed #D1D1D1;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    /* padding:10px; */
+    /* border: 2px dashed #D1D1D1; */
+    margin: 0px 10px 7px 10px;
     
 }
 .full_half_div{
@@ -192,5 +197,37 @@ font-size: 1.25rem;
 .location_add_container {
     height: 370px;
     overflow: scroll;
+    width: 98%;
 }
 
+.advertise_contentSpace{
+    margin-bottom: 13px;
+}
+
+.advertise_kwdsmall{
+    font-size: 10px;
+    color: gray;
+}
+
+.advertise_image{
+    display: flex;
+    justify-content: center;
+}
+
+.advertise_image img{
+    height: 65px;
+    margin-top: 12px;
+}
+
+.image_size{
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.pagination__container{
+    border-top: 1px solid #bdbbbb;
+    margin-top: 20px;
+    width: 96%;
+    display: flex;
+    justify-content: flex-end;
+}

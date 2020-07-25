@@ -91,3 +91,22 @@
 .MuiDialog-paper {
   overflow-y: visible !important;
 }
+
+
+.appbar_sideicons a:focus{
+  outline: none !important;
+  text-decoration: none;
+}
+
+/* toaster */
+
+.ant-notification-notice-closable{
+  padding: 14px 5px 0px 16px;
+}
+.ant-notification-notice-description{
+    position: relative;
+    bottom: 16px;
+}
+.lab_dashboard_buttons_wrap a{
+  text-decoration: none;
+}

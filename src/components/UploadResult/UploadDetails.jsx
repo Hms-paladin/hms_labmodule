@@ -50,19 +50,23 @@ class UploadDetails extends React.Component {
 
     UNSAFE_componentWillReceiveProps(newProps){
       console.log(newProps.weekMonthYearData,"rowDetails")
+      if(newProps.propsopen){
       if(this.state.value){
         this.setState({
           weekMonthYearDatapending:newProps.weekMonthYearData,
           wk_Mn_Yr_Full_DataPending:newProps.wk_Mn_Yr_Full_Data,
           searchDataPending:newProps.searchData,
+          propsopen:newProps.propsopen
         })
     }else{
       this.setState({
         weekMonthYearData:newProps.weekMonthYearData,
         wk_Mn_Yr_Full_DataUpload:newProps.wk_Mn_Yr_Full_Data,
         searchDataUpload:newProps.searchData,
+        propsopen:newProps.propsopen
       })
     }
+  }
     }
 
   render() {
@@ -79,11 +83,11 @@ class UploadDetails extends React.Component {
         </AppBar>
         {value === 0 && 
           <TabContainer>
-          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchDataUpload} />
+          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchDataUpload} propsopen={this.state.propsopen}/>
           </TabContainer>}
         {value === 1 && 
           <TabContainer>
-          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} />
+          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} propsopen={this.state.propsopen} />
           </TabContainer>}
       </div>
     );

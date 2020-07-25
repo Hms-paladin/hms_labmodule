@@ -80,7 +80,7 @@ export default class Labelbox extends Component {
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
 					<div>
-						<input className={`${data.error && "brdred"} brdrcls`} value={this.props.value} maxLength={this.props.maxlength} type="text" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} />
+						<input className={`${data.error && "brdred"} brdrcls`} value={this.props.value} maxLength={this.props.maxlength} type="text" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} placeholder={this.props.placeholder} />
 						{
 							<div className="Errormsg">
 								<div>{data.error && data.errmsg}</div>
@@ -96,7 +96,7 @@ export default class Labelbox extends Component {
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
 					<div>
-						<input className={`${data.error && "brdred"} brdrcls`} min="0" value={this.props.value} type="number" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} onKeyDown={e => (e.key === "e" || e.key === "." || e.key === "+" || e.key === "-") && e.preventDefault()} />
+						<input className={`${data.error && "brdred"} brdrcls`} min="0" value={this.props.value} type="number" onChange={(e) => this.props.changeData && this.props.changeData(e.target.value)} onKeyDown={e => (e.key === "e" || e.key === "+" || e.key === "-") && e.preventDefault()} />
 						{
 							<div className="Errormsg">
 								<div>{data.error && data.errmsg}</div>
@@ -124,14 +124,15 @@ export default class Labelbox extends Component {
 
 			)
 		} else if (data.type == 'radio') {
+			console.log(this.props.checked,"checked")
 			return (
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
 					<div>
 						<FormControlLabel control={<Radio className="radiobtncolor" icon={<RadioButtonUncheckedIcon fontSize="small" />}
-							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('M')} checked={this.state.gender == 'M'} fontSize="small" />} label="Amount" />
+							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('M')} checked={this.props.checked == 'M'} fontSize="small" />} label="Amount" />
 						<FormControlLabel value="female" control={<Radio className="radiobtncolor" icon={<RadioButtonUncheckedIcon fontSize="small" />}
-							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('F')} checked={this.state.gender == 'F'} fontSize="small" />} label="Percentage" />
+							checkedIcon={<RadioButtonCheckedIcon fontSize="small" />} onClick={() => this.changeGender('F')} checked={this.props.checked == 'F'} fontSize="small" />} label="Percentage" />
 					</div>
 
 				</div>
@@ -169,11 +170,11 @@ export default class Labelbox extends Component {
 							/>
 						</MuiPickersUtilsProvider>
 
-						{
+						{/* {
 							<div className="Errormsg">
 								<div>{data.error && data.errmsg}</div>
 							</div>
-						}
+						} */}
 					</div>
 
 				</div>
@@ -233,8 +234,8 @@ export default class Labelbox extends Component {
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
 
-					<Select showSearch value={data.value ? data.value : 'Select'} optionLabelProp="label"
-						optionFilterProp="label" className="selectbox" onChange={(value) => this.props.changeData && this.props.changeData(value)}>
+					<Select className={`${data.error && "brdred"} ${data.error && "brdnone"} selectbox`} showSearch value={data.value ? data.value : 'Select'} optionLabelProp="label"
+						optionFilterProp="label" onChange={(value) => this.props.changeData && this.props.changeData(value)}>
 						{data.dropdown && data.dropdown.length > 0 && data.dropdown.map((item, index) => {
 							return (
 								<Option label={item[data.valuelabel]} value={item[data.valuebind]}>{item[data.valuelabel]}</Option>
