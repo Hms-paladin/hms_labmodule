@@ -13,10 +13,13 @@ import DeleteMedia from './DeleteMedia'
 import Modalcomp from '../../helpers/ModalComp/Modalcomp'
 import Axios from 'axios';
 // import apiservice from '../../helpers/apiservices'
-import { apiurl, imageUrl } from "../../App";
+import { apiurl } from "../../App";
 import { Chart, Axis, Legend, Tooltip, Geom } from 'bizcharts';
-import Stepper from '../StepperStatus/Stepper'
+import Stepper from './Stepper'
 import ReactPagination from "../Pagination/Pagination";
+import NotfoundIcon from "../../Images/NotFound.svg";
+import { Spin } from "antd"
+
 
 
 const data = [
@@ -38,7 +41,8 @@ export default class AdvertiseList extends React.Component{
              ad_details:[],
              total_count:"",
              limit:5,
-             pageno:1
+             pageno:1,
+             dataOnload: true
     }
 }
 
@@ -48,14 +52,15 @@ getAdBooking = () => {
         method: 'POST',
         url: apiurl + '/getAdBooking',
         data:{
-            "doctorid":"1",
+            "doctorid":"2",
             "limit":this.state.limit,
             "pageno":this.state.pageno
         }
     }).then((response) => {
         this.setState({
             ad_details: response.data.data[0].details,
-            total_count:response.data.data[0].total_count
+            total_count:response.data.data[0].total_count,
+            dataOnload: false
         },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.details))
     }).catch((error) => {
         alert(JSON.stringify(error))
@@ -75,7 +80,7 @@ getAdDetails = (data) => {
         method: 'POST',
         url: apiurl + '/getAdBooking',
         data:{
-            "doctorid":"1",
+            "doctorid":"2",
             "limit":this.state.limit,
             "pageno":data+1
         }
@@ -107,7 +112,7 @@ getAdDetails = (data) => {
             method: 'POST',
             url: apiurl + '/deleteAdBooking',
             data: {
-                doctorid: 1,
+                doctorid: 2,
             }
         }).then((response) => {
             console.log(response)
@@ -120,11 +125,26 @@ getAdDetails = (data) => {
         console.log("deletedetails", details)
     }
 
+    workflowopen=(id)=>{
+        if(this.state.workflowopen===id){
+            this.setState({
+                workflowopen:null
+            })
+        }else{
+        this.setState({
+            workflowopen:id
+        })
+    }
+    }
+
 
     render(){
         console.log("sdfjskdhfjsdkhfds",this.props)
         return(
-         <>
+            <Spin className="spinner_align" spinning={this.state.dataOnload}>
+          {this.state.ad_details.length === 0 ? <div className={"noFoundIconCenter_deal"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
+          <>
+
             <div className="location_add_container">    
             {
                 this.state.ad_details && this.state.ad_details.length > 0 &&
@@ -136,12 +156,12 @@ getAdDetails = (data) => {
                         <div className="advertise_addlist_items">
                       
                             <div>
-                                <div>
+                                <div className="advertise_contentSpace">
                                     <label className="list_head">Ad Location</label>
                             <h5 className="list_subhead">{bookingDetails.ad_location}</h5>
                                 </div>
                                 
-                                <div>
+                                <div className="advertise_contentSpace">
                                     <label className="list_head">Days</label>
                             <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
                                 </div>
@@ -150,24 +170,24 @@ getAdDetails = (data) => {
     
     
                             <div>
-                                <div>
+                            <div className="advertise_contentSpace">
                                     <label className="list_head">Start Date</label>
                             <h5 className="list_subhead">{bookingDetails.ad_start_date}</h5>
                                 </div>
                                 
-                                <div>
-                                    <label className="list_head">Fee / Day (KWD)</label>
+                                <div className="advertise_contentSpace">
+                                    <label className="list_head">Fee / Day <span className="advertise_kwdsmall">(KWD)</span></label>
                                     <h5 className="list_subhead">{bookingDetails.ad_fee_per_day}</h5>
                                 </div>
                             </div>
                             <div>
-                                <div>
+                            <div className="advertise_contentSpace">
                                     <label className="list_head">End Date</label>
                                     <h5 className="list_subhead">{bookingDetails.ad_end_date}</h5>
                                 </div>
                                 
-                                <div>
-                                    <label className="list_head">Total Cost (KWD)</label>
+                                <div className="advertise_contentSpace">
+                                    <label className="list_head">Total Cost <span className="advertise_kwdsmall">(KWD)</span></label>
                                     <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
                                 </div>
                             </div>
@@ -177,7 +197,7 @@ getAdDetails = (data) => {
                                     <p className="image_size">Full</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
-                                            <img src={Workflow} className="listdelete_icon" />
+                                            <img src={Workflow} className="listdelete_icon" onClick={(id)=>this.workflowopen(bookingDetails.id)} />
                                             <EditIcon className="list_edit" 
                                             onClick={() => this.props.changeTab(bookingDetails)}
                                             />
@@ -188,15 +208,12 @@ getAdDetails = (data) => {
                                 </div>
     
                         </div>
-                        <Stepper businessDays={bookingDetails.business_days}/>
+                       {this.state.workflowopen === bookingDetails.id && <Stepper businessDays={bookingDetails} />}
                        
                     </div>
                     
                     )
                 })}
-
-
-               
 
 
             </div>
@@ -216,14 +233,17 @@ getAdDetails = (data) => {
                         title="Delete Advertisement" visible={this.state.open} closemodal = {this.handleClose}>
 
                             <DeleteMedia  delid={this.state.del_id} listName="advertisement" getAdvertiseList={this.getAdBooking}
+                            loader={(data)=>this.setState({dataOnload:data})}
                             apiendpoint={"deleteAdBooking"} generateAlert={this.props.generateAlert}
                                            
                                             closemodal = {this.handleClose} />
                         </Modalcomp>
                 </div>
-
-
                 </>
+    }
+
+
+                </Spin>
 
 
        

@@ -28,6 +28,10 @@
     border: 1px solid red;
 }
 
+.formdiv .brdnone .ant-select-selection{
+    border: none !important;
+}
+
 .formdiv .MuiFormControl-root .MuiTextField-root .MuiFormControl-marginNormal {
     box-shadow: transparent;
 }
@@ -46,12 +50,16 @@
     height: unset !important;
     padding: 4px;
     outline: 0;
-    border-radius: 3px;
+    border-radius: 2px !important;
     border: 0;
     border: 1px solid #ccc;
     box-shadow: 0 0 1.5px 0px #ccc;
     color: #797777;
 }
+
+/* .formdiv .selectbox .ant-select-selection--single {
+border-color: red;
+} */
 
 .formdiv .selectbox {
     /*   z-index: 1400  !important;*/
