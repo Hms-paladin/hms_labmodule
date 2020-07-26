@@ -140,11 +140,16 @@ export default class BookingDetails extends React.Component {
     }
 
     getRangeData = (data) => {
-        this.setState({
-            deal_valid_from: dateformat(new Date(data[0].split(" ").reverse().join("/")), "yyyy-mm-dd"),
-            deal_valid_to: dateformat(new Date(data[1].split(" ").reverse().join("/")), "yyyy-mm-dd")
-        })
-        this.setState({})
+        console.log(data,"getRangeData")
+        if(data.enddate===null){
+            this.setState({deal_valid_from:data.startdate})
+        }else{
+            if(data.startdate<data.enddate){
+            this.setState({deal_valid_from:data.startdate,deal_valid_to:data.enddate})
+            }else{
+            this.setState({deal_valid_from:data.enddate,deal_valid_to:data.startdate})
+            }
+        }
     }
 
     onSubmitData = () => {
@@ -254,6 +259,7 @@ export default class BookingDetails extends React.Component {
 
     render() {
         const { TabPane } = Tabs;
+        console.log(this.state.deal_valid_from,"deal_valid_from")
         return (
             <div className="booking_createlist">
                 <Grid container>
@@ -358,7 +364,6 @@ export default class BookingDetails extends React.Component {
                                     </div>
 
                                     </div>
-
 
                                     </Grid>
 

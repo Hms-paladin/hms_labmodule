@@ -113,13 +113,24 @@ export default class AdBooking extends React.Component {
     // }
 
 
-    getRangeData = (data) => {
-        this.setState({
-            startdate: dateformat(new Date(data[0].split(" ").reverse().join("/")), "yyyy-mm-dd"),
-            endDate: dateformat(new Date(data[1].split(" ").reverse().join("/")), "yyyy-mm-dd")
-        })
-        this.setState({})
-    }
+        getRangeData = (data) => {
+            console.log(data,"getRangeData")
+            if(data.enddate===null){
+                this.setState({startdate:data.startdate})
+            }else{
+                if(data.startdate<data.enddate){
+                this.setState({startdate:data.startdate,endDate:data.enddate})
+                }else{
+                this.setState({startdate:data.enddate,endDate:data.startdate})
+                }
+            }
+                    // this.setState({
+        //     startdate: dateformat(new Date(data[0].split(" ").reverse().join("/")), "yyyy-mm-dd"),
+        //     endDate: dateformat(new Date(data[1].split(" ").reverse().join("/")), "yyyy-mm-dd")
+        // })
+        // this.setState({})
+        }
+
 
 
     handleChange = info => {
