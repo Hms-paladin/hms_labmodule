@@ -30,8 +30,6 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import ReactSVG from "react-svg";
-import Profilepage from "../LabProfile/Profilepage";
-import ProfileLogout from "../../components/ProfileLogout/ProfileLogout";
 import uploadresult from "../../Images/uploadresult.svg";
 import deals from "../../Images/deals.svg";
 import managetest from "../../Images/managetest.svg";
@@ -42,8 +40,6 @@ import advertisementbooking from "../../Images/lab/advertisementbooking.svg";
 import revenue from "../../Images/lab/revenue.svg";
 import report from "../../Images/lab/report.svg";
 import profile from "../../Images/lab/profile.svg";
-// import ProfileComp from '../LabProfile/ProfileComp';
-
 import DashboardMaster from "../Dashboard/DashboardMaster";
 import AppointmentList from "../AppointmentsList/AppointmentsMaster";
 import UploadMaster from "../UploadResult/UploadMaster";
@@ -530,11 +526,6 @@ class Drawerpage extends React.Component {
             />
             <div>
               {children}
-              {/* <Profilepage
-                open={this.state.viewmodal}
-                onClose={this.viewmodalClose}
-              /> */}
-              {/* {this.state.viewmodal &&<ProfileComp/>} */}
             </div>
           </main>
         </div>

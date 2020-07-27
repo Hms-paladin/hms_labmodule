@@ -21,6 +21,7 @@
   padding-bottom: 15px;
   width: 96%;
 }
+
 .manage_test_Cancel {
   font-size: 1.25rem !important;
   background-color: rgb(201, 201, 201) !important;
@@ -130,7 +131,7 @@
   padding-right: 2px;
 }
 
-.texttag{
+.texttag {
   border-radius: 2px;
   font-size: 13px;
   line-height: 25px;
@@ -141,8 +142,71 @@
   padding-inline-start: 8px;
 }
 
-.closeicontestview{
-  color:#ec6060;
+.closeicontestview {
+  color: #ec6060;
   cursor: pointer;
   margin-left: 5px;
+}
+
+.tabControlTest {
+  /* display: flex;
+  justify-content: center; */
+}
+
+.addBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.manageCard {
+  height: 80px;
+}
+
+.left_content {
+  background: #86b149;
+  height: 80px;
+  color: white;
+  padding: 0px;
+  padding-top: 15px;
+}
+
+.left_header {
+  color: white !important;
+  display: flex;
+  justify-content: center;
+}
+
+.right_content {
+  height: 80px;
+  padding: 6px;
+}
+
+.closeIconRightContent {
+  font-size: 12px !important;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: bisque;
+  cursor: pointer;
+}
+
+.tabControlTest .ant-tabs-nav-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 3px 6px #00000029;
+  font-size: 16px !important;
+}
+
+.tabControlTest .ant-tabs-ink-bar {
+  height: 4px !important;
+  background-color: #86b149 !important;
+}
+
+.previewNoRecord {
+  width: 100%;
+  height: 67px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

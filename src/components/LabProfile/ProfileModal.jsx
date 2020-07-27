@@ -77,7 +77,9 @@ class Modalcomp extends React.Component {
     this.state = {
       openprofile: false,
       basicdetails: true,
-      Workingdetails: false
+      Workingdetails: false,
+      imageChanged: false,
+      imageData: []
     };
   }
 
@@ -87,11 +89,15 @@ class Modalcomp extends React.Component {
       return;
     }
     if (info.file.status === 'done') {
+      this.setState({
+        imageData: info
+      }, () => console.log("sdfdsfsdhfjhsdfhsdfd", this.state.imageData))
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl =>
         this.setState({
           imageUrl,
           loading: false,
+          imageChanged: true
         }),
       );
     }
@@ -110,14 +116,8 @@ class Modalcomp extends React.Component {
     this.setState({ openprofile: false })
   }
 
-  UNSAFE_componentWillReceiveProps(newProps){
-    if(newProps.openmodel){
-    this.setState({
-      openprofile:newProps.openmodel,
-      ProfileGetdata:newProps.ProfileGetdata,
-    })
-    this.props.closemodelPage()
-  }
+  componentWillReceiveProps() {
+    this.state.imageUrl = this.props.ProfileData.length > 0 && this.props.ProfileData[0].vendor_filename
   }
 
   render() {
@@ -133,9 +133,9 @@ class Modalcomp extends React.Component {
       <div className="labmodaldiv_profile">
         <Dialog
           className="Dialogmodaltitle"
-          // onClose={this.props.handleClose}
+          onClose={this.props.handleClose}
           aria-labelledby="customized-dialog-title"
-          open={this.state.openprofile}
+          open={this.props.open}
           maxWidth={this.props.xswidth ? 'xs' : 'md'}
           fullWidth={true}
         >
@@ -180,8 +180,14 @@ class Modalcomp extends React.Component {
 
             <div>
               {this.state.basicdetails === true ?
-                <BasicDetails onClose={this.closemodel} ProfileGetdata={this.state.ProfileGetdata}/>
-                : this.state.Workingdetails == true && <CheckboxLabels />}
+                <BasicDetails
+                  onClose={() => this.props.onClose(false)}
+                  ProfileData={this.props.ProfileData}
+                  ProfileGetApi={() => this.props.ProfileGetApi()}
+                  imageData={this.state.imageData}
+                  imageChanged={this.state.imageChanged}
+                />
+                : this.state.Workingdetails === true && <CheckboxLabels />}
             </div>
           </DialogContent>
         </Dialog>

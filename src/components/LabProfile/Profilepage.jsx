@@ -8,7 +8,7 @@ import "./Profilepage.css";
 import { TiLocation, MdLocationOn, MdLocalPhone } from "react-icons/md";
 import { IoIosGlobe } from "react-icons/io";
 import EditIcon from "@material-ui/icons/Edit";
-import Modalcomp from './ProfileModal';
+import ProfileModal from './ProfileModal';
 // import { BsThreeDots } from 'react-icons/bs';
 import Axios from "axios";
 import { apiurl } from "../../App";
@@ -160,7 +160,7 @@ export default class Profilepage extends React.Component {
               <Divider className="divider_profile" />
             </Grid>
           </Grid>
-        <Modalcomp closemodelPage={this.closemodelPage} openmodel={this.state.editIcon} ProfileGetdata={this.state.ProfileGetdata}/>
+        <ProfileModal closemodelPage={this.closemodelPage} openmodel={this.state.editIcon} ProfileGetdata={this.state.ProfileGetdata}/>
       </div>
       </div>
     );

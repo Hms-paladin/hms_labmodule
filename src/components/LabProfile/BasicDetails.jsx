@@ -1,164 +1,192 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import Grid from '@material-ui/core/Grid';
 import Labelbox from '../../helpers/labelbox/labelbox'
 import Button from '@material-ui/core/Button';
-import './BasicDetails.css'
-import Axios from 'axios';
+import './BasicDetails.css';
+import './ProfileModal.css';
+import axios from 'axios';
 import ValidationLibrary from "../../helpers/validationfunction";
+import { apiurl } from '../../App';
 
-export default class BasicDetails extends React.Component{
-    state={
-        open:"",
-        ProfileEditData:{
-              'Address':{
-                'value': '',
-                validation: [{ 'name': 'required' }],
-                error: null,
-                errmsg: null
-              },
-              'contactperson':{
-                'value': '',
-                validation: [{ 'name': 'required' }],
-                error: null,
-                errmsg: null
-              },
-              'Website':{
-                'value': '',
-                validation: [{ 'name': 'required' }],
-                error: null,
-                errmsg: null
-              },
-              'mobno':{
-                'value': '',
-                validation: [{ 'name': 'required' }],
-                error: null,
-                errmsg: null
-              },
-              'email':{
-                'value': '',
-                validation: [{ 'name': 'required' }],
-                error: null,
-                errmsg: null
-              }
-        }
+export default class BasicDetails extends React.Component {
+  state = {
+    open: "",
+    basicDetails: {
+      'address': {
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
+      },
+      'contactPerson': {
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
+      },
+      'website': {
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
+      },
+      'mobileNumber': {
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
+      },
+      'email': {
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
+      }
     }
-    changeDynamic = (data, key) => {
-        var ProfileEdit = this.state.ProfileEditData;
-        var errorcheck = ValidationLibrary.checkValidation(data, ProfileEdit[key].validation);
-        ProfileEdit[key].value = data;
-        ProfileEdit[key].error = !errorcheck.state;
-        ProfileEdit[key].errmsg = errorcheck.msg;
-        this.setState({ ProfileEdit });
+  }
+
+  componentDidMount() {
+    // const {EditData,EditOpen}=this.props
+    console.log("ProfileGetdata", this.props.ProfileGetdata)
+    this.setProfileData();
+  }
+
+  setProfileData = () => {
+    this.state.basicDetails.address.value = this.props.ProfileData[0].vendor_address
+    this.state.basicDetails.contactPerson.value = this.props.ProfileData[0].vendor_contact
+    this.state.basicDetails.website.value = this.props.ProfileData[0].vendor_website
+    this.state.basicDetails.mobileNumber.value = this.props.ProfileData[0].vendor_phone
+    this.state.basicDetails.email.value = this.props.ProfileData[0].vendor_email
+    this.setState({})
+  }
+
+  checkValidation = () => {
+    var basicDetails = this.state.basicDetails;
+    var basicDetailsKeys = Object.keys(basicDetails);
+    console.log(basicDetailsKeys);
+    for (var i in basicDetailsKeys) {
+      var errorcheck = ValidationLibrary.checkValidation(basicDetails[basicDetailsKeys[i]].value, basicDetails[basicDetailsKeys[i]].validation);
+      console.log(errorcheck);
+      basicDetails[basicDetailsKeys[i]].error = !errorcheck.state;
+      basicDetails[basicDetailsKeys[i]].errmsg = errorcheck.msg;
+    }
+    var filtererr = basicDetailsKeys.filter((obj) =>
+      basicDetails[obj].error == true);
+    console.log(filtererr.length)
+    if (filtererr.length > 0) {
+      this.setState({ error: true })
+    } else {
+      this.setState({ error: false })
+      this.onSubmitData()
+    }
+    this.setState({ basicDetails })
+  }
+  changeDynamic = (data, key) => {
+    var basicDetails = this.state.basicDetails;
+    var errorcheck = ValidationLibrary.checkValidation(data, basicDetails[key].validation);
+    basicDetails[key].value = data;
+    basicDetails[key].error = !errorcheck.state;
+    basicDetails[key].errmsg = errorcheck.msg;
+    this.setState({ basicDetails });
+    this.setState({})
+  }
+
+
+  onSubmitData = () => {
+    var formData = new FormData()
+    if (this.props.imageChanged === true) {
+
+      for (let i in this.props.imageData) {
+        formData.append('uploadFile', this.props.imageData[i].originFileObj)
+        console.log("formdafdsfsdf", this.props.imageData[i].originFileObj)
       }
 
-      
-      componentDidMount(){
-        // const {EditData,EditOpen}=this.props
-        console.log("ProfileGetdata",this.props.ProfileGetdata)
-        var EditData = this.props.ProfileGetdata
-        // if(EditOpen===true){
-          // this.state.editId=EditData[0].vendorId
-        this.state.ProfileEditData.Address.value=EditData[0].vendor_address
-        this.state.ProfileEditData.contactperson.value=EditData[0].vendor_contact
-        this.state.ProfileEditData.Website.value=EditData[0].vendor_website 
-        this.state.ProfileEditData.mobno.value=EditData[0].vendor_phone   
-        this.state.ProfileEditData.email.value=EditData[0].vendor_email 
-        // }
-        // console.log(EditData[0].vendor_address,"add")
-        this.setState({})
-        // console.log(EditData[0].vendor_address,"data")
-      }
-      EditProfileApi =()=>{
-          Axios({
-              method:"POST",
-              url:"http://52.200.251.222:8158/api/v1/lab/editlabprofiledetails",
-              data:{
-                // address:"Aminjikarai",
-                // mobile:"7397352059",
-                // email:"caprillsweet6@gmail.com",
-                // website:"www.nurse.com",
-                // contact:"nurse company",
-                // modifiedby:1,
-                // labId:2,
-                // uploadFile:"",
-          "labId":"2",
-	        "address":this.state.ProfileEditData.Address.value,
-	        "contact":this.state.ProfileEditData.contactperson.value,
-         	"website":this.state.ProfileEditData.Website.value,
-         	"mobile":this.state.ProfileEditData.mobno.value,
-	        "email":this.state.ProfileEditData.email.value,
-          "modifiedby":1,
-              }
-          })
-          .then((response)=>{
-              console.log(response,"response")
-              // this.props.LabProfileGetapi()
-          })
-      }
-     render(){ 
-         const ProfileGetdata =this.props
-         console.log(ProfileGetdata,"ProfileGetdata")
-        return(
-        <div className="basic_details_container">
-            <Grid container>
-            <Grid item xs={12} md={6} className="basicdetails_container">
-                <div className="basicdetails_firstgrid">
-                    <div className="basicdetails_child">
-                        <Labelbox type="text" labelname="Address"
-                         changeData={(data) => this.changeDynamic(data, 'Address')}
-                         value={this.state.ProfileEditData.Address.value}
-                         error={this.state.ProfileEditData.Address.error}
-                         errmsg={this.state.ProfileEditData.Address.errmsg}
-                         />
-                        <Labelbox type="text" labelname="Contact Person"
-                          changeData={(data) => this.changeDynamic(data, 'contactperson')}
-                          value={this.state.ProfileEditData.contactperson.value}
-                          error={this.state.ProfileEditData.contactperson.error}
-                          errmsg={this.state.ProfileEditData.contactperson.errmsg}
-                          />
-                        <Labelbox type="text" labelname="Website"
-                            changeData={(data) => this.changeDynamic(data, 'Website')}
-                            value={this.state.ProfileEditData.Website.value}
-                            error={this.state.ProfileEditData.Website.error}
-                            errmsg={this.state.ProfileEditData.Website.errmsg}
-                        />
-                   </div>
-                </div>
-            </Grid>
-            <Grid item xs={12} md={6} className="basicdetails_container">
-                <div className="basicdetails_firstgrid">
-                    <div className="basicdetails_child">
-                        <Labelbox type="text" labelname="Mobile Number"
-                         changeData={(data) => this.changeDynamic(data, 'mobno')}
-                         value={this.state.ProfileEditData.mobno.value}
-                         error={this.state.ProfileEditData.mobno.error}
-                         errmsg={this.state.ProfileEditData.mobno.errmsg}
-                         />
-                        <Labelbox type="text" labelname="Email Id"
-                         changeData={(data) => this.changeDynamic(data, 'email')}
-                         value={this.state.ProfileEditData.email.value}
-                         error={this.state.ProfileEditData.email.error}
-                         errmsg={this.state.ProfileEditData.email.errmsg}
-                         />
-                    </div>
-                </div>
-            </Grid>
-            </Grid>
-            <div className="buttons_container basicProfilebtn">
-                <div>
-                    <div>
-                        <Button className="cancel_button" variant="contained" onClick={()=>this.props.onClose()}>Cancel</Button>
-                    </div>
-                 </div>
-                <div>
-                    <div>
-                        <Button className="update_button" variant="contained" color="primary"
-                          onClick={this.EditProfileApi}>Update</Button>
-                        </div>
-                     </div> 
+    } else {
+      formData.append('uploadFile', '')
+    }
+    formData.set('address', this.state.basicDetails.address.value)
+    formData.set('mobile', this.state.basicDetails.mobileNumber.value)
+    formData.set('email', this.state.basicDetails.email.value)
+    formData.set('website', this.state.basicDetails.website.value)
+    formData.set('contact', this.state.basicDetails.contactPerson.value)
+    formData.set('labId', 2)
+    formData.set('modifiedby', 1)
+    axios({
+      method: 'POST',
+      url: apiurl + '/Lab/editlabprofiledetails',
+      data: formData
+    }).then((response) => {
+      this.props.onClose()
+      this.props.ProfileGetApi()
+      console.log(response, "responseCheckProfile")
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
+  render() {
+    const ProfileGetdata = this.props
+    console.log(ProfileGetdata, "ProfileGetdata")
+    return (
+      <div className="basic_details_container">
+        <Grid container>
+          <Grid item xs={12} md={6} className="basicdetails_container">
+            <div className="basicdetails_firstgrid">
+              <div className="basicdetails_child">
+                <Labelbox type="text" labelname="Address"
+                  changeData={(data) => this.changeDynamic(data, 'address')}
+                  value={this.state.basicDetails.address.value}
+                  error={this.state.basicDetails.address.error}
+                  errmsg={this.state.basicDetails.address.errmsg}
+                />
+                <Labelbox type="text" labelname="Contact Person"
+                  changeData={(data) => this.changeDynamic(data, 'contactPerson')}
+                  value={this.state.basicDetails.contactPerson.value}
+                  error={this.state.basicDetails.contactPerson.error}
+                  errmsg={this.state.basicDetails.contactPerson.errmsg}
+                />
+                <Labelbox type="text" labelname="Website"
+                  changeData={(data) => this.changeDynamic(data, 'website')}
+                  value={this.state.basicDetails.website.value}
+                  error={this.state.basicDetails.website.error}
+                  errmsg={this.state.basicDetails.website.errmsg}
+                />
+              </div>
             </div>
+          </Grid>
+          <Grid item xs={12} md={6} className="basicdetails_container">
+            <div className="basicdetails_firstgrid">
+              <div className="basicdetails_child">
+                <Labelbox type="text" labelname="Mobile Number"
+                  changeData={(data) => this.changeDynamic(data, 'mobileNumber')}
+                  value={this.state.basicDetails.mobileNumber.value}
+                  error={this.state.basicDetails.mobileNumber.error}
+                  errmsg={this.state.basicDetails.mobileNumber.errmsg}
+                />
+                <Labelbox type="text" labelname="Email Id"
+                  changeData={(data) => this.changeDynamic(data, 'email')}
+                  value={this.state.basicDetails.email.value}
+                  error={this.state.basicDetails.email.error}
+                  errmsg={this.state.basicDetails.email.errmsg}
+                />
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+        <div className="buttons_container">
+          <div>
+            <div>
+              <Button className="cancel_button" variant="contained" onClick={()=>this.props.onClose()}>Cancel</Button>
+            </div>
+          </div>
+          <div>
+            <div>
+              <Button className="update_button" variant="contained" color="primary" onClick={this.checkValidation}>Update</Button>
+            </div>
+          </div>
         </div>
+      </div>
     )
-}
+  }
 }
