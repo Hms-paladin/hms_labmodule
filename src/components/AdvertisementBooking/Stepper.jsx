@@ -139,7 +139,7 @@ export default function CustomizedSteppers(props) {
           </div>
 
           <div className="">
-            {props.businessDays.ad_approval_time}
+            {props.businessDays.ad_approval_time && props.businessDays.ad_approval_time}
             {/* {"11 jun 2020"} */}
           </div>
           <div className="">

@@ -54,6 +54,7 @@ import PaymentReceived from "../PaymentReceived/PaymentReceived";
 import CancelPayment from "../CancelPayment/CancelPayment";
 import { apiurl } from "../../App";
 import Axios from "axios";
+import {notification} from 'antd';
 
 
 const drawerWidth = 260;
@@ -125,6 +126,18 @@ var date=today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
 var time = today.toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true })
 
 class Drawerpage extends React.Component {
+
+  generateAlert = (description) => {
+    notification.success({
+      message: "Success",
+      description,
+      onClick: () => {
+        console.log("Notification Clicked!");
+      },
+    });
+  };
+
+
   state = {
     open: false,
     logout: false,
@@ -484,7 +497,7 @@ class Drawerpage extends React.Component {
             />
             <Route
               path={`${this.props.match.path}/advertisementbooking`}
-              component={AdvertisementMaster}
+              render={(props) => <AdvertisementMaster {...props} generateAlert={this.generateAlert} />}
               exact
             />
             <Route

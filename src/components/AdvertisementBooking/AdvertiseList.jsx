@@ -7,6 +7,7 @@ import './AdvertiseList.css'
 import Workflow from '../../Images/workflow.svg'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Half from '../../Images/Full.svg';
 import Full from '../../Images/half.svg';
 
 import DeleteMedia from './DeleteMedia'
@@ -61,7 +62,7 @@ getAdBooking = () => {
             ad_details: response.data.data[0].details,
             total_count:response.data.data[0].total_count,
             dataOnload: false
-        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.details))
+        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.ad_details))
     }).catch((error) => {
         alert(JSON.stringify(error))
     })
@@ -88,7 +89,7 @@ getAdDetails = (data) => {
         console.log("sdfjhsdfjhsdjfhsdjlfhdf",response.data.data[0].total_count)
         this.setState({
             ad_details: response.data.data[0].details,
-        })
+        },() => console.log("sdfsdhfejdhfdsf",this.state.ad_details))
     }).catch((error) => {
         alert(JSON.stringify(error))
     })
@@ -163,7 +164,7 @@ getAdDetails = (data) => {
                                 
                                 <div className="advertise_contentSpace">
                                     <label className="list_head">Days</label>
-                            <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
+                            <h5 className="list_subhead">{bookingDetails.ad_total_days}</h5>
                                 </div>
                                 
                             </div>
@@ -193,7 +194,7 @@ getAdDetails = (data) => {
                             </div>
     
                                 <div>
-                                    <div className="advertise_image"> <img src={Full} /> </div>
+                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == 1 ? Full : Half} /> </div>
                                     <p className="image_size">Full</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
