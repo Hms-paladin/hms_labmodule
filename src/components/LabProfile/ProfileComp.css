@@ -14,9 +14,6 @@
   }
   
   .profilepaper_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     top: -222px;
     position: relative;
   }
