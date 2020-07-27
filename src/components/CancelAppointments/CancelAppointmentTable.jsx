@@ -73,6 +73,12 @@ class CancelAppointmentTable extends React.Component {
     })
 }
 
+formatTimeShow=(h_24)=> {
+  var h = Number(h_24.substring(0, 2)) % 12;
+  if (h === 0) h = 12;
+  return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+}
+
   render() {
     const searchdata = []
     this.state.tableDatafull.filter((data,index) => {

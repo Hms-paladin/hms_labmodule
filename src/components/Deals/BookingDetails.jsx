@@ -265,9 +265,6 @@ export default class BookingDetails extends React.Component {
                 <Grid container>
                     <Grid item xs={12} md={7}>
                         <Calendar
-                            // edit={this.state.edit === true && true}
-                            editFromDate={this.state.editData && this.state.editData.deal_valid_from}
-                            editToDate={this.state.editData && this.state.editData.deal_valid_to}
                             getDate={(data) => this.getRangeData(data)}
                         />
                     </Grid>
