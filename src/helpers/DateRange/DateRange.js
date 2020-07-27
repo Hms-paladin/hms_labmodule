@@ -21,7 +21,7 @@ export default class DateRangeSelect extends React.Component {
         }],
         onCount: 1,
         openDateRange: false,
-        SelectRange:dateformat(new Date(), "dd-mm-yyyy") + "\xa0\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0\xa0" + dateformat(new Date(), "dd-mm-yyyy"),
+        SelectRange:dateformat(new Date(), "dd-mm-yyyy") + "\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0" + dateformat(new Date(), "dd-mm-yyyy"),
         tabchange:0,
     }
     
@@ -45,7 +45,7 @@ export default class DateRangeSelect extends React.Component {
         this.props.rangeDate(this.state.item)
         var startdate = dateformat(this.state.item[0].startDate, "dd-mm-yyyy")
         var enddate = dateformat(this.state.item[0].endDate, "dd-mm-yyyy")
-        this.setState({ SelectRange: startdate + "\xa0\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0\xa0" + enddate,openDateRange:!this.state.openDateRange })
+        this.setState({ SelectRange: startdate + "\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0" + enddate,openDateRange:!this.state.openDateRange })
         // }
     }
 
@@ -65,7 +65,7 @@ export default class DateRangeSelect extends React.Component {
                 endDate: new Date(),
                 key: 'selection',
             }],
-            SelectRange: dateformat(new Date(), "dd-mm-yyyy") + "\xa0\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0\xa0" + dateformat(new Date(), "dd-mm-yyyy"),
+            SelectRange: dateformat(new Date(), "dd-mm-yyyy") + "\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0" + dateformat(new Date(), "dd-mm-yyyy"),
             tabchange:newProps.setselectedDate,
         })
     }
@@ -79,11 +79,11 @@ export default class DateRangeSelect extends React.Component {
                     <div className="rangePicker_Label">
                         Select Range:
             </div>
-                    <div className="rangePicker_InpputIconAlign" onClick={()=>this.setState({openDateRange:!this.state.openDateRange})}>
+                    <div title={this.state.SelectRange} className="rangePicker_InpputIconAlign" onClick={()=>this.setState({openDateRange:!this.state.openDateRange})}>
                         <Labelbox
                             type="text"
                             value={this.state.SelectRange}
-                            placeholder={"\xa0" + "Start Date" + "\xa0\xa0\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0\xa0\xa0" + "End Date"} />
+                            placeholder={"\xa0" + "Start Date" + "\xa0\xa0\xa0" + "-- >" + "\xa0\xa0\xa0" + "End Date"} />
                         <InsertInvitationIcon className="rangePicker_Calendericon" />
                     </div>
                 </div>
