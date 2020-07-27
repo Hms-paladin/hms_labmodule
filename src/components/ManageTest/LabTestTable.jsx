@@ -27,7 +27,6 @@ class LabTestTable extends React.Component {
 
   UNSAFE_componentWillReceiveProps(newProps) {
     if(newProps.getdatacall){
-      this.getTableData()
       this.props.falsegetmethod()
     }
   }
@@ -53,7 +52,7 @@ class LabTestTable extends React.Component {
       var responseAllData = [];
         response.data.data.map((val) => {
             tableData.push({ test: val.lab_test_name,cost:val.lab_cost,date:moment(val.lab_created_on).format('DD-MM-YYYY'),
-             id: val.lab_id })
+             id: val.lab_test_id })
             responseAllData.push(val) 
         })
         self.setState({
@@ -75,13 +74,13 @@ modelopen = (data,id) => {
   if (data === "view") {
 
     var viewdata = this.state.responseAllData.filter((viewdata)=>{
-       return viewdata.lab_id===id
+       return viewdata.lab_test_id===id
     })
     this.setState({ openview: true,viewdata:viewdata });
 
   } else if (data === "edit") {
     var editdata = this.state.responseAllData.filter((editdata)=>{
-      return editdata.lab_id===id
+      return editdata.lab_test_id===id
    })
 
    console.log(editdata,"editdata")
@@ -90,7 +89,7 @@ modelopen = (data,id) => {
 };
 
 closemodal = (editbol) => {
-  this.setState({ openview: false, editopen: false,props_loading:editbol,deleteopen:false });
+  this.setState({ openview: false, editopen: false,props_loading:false,deleteopen:false });
 };
 
 deleteopen = (type,id) => {
@@ -134,7 +133,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           test: data.lab_test_name,
           cost:data.lab_cost,
           date:moment(data.lab_created_on).format('DD MMM YYYY'),
-          id: data.lab_id
+          id: data.lab_test_id
           })
       }
       else if (data.lab_test_name !== null && data.lab_test_name.toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_cost !== null && data.lab_cost.toString().toLowerCase().includes(this.state.search.toLowerCase()) || data.lab_created_on !== null && moment(data.lab_created_on).format('DD MMM YYYY').toLowerCase().includes(this.state.search.toLowerCase())) {
@@ -142,7 +141,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           test: data.lab_test_name,
           cost:data.lab_cost,
           date:moment(data.lab_created_on).format('DD MMM YYYY'),
-          id: data.lab_id
+          id: data.lab_test_id
         })
       }
   })
