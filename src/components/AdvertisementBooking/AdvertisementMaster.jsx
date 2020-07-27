@@ -18,7 +18,7 @@ import Axios from "axios";
 
 const current_date=(dateFormat(new Date(),"dd mmm yyyy"))
 
-class RevenueMaster extends Component {
+class AdvertisementMaster extends Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +64,7 @@ componentWillMount(){
                 </select>
             </div>           */}
           </div>
-          <BookingDetails/>
+          <BookingDetails generateAlert={this.props.generateAlert} />
           </Paper>
           </div>
       
@@ -72,4 +72,4 @@ componentWillMount(){
   }
 }
 
-export default RevenueMaster;
+export default AdvertisementMaster;

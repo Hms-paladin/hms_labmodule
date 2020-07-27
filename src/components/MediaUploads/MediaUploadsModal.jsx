@@ -17,6 +17,8 @@ import dateformat from 'dateformat';
 import ValidationLibrary from "../../helpers/validationfunction";
 import UploadPic from '../../Images/uploadfile.png';
 
+
+var result = [];
 export default class MediaUploadsModal extends Component {
     constructor(props){
         super(props)
@@ -45,7 +47,7 @@ export default class MediaUploadsModal extends Component {
       filename: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
 }
 
-console.log("sdfjhsdfjkhdsfjkdfs",this.props)
+console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
 }
     handleOpen=()=>
     {
@@ -159,7 +161,11 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.props)
         alert(JSON.stringify(error))
       })
     }
+
+  
 componentDidMount(){
+  
+
       const {editData,editopenModal} = this.props;
       if(editopenModal === true){
         this.state.editId= editData.id
@@ -208,6 +214,13 @@ componentDidMount(){
     }
 
     render() {
+
+  
+
+      // this.state.filename = result[2];
+
+      console.log("arjungshsjdfhsjd",result[2])
+
       console.log(this.state.mediaupload_lab.media_description.value,"description")
       console.log(this.props.truegetmethod,"statevalue")
       const props = {

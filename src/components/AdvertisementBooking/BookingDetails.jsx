@@ -25,6 +25,7 @@ import { FiInfo } from "react-icons/fi";
 import dateformat from 'dateformat';
 import 'antd/dist/antd.css';
 import { notification, Select } from 'antd';
+import moment from 'moment';
 
 
 const { Option } = Select;
@@ -59,6 +60,9 @@ const openNotification = () => {
     });
 }
 
+var startdate = dateformat(new Date(), "yyyy-mm-dd")
+
+var enddate = dateformat(new Date(), "yyyy-mm-dd")
 export default class AdBooking extends React.Component {
     constructor(props) {
         super(props)
@@ -80,8 +84,9 @@ export default class AdBooking extends React.Component {
             adsize: "",
             ad_details: [],
             activeKey: "1",
-            startdate: "",
-            endDate: "",
+            startdate: startdate,
+            endDate:  enddate,
+            checked:false,
 
 
 
@@ -91,7 +96,8 @@ export default class AdBooking extends React.Component {
             locationError: "",
             imageError: "",
             feeError: "",
-            totalcostError: ""
+            totalcostError: "",
+            dateError:false
         }
 
         console.log("sdfsdafjlshjerhsdf", this.props)
@@ -114,14 +120,17 @@ export default class AdBooking extends React.Component {
 
 
         getRangeData = (data) => {
+          
             console.log(data,"getRangeData")
             if(data.enddate===null){
-                this.setState({startdate:data.startdate})
+              
+                this.setState({startdate:data.startdate},() => this.compareDate())
             }else{
                 if(data.startdate<data.enddate){
-                this.setState({startdate:data.startdate,endDate:data.enddate})
+                   
+                this.setState({startdate:data.startdate,endDate:data.enddate},() => this.compareDate())
                 }else{
-                this.setState({startdate:data.enddate,endDate:data.startdate})
+                this.setState({startdate:data.enddate,endDate:data.startdate},() => this.compareDate())
                 }
             }
                     // this.setState({
@@ -162,6 +171,7 @@ export default class AdBooking extends React.Component {
 
 
     changeTabFun = (data) => {
+        console.log("asfshdfsdfksd",data)
         if(new Date (data.ad_start_date) < new Date() && new Date (data.ad_end_date) < new Date() ){
             notification.info({
                 description:
@@ -181,7 +191,7 @@ export default class AdBooking extends React.Component {
             editData: data,
             imageChanged: false,
             edit: true
-        })
+        },() => this.storeadSize(this.state.editData.ad_size))
 
         // For Edit Data form filling
         this.state.id = data.id
@@ -193,8 +203,11 @@ export default class AdBooking extends React.Component {
         this.state.adfeeperday = data.ad_fee_per_day
         this.state.adtotalcost = data.ad_total_cost
         this.state.imagedata = data.ad_filename
+        this.state.imageName = data.ad_filename
 
         this.setState({})
+
+        console.log("adfksgadfsgdlfhgdslfh",this.state.editData)
     }
 
     }
@@ -348,6 +361,7 @@ export default class AdBooking extends React.Component {
             data: ratedata
         }).then((response) => {
             this.setState({ adfeeperday: response.data.data[0].rate })
+            this.checkHours()
         }).catch((err) => {
 
         })
@@ -372,10 +386,12 @@ export default class AdBooking extends React.Component {
             }
 
         }
+        // this.state.startdate = dateformat(data.ad_start_date, "yyyy-mm-dd")
+        // this.state.endDate = dateformat(data.ad_end_date, "yyyy-mm-dd")
 
         formdata.set('adtitle', "Nurse")
-        formdata.set('startdate', this.state.startdate)
-        this.state.edit ? formdata.set('enddate', this.state.endDate) : formdata.set('endDate', this.state.endDate)
+        formdata.set('startdate', dateformat(this.state.startdate,"yyyy-mm-dd"))
+        this.state.edit ? formdata.set('enddate', dateformat(this.state.endDate,"yyyy-mm-dd")) : formdata.set('endDate', dateformat(this.state.endDate, "yyyy-mm-dd"))
         formdata.set('adtotaldays', 4)
         formdata.set('adsize', this.state.adsize)
         formdata.set('adlocationId', this.state.location)
@@ -397,12 +413,12 @@ export default class AdBooking extends React.Component {
         const isValid = this.validation()
 
 
-        if (this.state.edit === false && isValid) {
+        if (this.state.edit === false && isValid && !this.state.dateError) {
 
             this.insertAdBooking(formdata)
         }
 
-        if (this.state.edit === true && isValid) {
+        if (this.state.edit === true && isValid && !this.state.dateError) {
             this.editAdBooking(formdata)
         }
 
@@ -422,7 +438,7 @@ export default class AdBooking extends React.Component {
             console.log("sadfjksdhfjksdhfjsd", response)
 
             this.getAdBooking()
-            this.props.generateAlert("Advertisement Booked successfully")
+            this.props.generateAlert("Advertisement added successfully")
 
             this.state.adfeeperday = "";
             this.state.location = "";
@@ -448,6 +464,14 @@ export default class AdBooking extends React.Component {
         }).then((response) => {
 
             this.getAdBooking()
+            this.props.generateAlert("Advertisement updated successfully")
+            this.setState({activeKey:"2",edit:false})
+            this.state.adfeeperday = "";
+            this.state.startdate = startdate;
+            this.state.endDate = enddate;
+            this.state.adtotalcost = "";
+            this.state.imageName = "";
+            this.state.adsize = "";
         }).catch((error) => {
             alert(JSON.stringify(error))
         })
@@ -518,20 +542,100 @@ export default class AdBooking extends React.Component {
 
     }
 
+    checkHours = () => {
+
+
+
+
+        var startDate = moment(this.state.endDate).format('DD')
+        var endDate = moment(this.state.startdate).format('DD')
+    
+    
+    
+        var fromMonth = moment(this.state.startdate).format('MM');
+        var toMonth = moment(this.state.endDate).format('MM');
+    
+    
+    
+        var current_year  =  moment().year();
+    
+        var to_year = moment(this.state.endDate).year()
+    
+    
+       
+    
+    
+       if(parseInt(fromMonth) < parseInt(toMonth)){
+         
+           var monthDiff = moment(this.state.endDate).format('MM') - moment(this.state.startdate).format('MM')
+       }else{
+        var monthabs = moment(this.state.startdate).format('MM') - moment(this.state.toDate).format('MM') - (12 * (to_year - current_year))
+    
+        var monthDiff = Math.abs(monthabs)
+       }
+    
+
+        console.log("asfjksdhfjsdfhljsdfsd",monthDiff)
+    
+        var daysInMonth = 0;
+        for(let i=0;i<monthDiff;i++){
+          var filteredMonth = parseInt(fromMonth) + parseInt(i);
+           daysInMonth += new Date(current_year,filteredMonth,0).getDate();
+        }
+    
+       
+    
+    
+       console.log("sdfjsdhfjsdhfljsdfhsdkjf",daysInMonth)
+    
+    
+        
+    
+        if(parseInt(endDate) < parseInt(startDate)){
+           var totalDays = moment(this.state.endDate).format('DD') - moment(this.state.startdate).format('DD') + daysInMonth
+        }else{
+          console.log("sdlfsdjfhsdfhsdjfhsdfj",daysInMonth)
+          var totalDays = daysInMonth - (moment(this.state.startdate).format('DD') - moment(this.state.endDate).format('DD'))
+        }
+    
+    
+    
+        console.log("sfsdfsdfjshdfjksdf",totalDays)
+
+
+        var totalcost = totalDays * this.state.adfeeperday;
+
+        this.setState({adtotalcost:totalcost})
+    
+    
+
+      
+      }
+    
+
 
     datepickerChange = (data, key) => {
         if (key === 'startdate') {
             this.setState({
                 startdate: data
-            })
+            },() => this.compareDate())
         }
         if (key === 'enddate') {
             this.setState({
                 endDate: data
-            })
+            },() => this.compareDate())
         }
     }
 
+    compareDate = () => {
+        console.log(this.state.startdate,"arjsirusiodfsdjfsak;dfj")
+        if(dateformat(this.state.startdate,'mm-dd-yyyy') <= dateformat(this.state.endDate,'mm-dd-yyyy')) {
+             this.setState({dateError:false})
+             this.checkHours()
+        }else{
+            this.setState({dateError:true})
+        }
+    }
 
     placementLocation = () => {
         let locations = [];
@@ -545,6 +649,8 @@ export default class AdBooking extends React.Component {
 
 
     storeadSize = (data) => {
+        
+        console.log("sdfjdshfjksdhfkjsdhf",this.state.adsize)
         this.setState({ adsize: data }, () => this.setState({ sizeError: false }))
     }
 
@@ -579,14 +685,15 @@ export default class AdBooking extends React.Component {
 
                                             {
                                                 this.state.sizeData.length > 0 && this.state.sizeData.map(checkingsize =>
-
+                                                
                                                     <div className="ad__size">
-                                                        <Checkbox checked={this.state.edit ? this.state.adsize : checkingsize.ad_size} value={this.state.edit ? this.state.adsize : checkingsize.ad_size} onChange={() => this.storeadSize(checkingsize.id)}
+                                                        <Checkbox checked={this.state.adsize == checkingsize.id ? true : false} value={this.state.edit ? this.state.adsize : checkingsize.ad_size} onChange={() => this.storeadSize(checkingsize.id)}
 
                                                         >
                                                         </Checkbox>
                                                         {checkingsize.size}
                                                     </div>
+                                                   
                                                 )}
 
 
@@ -609,6 +716,7 @@ export default class AdBooking extends React.Component {
                                                 value={this.state.endDate} 
                                                 changeData={(data) => this.datepickerChange(data,'enddate')}/>
                                         </div>
+                                        <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
                                         <div className="validation__error">{this.state.enddateError && this.state.enddateError}</div>
 
 
@@ -622,9 +730,9 @@ export default class AdBooking extends React.Component {
                                             </Select>
                                         </div>
                                         <div className="validation__error">{this.state.locationError && this.state.locationError}</div>
-                                        <div className="advertise_cost">
+                                        <div className="advertise_cost--unique">
                                             <p className="fees_cost">Total Cost (KWD)</p>
-                                            <input type="number" className="html__input" value={this.state.adtotalcost} onChange={(e) => this.changeData(e, 'total')}></input>
+                                            <input type="number" className="html__input" value={this.state.adtotalcost} ></input>
                                         </div>
                                         <div className="validation__error">{this.state.totalcostError && this.state.totalcostError}</div>
                                     </Grid>

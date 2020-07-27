@@ -81,6 +81,8 @@ UNSAFE_componentWillReceiveProps(newProps) {
           // for(let i=0;i<50;i++){
             tableData.push({ title: val.media_title,type:val.media_type,uploaded:dateformat(val.created_on, "dd mmm yyyy hh:MM"),status:val.is_active,id: val.id,indexid:index.toString(),sortorder:val.media_sortorder })
             console.log(val.id,"idddddd")
+
+             console.log("sdfjksdhfshdfjsdhjdsf",val)
           // }
 
         })
@@ -130,6 +132,7 @@ deleterow = () => {
   this.setState({ props_loading: false })
 }
   render() {
+   
     const img_var = <ReactSVG src={order} />;
     return (
       <Spin className="spinner_align" spinning={this.state.loading}>

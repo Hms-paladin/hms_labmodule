@@ -22,9 +22,9 @@ export default class ViewMedia extends Component {
     }
   }
   componentWillMount() {
-     alert("hii")
+    
     if(this.props.viewData.media_type === "Image") {
-      alert("inside")
+   
       let image = this.props.viewData.media_filename;
       var storeImage = image.split("/");
       result = storeImage[4].split("_");
@@ -39,7 +39,7 @@ export default class ViewMedia extends Component {
   }
   render() {
     const{viewData,viewopenModal} = this.props
-    console.log(this.props.viewData.media_type,"viewData_render_check")
+    
     return (
       <div>
       {/* {" "} */}
@@ -61,7 +61,7 @@ export default class ViewMedia extends Component {
           </div>
   }
 
-        {viewData.media_type === "Image" || viewData.media_type === "image" &&
+        {viewData.media_type.toLowerCase() === "image" &&
              
       
            <div className="profile_media_div">
@@ -76,7 +76,7 @@ export default class ViewMedia extends Component {
         </Grid>
         <Grid item xs={12} md={6} className="media_title_container">
            <div className="stepper__container">
-          <Stepper />
+          <Stepper  />
           </div>
         </Grid>
       </Grid>
