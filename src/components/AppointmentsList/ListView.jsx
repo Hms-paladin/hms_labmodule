@@ -52,7 +52,7 @@ export default class AppointmentView extends React.Component {
               <p className="appointment__details appointment_master">Appointment Details</p>
 
               <div className="appointment__detailsdiv"><p className="appointment__details">Date</p><p className="appointment_date">{dateformat(viewdata && viewdata.test_date, "dd mmm yyyy")}</p></div>
-              <div className="appointment__detailsdiv"><p className="appointment__details_info">Time</p><p className="appointment_date">{viewdata && viewdata.uploaded_time ? viewdata.uploaded_time : "--"}</p></div>
+              <div className="appointment__detailsdiv"><p className="appointment__details_info">Time</p><p className="appointment_date">{viewdata && viewdata.test_time ? viewdata.test_time : "--"}</p></div>
               <div className="appointment__detailsdiv"><p className="appointment__details_info">Test</p><p className="appointment_date">{viewdata && viewdata.test}</p></div>
 
               <Divider className="dividerlist_root" />

@@ -56,7 +56,8 @@ class UploadDetails extends React.Component {
           weekMonthYearDatapending:newProps.weekMonthYearData,
           wk_Mn_Yr_Full_DataPending:newProps.wk_Mn_Yr_Full_Data,
           searchDataPending:newProps.searchData,
-          propsopen:newProps.propsopen
+          propsopen:newProps.propsopen,
+          selectedDatepen:newProps.selectedDatepen
         })
     }else{
       this.setState({
@@ -87,7 +88,7 @@ class UploadDetails extends React.Component {
           </TabContainer>}
         {value === 1 && 
           <TabContainer>
-          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} propsopen={this.state.propsopen} />
+          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} propsopen={this.state.propsopen} selectedDatepen={this.state.selectedDatepen} />
           </TabContainer>}
       </div>
     );

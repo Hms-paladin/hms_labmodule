@@ -14,6 +14,12 @@ export default class UploadView extends React.Component {
     this.state = { cancel: null};
   }
 
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
   render() {
     const { classes, onClose, cancel, selectedValue,viewdata, ...other } = this.props;
     console.log(viewdata,"viewdata")
@@ -41,7 +47,7 @@ export default class UploadView extends React.Component {
            </div>
            <div className="date_uploadetext_edit">
              <p className="uploadeddate_text_date">Time</p>
-             <p className="date_text_date">{viewdata.uploaded_time?viewdata.uploaded_time:"---"}</p>
+             <p className="date_text_date">{viewdata.uploaded_time?this.formatTimeShow(viewdata.uploaded_time):"---"}</p>
            </div>
            </div>
           

@@ -88,16 +88,16 @@ formatTimeShow=(h_24)=> {
             name: data.customer,
             test: data.test,
             date: dateformat(data.test_date, "dd mmm yyyy"),
-            time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
+            time: data.test_time ? this.formatTimeShow(data.test_time) : '-',
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
-          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : '-',
+          time: data.test_time ? this.formatTimeShow(data.test_time) : '-',
         id:index
         })
       }

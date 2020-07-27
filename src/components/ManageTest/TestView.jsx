@@ -271,7 +271,7 @@ export default class TestView extends Component {
           <TabPane tab="Entry" key={"1"}>
             <div className="testentry_container mt-4">
               <Grid container spacing={2}>
-                <Grid item xs={12} md={7}>
+                <Grid item xs={12} md={4}>
                   <div className="instruction_area">
                     <Labelbox
                       type="text"
@@ -284,7 +284,7 @@ export default class TestView extends Component {
 
                 </Grid>
 
-                <Grid item xs={12} md={5} className="package_containerthird">
+                <Grid item xs={12} md={8} className="package_containerthird">
                   <>
 
                     <div className="add_test_container">

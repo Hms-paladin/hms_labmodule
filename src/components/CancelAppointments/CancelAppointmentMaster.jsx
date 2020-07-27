@@ -75,7 +75,7 @@ class CancelAppointmentMaster extends Component {
             test: val.test,
             Bookdate: moment(val.book_date).format('DD MMM YYYY'),
             Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
-            time: "-",
+            time: dateformat(new Date(val.cancel_date), "hh:MM TT"),
             id: index
           })
           tableDatafull.push(val)
@@ -135,7 +135,7 @@ class CancelAppointmentMaster extends Component {
     const doc = new jsPDF("a4")
     var bodydata = []
     this.state.weekMonthYearData.map((data, index) => {
-      bodydata.push([index + 1, data.name, data.test, data.Bookdate,data.Canceldate,data.time])
+      bodydata.push([index + 1, data.name, data.test, data.Bookdate,dateformat(new Date(data.Canceldate), "hh:MM TT"),data.time])
     })
     doc.autoTable({
       beforePageContent: function (data) {

@@ -89,17 +89,17 @@ formatTimeShow=(h_24)=> {
           test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
-          time:data.uploaded_time?this.formatTimeShow(data.uploaded_time):"-",
+          time:data.cancel_date?dateformat(new Date(data.cancel_date), "hh:MM TT"):"-",
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && dateformat(new Date(data.cancel_date), "hh:MM TT").toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
-          time:data.uploaded_time?this.formatTimeShow(data.uploaded_time):"-",
+          time:data.cancel_date?dateformat(new Date(data.cancel_date), "hh:MM TT"):"-",
           id:index
         })
       }

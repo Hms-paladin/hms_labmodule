@@ -262,8 +262,7 @@ class Drawerpage extends React.Component {
                       
                         className="Avatar"
                         alt="avatar-missing"
-                        // src={val.vendor_filename ? val.vendor_filename : "" }
-                        src={avatar}
+                        src={val.vendor_filename ? val.vendor_filename : avatar }
                       />
              
                       {/* </NavLink> */}
