@@ -148,8 +148,9 @@ export default class TestView extends Component {
           }
         })
           .then((response) => {
+            alert("Working")
             console.log(response, "response_checkingg")
-            this.setState({}, () => self.props.callget("Added"))
+            this.props.callget("Added")
           })
       }
     }

@@ -86,7 +86,6 @@ display: flex;
     color:green;
 }
 .cancel_button{
-    font-size: 1.5rem !important;
     margin-right: 15px !important;
 
 }
@@ -160,4 +159,10 @@ display: flex;
      {
          width:50%;
      }          
+    }
+
+
+    .update_button{
+        font-size: 1.25rem !important;
+        background-color: #2196F3 !important;
     }
