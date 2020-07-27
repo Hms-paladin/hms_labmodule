@@ -8,7 +8,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { apiurl } from "../../App";
 import axios from 'axios';
 import dateFormat from 'dateformat';
-import { Tabs, notification } from 'antd';
+import { Tabs, } from 'antd';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import "./TestView.css";
 import Preview from "./preview";
@@ -18,6 +19,7 @@ export default class TestView extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      testActive:false,
       activeKey: "1",
       name: "",
       testCost: [],
@@ -54,11 +56,13 @@ export default class TestView extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props,"checing")
     if (this.props.edithide) {
       this.state.labmanage_test.lab_test_category.value = this.props.editdata[0].lab_test_category
       this.state.labmanage_addtestcost.lab_test_name.value = this.props.editdata[0].lab_test_name
       this.state.labmanage_addtestcost.lab_cost.value = this.props.editdata[0].lab_cost
       this.state.labmanage_addtestcost.lab_instruction.value = this.props.editdata[0].test_instruction
+      this.state.testActive=this.props.editdata[0].active_flag === 1 ? true : false
       this.setState({})
     }
   }
@@ -141,14 +145,13 @@ export default class TestView extends Component {
             "lab_created_on": dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss"),
             "lab_modified_on": dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss"),
             "cost": "1",
-            "active_flag": "1",
+            "active_flag": this.state.testActive === true ? 1 : 0,
             "lab_id": "2",
             "lab_modified_by": "19",
             "lab_created_by": "19",
           }
         })
           .then((response) => {
-            alert("Working")
             console.log(response, "response_checkingg")
             this.props.callget("Added")
           })
@@ -232,7 +235,7 @@ export default class TestView extends Component {
         // "lab_instruction": this.state.labmanage_test.lab_instruction.value,
         "lab_test_category_id": this.props.editdata[0].lab_test_category_id,
         "lab_test_category": this.state.labmanage_test.lab_test_category.value,
-        "active_flag": 1,
+        "active_flag": this.state.testActive === true ? 1 : 0,
         "test_info": [
           {
             "lab_test_id": this.props.editdata[0].lab_test_id,
@@ -256,9 +259,14 @@ export default class TestView extends Component {
   }
 
   deleteCard = (index) => {
-    alert(index)
     this.state.lab_test_list.splice(index,1)
     this.setState({})
+  }
+
+  testActiveCheck = (e) => {
+    this.setState({
+      testActive: e.target.checked
+  })
   }
 
 
@@ -281,6 +289,7 @@ export default class TestView extends Component {
                       error={this.state.labmanage_test.lab_test_category.error}
                       errmsg={this.state.labmanage_test.lab_test_category.errmsg} />
                   </div>
+                  <Checkbox className="Deal_active_check" checked={this.state.testActive} onChange={(e) => this.testActiveCheck(e)} /><span>Test Active</span>
 
                 </Grid>
 

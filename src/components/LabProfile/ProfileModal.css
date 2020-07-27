@@ -124,6 +124,7 @@ display: flex;
 .upload-img-circle
 {
     border-radius: 50% !important;
+    height: 95px;
 }
 .upload-icon
 {

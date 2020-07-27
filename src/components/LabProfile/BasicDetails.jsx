@@ -15,7 +15,7 @@ export default class BasicDetails extends React.Component {
     basicDetails: {
       'address': {
         'value': '',
-        validation: [{ 'name': 'required' }],
+        validation: [{ 'name': 'required' },{'name':'address'}],
         error: null,
         errmsg: null
       },
@@ -27,19 +27,19 @@ export default class BasicDetails extends React.Component {
       },
       'website': {
         'value': '',
-        validation: [{ 'name': 'required' }],
+        validation: [{ 'name': 'required' }, { 'name': 'webUrl' }],
         error: null,
         errmsg: null
       },
       'mobileNumber': {
         'value': '',
-        validation: [{ 'name': 'required' }],
+        validation: [{ 'name': 'required' }, { 'name': 'mobile' }],
         error: null,
         errmsg: null
       },
       'email': {
         'value': '',
-        validation: [{ 'name': 'required' }],
+        validation: [{ 'name': 'required' }, { 'name': 'email' }],
         error: null,
         errmsg: null
       }
@@ -130,7 +130,49 @@ export default class BasicDetails extends React.Component {
     console.log(ProfileGetdata, "ProfileGetdata")
     return (
       <div className="basic_details_container">
-        <Grid container>
+        <div className="row">
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Address"
+              changeData={(data) => this.changeDynamic(data, 'address')}
+              value={this.state.basicDetails.address.value}
+              error={this.state.basicDetails.address.error}
+              errmsg={this.state.basicDetails.address.errmsg}
+            />
+          </div>
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Mobile Number"
+              changeData={(data) => this.changeDynamic(data, 'mobileNumber')}
+              value={this.state.basicDetails.mobileNumber.value}
+              error={this.state.basicDetails.mobileNumber.error}
+              errmsg={this.state.basicDetails.mobileNumber.errmsg}
+            />
+          </div>
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Contact Person"
+              changeData={(data) => this.changeDynamic(data, 'contactPerson')}
+              value={this.state.basicDetails.contactPerson.value}
+              error={this.state.basicDetails.contactPerson.error}
+              errmsg={this.state.basicDetails.contactPerson.errmsg}
+            />
+          </div>
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Email Id"
+              changeData={(data) => this.changeDynamic(data, 'email')}
+              value={this.state.basicDetails.email.value}
+              error={this.state.basicDetails.email.error}
+              errmsg={this.state.basicDetails.email.errmsg}
+            />
+          </div>
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Website"
+              changeData={(data) => this.changeDynamic(data, 'website')}
+              value={this.state.basicDetails.website.value}
+              error={this.state.basicDetails.website.error}
+              errmsg={this.state.basicDetails.website.errmsg}
+            />
+          </div>
+        </div>
+        {/* <Grid container>
           <Grid item xs={12} md={6} className="basicdetails_container">
             <div className="basicdetails_firstgrid">
               <div className="basicdetails_child">
@@ -173,11 +215,11 @@ export default class BasicDetails extends React.Component {
               </div>
             </div>
           </Grid>
-        </Grid>
+        </Grid> */}
         <div className="buttons_container">
           <div>
             <div>
-              <Button className="cancel_button" variant="contained" onClick={()=>this.props.onClose()}>Cancel</Button>
+              <Button className="cancel_button" variant="contained" onClick={() => this.props.onClose()}>Cancel</Button>
             </div>
           </div>
           <div>

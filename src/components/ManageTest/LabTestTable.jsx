@@ -36,7 +36,6 @@ class LabTestTable extends React.Component {
   }
 
   getTableData = (notifyMsg) => {
-    alert("hjh")
   this.setState({ props_loading: true })
     var self = this
     axios({
