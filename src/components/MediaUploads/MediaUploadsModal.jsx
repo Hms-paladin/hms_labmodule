@@ -59,6 +59,9 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
     }
 
     componentWillMount() {
+
+      if(this.props.editData){
+        alert("edittrue")
       var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
       var imgarr = imageurl.split('/');
       var s = imgarr[imgarr.length - 1];
@@ -67,6 +70,9 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
       var splitted = s.split('mediaDoc');
  
       this.setState({filename : splitted[1].slice(5)})
+      }else{
+            alert("edit false")
+      }
       
     }
     changeDynamic = (data, key) => {
