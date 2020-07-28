@@ -55,6 +55,7 @@ import CancelPayment from "../CancelPayment/CancelPayment";
 import { apiurl } from "../../App";
 import Axios from "axios";
 import {notification} from 'antd';
+import Noimageavailable from "../../Images/Noimageavailable.png"
 
 
 const drawerWidth = 260;
@@ -275,7 +276,7 @@ class Drawerpage extends React.Component {
                       
                         className="Avatar"
                         alt="avatar-missing"
-                        src={val.vendor_filename ? val.vendor_filename : avatar }
+                        src={val.vendor_filename ? val.vendor_filename : Noimageavailable }
                       />
              
                       {/* </NavLink> */}
@@ -344,7 +345,7 @@ class Drawerpage extends React.Component {
               <Avatar
                 className="Avatar-image"
                 alt="avatar-missing"
-                src={val.vendor_filename?val.vendor_filename:avatar}
+                src={val.vendor_filename?val.vendor_filename:Noimageavailable}
                 className={classes.avatar}
               />
                )})}

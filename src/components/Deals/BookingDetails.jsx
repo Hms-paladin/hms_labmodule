@@ -126,7 +126,7 @@ export default class BookingDetails extends React.Component {
               // self.state.serviceType=response.data.data.map((val)=>{return{id:val.id,serviceType:val.service_type}})
             })
             .catch((error) => {
-              alert(JSON.stringify(error));
+            //   alert(JSON.stringify(error));
             });
     }
 
@@ -260,6 +260,7 @@ export default class BookingDetails extends React.Component {
             console.log(response)
             this.resetFormValue()
             this.getDealsList()
+            this.setState({afteredit: true})
             notification.info({
                 description:
                   'Record Added Successfully',
@@ -267,7 +268,7 @@ export default class BookingDetails extends React.Component {
               });
 
         }).catch((error) => {
-            alert(JSON.stringify(error))
+            // alert(JSON.stringify(error))
         })
     }
 
@@ -293,7 +294,7 @@ export default class BookingDetails extends React.Component {
               });
 
         }).catch((error) => {
-            alert(JSON.stringify(error))
+            // alert(JSON.stringify(error))
         })
     }
 
@@ -318,7 +319,7 @@ export default class BookingDetails extends React.Component {
             );
           })
           .catch((error) => {
-            alert(JSON.stringify(error));
+            // alert(JSON.stringify(error));
           });
       };
 
@@ -442,6 +443,7 @@ export default class BookingDetails extends React.Component {
                             </TabPane>
                             <TabPane tab="Deals List" key="2">
                                 <DealList
+                                    aftereditfalse={()=>this.setState({afteredit:false})}
                                     dealsList={this.state.dealsList} // list data
                                     getDealsList={this.getDealsList} // get api function
                                     serviceType={this.state.serviceType} // dropdown val

@@ -59,7 +59,7 @@ export default class ProfileView extends React.Component {
            <div className="labappointment_details"><p className="labappointment_details">Date<span className="lab_date">{viewdata && moment(viewdata.test_date).format('DD MMM YYYY')}</span></p></div>
            <div className="labappointment_details-div"><p className="labappointment_details">Time<span className="lab_date">{viewdata && this.formatTimeShow(viewdata.test_time)}</span></p></div>
           
-           <div className="labappointment_details"><Button variant="contained" className="view_detailsbutton">View Details<ChevronRightIcon className="right_arrowview"/></Button></div>
+           {/* <div className="labappointment_details"><Button variant="contained" className="view_detailsbutton">View Details<ChevronRightIcon className="right_arrowview"/></Button></div> */}
            <Divider className="divider_root"/>
           
          </div>
