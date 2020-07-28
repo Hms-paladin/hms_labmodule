@@ -57,6 +57,18 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
     {
         this.setState({open:false})
     }
+
+    componentWillMount() {
+      var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
+      var imgarr = imageurl.split('/');
+      var s = imgarr[imgarr.length - 1];
+     
+ 
+      var splitted = s.split('mediaDoc');
+ 
+      this.setState({filename : splitted[1].slice(5)})
+      
+    }
     changeDynamic = (data, key) => {
     //   if (key === 'profile_pic') {
     //     this.handleChange(data)
@@ -204,22 +216,21 @@ componentDidMount(){
     checkType = () => {
       if(this.state.type == "image/jpeg" || this.state.type == "image/png") {
         
-        this.setState({mediatype:"image"})
+        this.setState({mediatype:"Image"})
       }
 
       if(this.state.type == "video/mp4") {
         
-        this.setState({mediatype:"video"})
+        this.setState({mediatype:"Video"})
       }
     }
 
     render() {
+   
+      console.log("sdfljsdhfkjsdfhjdfjsk",this.state.filename)
+    
 
-  
-
-      // this.state.filename = result[2];
-
-      console.log("arjungshsjdfhsjd",result[2])
+   
 
       console.log(this.state.mediaupload_lab.media_description.value,"description")
       console.log(this.props.truegetmethod,"statevalue")
