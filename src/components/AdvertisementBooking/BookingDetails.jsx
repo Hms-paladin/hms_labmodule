@@ -506,7 +506,6 @@ export default class AdBooking extends React.Component {
 
     //   get the ad details
     getAdBooking = () => {
-        alert("hlooo")
         Axios({
             method: 'POST',
             url: apiurl + '/getAdBooking',

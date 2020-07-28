@@ -120,7 +120,6 @@ getAdDetails = (data) => {
 
 
       handleDelete = (details) => {
-          alert("test")
         Axios({
             method: 'POST',
             url: apiurl + '/deleteAdBooking',
