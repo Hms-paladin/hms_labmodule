@@ -462,7 +462,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Profile" />
               </MenuItem>
 
-              <MenuItem component={Link} to="">
+              <MenuItem component={Link}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={report} />

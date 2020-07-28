@@ -97,7 +97,8 @@ export default class AdBooking extends React.Component {
             imageError: "",
             feeError: "",
             totalcostError: "",
-            dateError:false
+            dateError:false,
+            hidefilelist:false,
         }
 
         console.log("sdfsdafjlshjerhsdf", this.props)
@@ -143,29 +144,45 @@ export default class AdBooking extends React.Component {
 
 
     handleChange = info => {
-        console.log("sfdfjhsdfjhsdjfhsdjfkhsdf", info)
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true, imageUrl: '' });
-            return;
-        }
-        if (info.file.status === 'done') {
+        let fileList = [...info.fileList];
 
-            this.setState({
-                imagedata: info
-            }, () => console.log("sdfdsfsdhfjhsdfhsdfd", this.state.imagedata))
 
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                    imageName: info.file.name,
-                    imageChanged: true
-                }),
-            );
-            // console.log("infofile",info.file)
+        fileList = fileList.slice(-1);
+    
+    
+        fileList = fileList.map(file => {
+          if (file.response) {
+    
+            file.url = file.response.url;
+          }
+          return file;
+        });
+    
+        this.setState({ fileList,imagedata:fileList,imageChanged: true,hidefilelist:false });
+        console.log(fileList, "fileList")
+        // console.log("sfdfjhsdfjhsdjfhsdjfkhsdf", info)
+        // if (info.file.status === 'uploading') {
+        //     this.setState({ loading: true, imageUrl: '' });
+        //     return;
+        // }
+        // if (info.file.status === 'done') {
 
-        }
+        //     this.setState({
+        //         imagedata: info
+        //     }, () => console.log("sdfdsfsdhfjhsdfhsdfd", this.state.imagedata))
+
+        //     // Get this url from response in real world.
+        //     getBase64(info.file.originFileObj, imageUrl =>
+        //         this.setState({
+        //             imageUrl,
+        //             loading: false,
+        //             imageName: info.file.name,
+        //             imageChanged: true
+        //         }),
+        //     );
+        //     // console.log("infofile",info.file)
+
+        // }
     };
 
 
@@ -202,7 +219,7 @@ export default class AdBooking extends React.Component {
         this.state.location = data.ad_location_id
         this.state.adfeeperday = data.ad_fee_per_day
         this.state.adtotalcost = data.ad_total_cost
-        this.state.imagedata = data.ad_filename
+        this.state.imagedata = [{name:data.ad_filename}]
         this.state.imageName = data.ad_filename
 
         this.setState({})
@@ -445,8 +462,9 @@ export default class AdBooking extends React.Component {
             this.state.adtotalcost = "";
             this.state.imageName = "";
             this.state.adsize = "";
+            this.state.imagedata=[];
 
-            this.setState({})
+            this.setState({hidefilelist:true})
 
         }).catch((error) => {
             // alert(JSON.stringify(error))
@@ -543,22 +561,11 @@ export default class AdBooking extends React.Component {
     }
 
     checkHours = () => {
-
-
-
-
         var startDate = moment(this.state.endDate).format('DD')
         var endDate = moment(this.state.startdate).format('DD')
-    
-    
-    
         var fromMonth = moment(this.state.startdate).format('MM');
         var toMonth = moment(this.state.endDate).format('MM');
-    
-    
-    
         var current_year  =  moment().year();
-    
         var to_year = moment(this.state.endDate).year()
     
     
@@ -659,6 +666,11 @@ export default class AdBooking extends React.Component {
     render() {
         console.log("sdfkjsdfksdf", this.state.imagedata)
         const { TabPane } = Tabs;
+        const props = {
+            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+            onChange: this.handleChange,
+            multiple: true,
+          };
 
         return (
             <div className="booking_createlist booking_createlist--advertisement">
@@ -738,11 +750,11 @@ export default class AdBooking extends React.Component {
                                     </Grid>
 
                                     <Grid item xs={12} md={12} className="create_container">
-                                        <div className="advertise_upload"><label>Upload Advertisement</label>
+                                        <div className={`${this.state.hidefilelist && "advertise_uploadfile"} advertise_upload`}><label>Upload Advertisement</label>
                                             <span><FiInfo className="info_icon" onClick={this.handleOpen} /></span>
 
                                         </div>
-                                        <Upload
+                                        {/* <Upload
 
                                             showUploadList={false}
                                             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -752,7 +764,18 @@ export default class AdBooking extends React.Component {
 
                                             <span><Button className="button_browse">Browse</Button></span>
                                         </Upload>
-                                        <div className="validation__error">{this.state.imageError && this.state.imageError}</div>
+                                        <div className="validation__error">{this.state.imageError && this.state.imageError}</div> */}
+
+                            <div >
+                                <Upload {...props} style={{ width: "100%" }} 
+                                fileList={this.state.fileList}
+                                >
+                                    <p className="myimage_upload">
+                                        {this.state.imagedata && this.state.imagedata[0] && this.state.imagedata[0].name}
+                                        </p>
+                                    <Button className="button_browse">Browse</Button>
+                                </Upload>
+                            </div>
 
 
 

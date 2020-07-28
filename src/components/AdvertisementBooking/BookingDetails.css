@@ -368,3 +368,7 @@
 .ant-notification {
     z-index: 999999999999!important;
 }
+
+.advertise_uploadfile ~ div .ant-upload-list{
+    display: none ;
+}

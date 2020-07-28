@@ -74,7 +74,7 @@ export default class DeleteMedia extends Component {
             </div>
             <div className="mediadelete_container">
               <Button className="detete_no" onClick={() => this.props.closemodal()}>No</Button>
-              <Button className="detete_yes" onClick={() => this.deleteRecord()}>Yes</Button>
+              <Button className="detete_yes" onClick={() => this.props.deleteitem()}>Yes</Button>
             </div>
           </Grid>
         </Grid>

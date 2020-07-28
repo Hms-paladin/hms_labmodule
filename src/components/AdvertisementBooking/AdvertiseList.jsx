@@ -143,7 +143,7 @@ getAdDetails = (data) => {
         console.log("sdfjskdhfjsdkhfds",this.props)
         return(
             <Spin className="spinner_align" spinning={this.state.dataOnload}>
-          {this.state.ad_details.length === 0 ? <div className={"noFoundIconCenter_deal"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
+          {this.state.ad_details.length === 0 ? <div className={"noFoundIconCenter_ad"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
           <>
 
             <div className="location_add_container">    

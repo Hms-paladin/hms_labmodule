@@ -231,3 +231,12 @@ font-size: 1.25rem;
     display: flex;
     justify-content: flex-end;
 }
+
+.noFoundIconCenter_ad {
+    text-align: center !important;
+}
+
+.noFoundIconCenter_ad img {
+    width: 100px;
+    margin-top: 60px;
+}

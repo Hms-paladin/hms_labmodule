@@ -244,8 +244,8 @@ export default class BookingDetails extends React.Component {
             this.state.deal_valid_to = dateformat(new Date(), "yyyy-mm-dd"),
             this.state.dealOption = "M",
             this.state.bookingDetails.deal_amt.value = "",
-            this.state.dealActive = false
-            
+            this.state.dealActive = false,
+            this.setState({})
         )
     }
 

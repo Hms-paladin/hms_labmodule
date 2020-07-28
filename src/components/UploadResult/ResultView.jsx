@@ -35,7 +35,10 @@ export default class ResultView extends React.Component {
   };
 
   Notification = () => {
+    const key = 'updatable';
+
     notification.info({
+      key,
       description:
         'Uploaded Succesfully',
       placement: "topRight",
