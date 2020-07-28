@@ -59,7 +59,7 @@ export default class DealList extends React.Component {
                             }}
                           >
                             <div>
-                              <b>Service Type</b>
+                              <b>Test Name</b>
                               <div>{ val.deal_service_type === "" ? "All" : val.deal_service_type}</div>
                             </div>
                             <div>

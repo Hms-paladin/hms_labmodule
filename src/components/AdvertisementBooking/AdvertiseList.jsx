@@ -194,8 +194,8 @@ getAdDetails = (data) => {
                             </div>
     
                                 <div>
-                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == 1 ? Full : Half} /> </div>
-                                    <p className="image_size">Full</p>
+                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == "1" ? Half : Full} /> </div>
+                                    <p className="image_size">{bookingDetails.ad_size == "1" ? "Half" : "Full"}</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
                                             <img src={Workflow} className="listdelete_icon" onClick={(id)=>this.workflowopen(bookingDetails.id)} />

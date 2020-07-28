@@ -133,7 +133,7 @@ class Drawerpage extends React.Component {
 
   generateAlert = (description) => {
     notification.success({
-      message: "Success",
+      // message: "Success",
       description,
       onClick: () => {
         console.log("Notification Clicked!");

@@ -61,7 +61,7 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
     componentWillMount() {
 
       if(this.props.editData){
-        alert("edittrue")
+       
       var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
       var imgarr = imageurl.split('/');
       var s = imgarr[imgarr.length - 1];
@@ -71,7 +71,7 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
  
       this.setState({filename : splitted[1].slice(5)})
       }else{
-            alert("edit false")
+            
       }
       
     }
@@ -109,10 +109,12 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
       this.setState({mediaupload_lab})
     }
     onSubmitData = () => {
+     
 
       if(this.props.editData){
-        console.log(this.state.imageurl,"checking_imageurl_value")
         var formData = new FormData();
+        console.log(this.state.imageurl,"checking_imageurl_value")
+      
         formData.append('imageArray', this.state.imageurl)
         formData.set("mediatype",this.state.mediatype);
         formData.set("mediasortorder", this.state.sortorder)
@@ -129,8 +131,10 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
         formData.set( "id",this.props.editData.id)
         this.mediaupload_labUpdateApi(formData)   // Update Api Call
       }else{
-        console.log(this.state.imageurl.name,"checking_imageurl_value")
-        var formData = new FormData();
+          var formData = new FormData();
+       
+      
+      
         formData.append('imageArray', this.state.imageurl)
         formData.set("mediatype",this.state.mediatype);
         formData.set("mediasortorder", 1)

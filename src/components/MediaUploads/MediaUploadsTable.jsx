@@ -132,7 +132,7 @@ deleterow = () => {
   this.setState({ props_loading: false })
 }
   render() {
-   
+   console.log("sadfkjsdhfjkdshfjdsf",this.state.tableData)
     const img_var = <ReactSVG src={order} />;
     return (
       <Spin className="spinner_align" spinning={this.state.loading}>
