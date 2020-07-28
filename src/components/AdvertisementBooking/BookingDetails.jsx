@@ -578,15 +578,19 @@ export default class AdBooking extends React.Component {
     
     
        
-    
+        console.log("sdfhsdjlk",fromMonth)
+        console.log("sdfhsdjlk",toMonth)
     
        if(parseInt(fromMonth) < parseInt(toMonth)){
-         
+          alert("hey")
            var monthDiff = moment(this.state.endDate).format('MM') - moment(this.state.startdate).format('MM')
-       }else{
+       }else if(parseInt(toMonth) < parseInt(fromMonth)){
+           alert("ooo")
         var monthabs = moment(this.state.startdate).format('MM') - moment(this.state.toDate).format('MM') - (12 * (to_year - current_year))
     
         var monthDiff = Math.abs(monthabs)
+       }else if(parseInt(fromMonth) == parseInt(toMonth)) {
+           var monthDiff = 0;
        }
     
 
@@ -608,10 +612,11 @@ export default class AdBooking extends React.Component {
     
         if(parseInt(endDate) < parseInt(startDate)){
            var totalDays = moment(this.state.endDate).format('DD') - moment(this.state.startdate).format('DD') + daysInMonth+1;
+           console.log("sdjfhsdlkjfhdsjf",totalDays)
 
            this.setState({totalDays})
         }else{
-          console.log("sdlfsdjfhsdfhsdjfhsdfj",daysInMonth)
+            console.log("sdjfhsdlkjfhdsjf",totalDays)
           var totalDays = daysInMonth+1 - (moment(this.state.startdate).format('DD') - moment(this.state.endDate).format('DD'));
 
           this.setState({totalDays})
