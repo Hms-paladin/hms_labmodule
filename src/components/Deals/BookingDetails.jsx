@@ -101,9 +101,9 @@ export default class BookingDetails extends React.Component {
     getServiceType = () => {
         Axios({
             method: "POST",
-            url: apiurl + "/get_mas_doctor_service_type",
+            url: apiurl + "/get_mas_lab_test",
             data: {
-              doctor_id: "1",
+                "labId":"2"
             },
           })
             .then((response) => {
@@ -116,7 +116,7 @@ export default class BookingDetails extends React.Component {
               this.setState(
                 {
                   serviceType: response.data.data.map((val) => {
-                    return { id: val.id, serviceType: val.service_type };
+                    return { id: val.lab_test_id, serviceType: val.lab_test_name };
                   }),
                 },
                 () => this.state.serviceType.unshift({ id: 1, serviceType: "All" })
@@ -213,7 +213,7 @@ export default class BookingDetails extends React.Component {
     onSubmitData = () => {
         var bookingDetails = {
             userId: 1,
-            dealvendorId: 1,
+            dealvendorId: 2,
             dealservicetypeId: this.state.servicetype,
             dealtitle: this.state.bookingDetails.deal_title.value,
             dealvalidfrom: dateformat(this.state.deal_valid_from, "yyyy-mm-dd"),
@@ -300,13 +300,13 @@ export default class BookingDetails extends React.Component {
     // For Update purpose we are using this function here (if we try use this in dealList.jsx then we cant update automatically the list)
     getDealsList = () => {
         var data = {
-          doctorid: "1",
+          vendor_id:2,
           limit: 10,
-          pageno: 1,
+          pageno: 2,
         };
         Axios({
           method: "POST",
-          url: apiurl + "/getsingleDeals",
+          url: apiurl + "/Common/getsingle_deals",
           data: data,
         })
           .then((response) => {
@@ -353,7 +353,7 @@ export default class BookingDetails extends React.Component {
                                     <Grid item xs={6} md={6}>
                                   
                                                 <div>
-                                                    <label className="label_txt">Service Type</label>
+                                                    <label className="label_txt">Test Name</label>
                                                 <Select defaultValue={editValue ? this.state.serviceTypeValue : "All"}  style={{width:"100%"}} onChange={this.storeService}>
                                                     {this.services()}
                                                 </Select>

@@ -30,7 +30,7 @@ export default class DeleteMedia extends Component {
       }
     Axios({
       method: 'DELETE',
-      url: apiurl+"/" + this.props.apiendpoint,
+      url: apiurl +"/" + this.props.apiendpoint,
       data:data
   }).then((response) => {
     
@@ -40,7 +40,7 @@ export default class DeleteMedia extends Component {
       
 
       if(this.props.listName === "advertisement"){
-     
+          alert("inside")
         this.props.getAdvertiseList();
         this.props.generateAlert("Advertisement Deleted Successfully")
         this.props.closemodal()

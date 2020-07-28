@@ -74,6 +74,12 @@ componentWillMount() {
     this.getAdBooking()
 }
 
+UNSAFE_componentWillReceiveProps(){
+    // if(this.props.recallget){
+this.getAdDetails()
+// }
+}
+
 
 getAdDetails = (data) => {
     
@@ -91,7 +97,7 @@ getAdDetails = (data) => {
             ad_details: response.data.data[0].details,
         },() => console.log("sdfsdhfejdhfdsf",this.state.ad_details))
     }).catch((error) => {
-        alert(JSON.stringify(error))
+        // alert(JSON.stringify(error))
     })
 }
 
@@ -109,6 +115,7 @@ getAdDetails = (data) => {
 
 
       handleDelete = (details) => {
+          alert("test")
         Axios({
             method: 'POST',
             url: apiurl + '/deleteAdBooking',
@@ -118,10 +125,10 @@ getAdDetails = (data) => {
         }).then((response) => {
             console.log(response)
             // this.resetFormValue()
-            this.getDealsList()
+            this.getAdDetails()
     
         }).catch((error) => {
-            alert(JSON.stringify(error))
+            // alert(JSON.stringify(error))
         })
         console.log("deletedetails", details)
     }
@@ -194,8 +201,8 @@ getAdDetails = (data) => {
                             </div>
     
                                 <div>
-                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == 1 ? Full : Half} /> </div>
-                                    <p className="image_size">Full</p>
+                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == "1" ? Half : Full} /> </div>
+                                    <p className="image_size">{bookingDetails.ad_size == "1" ? "Half" : "Full"}</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
                                             <img src={Workflow} className="listdelete_icon" onClick={(id)=>this.workflowopen(bookingDetails.id)} />

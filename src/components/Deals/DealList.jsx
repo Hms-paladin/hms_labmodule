@@ -41,19 +41,25 @@ export default class DealList extends React.Component {
   }
   
   // Unsafe_componentWillReceiveProps(){
-  //   // if(this.props.afteredit){
+  //   if(this.props.afteredit){
   //   this.getlistdata()
-  //   // }
+  //   }
   // }
+
+  UNSAFE_componentWillReceiveProps(){
+        if(this.props.afteredit){
+    this.getlistdata()
+    }
+  }
 
   getlistdata=(notifymsg)=>{
     var self = this
     axios({
-        method: 'get',
-        url: apiurl + "/getDeals",
+        method: 'post',
+        url: apiurl + "/Common/getsingle_deals",
         data:{
           "vendor_id":"2", 
-          "limit":10, 
+          "limit":200, 
           "pageno":1
           
         } 
@@ -63,7 +69,7 @@ export default class DealList extends React.Component {
       var dyndeallist= []
       var dyndealAlllist= []
 
-      response.data.data.map((listdata)=>{
+      response.data.data[0].details.map((listdata)=>{
         dyndealAlllist.push(listdata)
         dyndeallist.push(
           <>
@@ -71,8 +77,10 @@ export default class DealList extends React.Component {
               <Paper className="dyndeallistPaper">
                 <div className="aligndeallistdata">
                   <div>
-                    <span>Service Type</span>
-                    <div>{listdata.deal_title}</div>
+                    <span>Test Name</span>
+                    {/* <div>{listdata.deal_title}</div> */}
+                    <div>{""}</div>
+                    
                   </div>
                   <div>
                     <span> Start Date</span>
@@ -155,7 +163,8 @@ export default class DealList extends React.Component {
               <div className="aligndeallistdata">
                 <div >
                   <span>Service Type</span>
-                  <div>{listdata.deal_title}</div>
+                  {/* <div>{listdata.deal_title}</div> */}
+                  <div>{""}</div>
                 </div>
                 <div>
                   <span> Start Date</span>

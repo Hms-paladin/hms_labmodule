@@ -52,7 +52,7 @@ export default class ViewMedia extends Component {
       <Grid container>
         <Grid item xs={12} md={6} className="media_title_container">
 
-          {viewData.media_type === "Video" && 
+          {viewData.media_type.toLowerCase() === "video" && 
           <div className="profile_media_div">
            
             <video src = {this.props.viewData.media_filename} type="video/mp4" controls className="img_uploader_edit"/>
@@ -76,7 +76,7 @@ export default class ViewMedia extends Component {
         </Grid>
         <Grid item xs={12} md={6} className="media_title_container">
            <div className="stepper__container">
-          <Stepper  />
+          {/* <Stepper  /> */}
           </div>
         </Grid>
       </Grid>

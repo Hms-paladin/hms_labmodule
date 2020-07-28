@@ -99,6 +99,7 @@ export default class AdBooking extends React.Component {
             totalcostError: "",
             dateError:false,
             hidefilelist:false,
+            totalDays:null
         }
 
         console.log("sdfsdafjlshjerhsdf", this.props)
@@ -403,13 +404,15 @@ export default class AdBooking extends React.Component {
             }
 
         }
+
+        console.log("adfeee",this.state.adfeeperday)
         // this.state.startdate = dateformat(data.ad_start_date, "yyyy-mm-dd")
         // this.state.endDate = dateformat(data.ad_end_date, "yyyy-mm-dd")
 
         formdata.set('adtitle', "Nurse")
         formdata.set('startdate', dateformat(this.state.startdate,"yyyy-mm-dd"))
         this.state.edit ? formdata.set('enddate', dateformat(this.state.endDate,"yyyy-mm-dd")) : formdata.set('endDate', dateformat(this.state.endDate, "yyyy-mm-dd"))
-        formdata.set('adtotaldays', 4)
+        formdata.set('adtotaldays', this.state.totalDays)
         formdata.set('adsize', this.state.adsize)
         formdata.set('adlocationId', this.state.location)
         formdata.set('adfeeperday', this.state.adfeeperday)
@@ -464,7 +467,7 @@ export default class AdBooking extends React.Component {
             this.state.adsize = "";
             this.state.imagedata=[];
 
-            this.setState({hidefilelist:true})
+            this.setState({hidefilelist:true,recallget:true})
 
         }).catch((error) => {
             // alert(JSON.stringify(error))
@@ -599,20 +602,34 @@ export default class AdBooking extends React.Component {
         
     
         if(parseInt(endDate) < parseInt(startDate)){
-           var totalDays = moment(this.state.endDate).format('DD') - moment(this.state.startdate).format('DD') + daysInMonth
+           var totalDays = moment(this.state.endDate).format('DD') - moment(this.state.startdate).format('DD') + daysInMonth+1;
+
+           this.setState({totalDays})
         }else{
           console.log("sdlfsdjfhsdfhsdjfhsdfj",daysInMonth)
-          var totalDays = daysInMonth - (moment(this.state.startdate).format('DD') - moment(this.state.endDate).format('DD'))
+          var totalDays = daysInMonth+1 - (moment(this.state.startdate).format('DD') - moment(this.state.endDate).format('DD'));
+
+          this.setState({totalDays})
         }
     
     
     
-        console.log("sfsdfsdfjshdfjksdf",totalDays)
+        console.log("sfsdfsdfjshdfjksdf",this.state.adsize)
 
 
         var totalcost = totalDays * this.state.adfeeperday;
 
-        this.setState({adtotalcost:totalcost})
+        if(this.state.adsize == "" || this.state.adsize == 2) {
+            this.setState({adtotalcost:totalcost})   
+        }
+
+        if(this.state.adsize == 1) {
+            this.setState({adtotalcost:totalcost/2}) 
+        }
+
+         
+
+    
     
     
 
@@ -658,7 +675,8 @@ export default class AdBooking extends React.Component {
     storeadSize = (data) => {
         
         console.log("sdfjdshfjksdhfkjsdhf",this.state.adsize)
-        this.setState({ adsize: data }, () => this.setState({ sizeError: false }))
+        this.setState({ adsize: data }, () =>  this.checkHours() )
+       
     }
 
 

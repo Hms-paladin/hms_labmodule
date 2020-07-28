@@ -57,6 +57,24 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
     {
         this.setState({open:false})
     }
+
+    componentWillMount() {
+
+      if(this.props.editData){
+       
+      var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
+      var imgarr = imageurl.split('/');
+      var s = imgarr[imgarr.length - 1];
+     
+ 
+      var splitted = s.split('mediaDoc');
+ 
+      this.setState({filename : splitted[1].slice(5)})
+      }else{
+            
+      }
+      
+    }
     changeDynamic = (data, key) => {
     //   if (key === 'profile_pic') {
     //     this.handleChange(data)
@@ -91,10 +109,12 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
       this.setState({mediaupload_lab})
     }
     onSubmitData = () => {
+     
 
       if(this.props.editData){
-        console.log(this.state.imageurl,"checking_imageurl_value")
         var formData = new FormData();
+        console.log(this.state.imageurl,"checking_imageurl_value")
+      
         formData.append('imageArray', this.state.imageurl)
         formData.set("mediatype",this.state.mediatype);
         formData.set("mediasortorder", this.state.sortorder)
@@ -111,8 +131,10 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
         formData.set( "id",this.props.editData.id)
         this.mediaupload_labUpdateApi(formData)   // Update Api Call
       }else{
-        console.log(this.state.imageurl.name,"checking_imageurl_value")
-        var formData = new FormData();
+          var formData = new FormData();
+       
+      
+      
         formData.append('imageArray', this.state.imageurl)
         formData.set("mediatype",this.state.mediatype);
         formData.set("mediasortorder", 1)
@@ -204,22 +226,21 @@ componentDidMount(){
     checkType = () => {
       if(this.state.type == "image/jpeg" || this.state.type == "image/png") {
         
-        this.setState({mediatype:"image"})
+        this.setState({mediatype:"Image"})
       }
 
       if(this.state.type == "video/mp4") {
         
-        this.setState({mediatype:"video"})
+        this.setState({mediatype:"Video"})
       }
     }
 
     render() {
+   
+      console.log("sdfljsdhfkjsdfhjdfjsk",this.state.filename)
+    
 
-  
-
-      // this.state.filename = result[2];
-
-      console.log("arjungshsjdfhsjd",result[2])
+   
 
       console.log(this.state.mediaupload_lab.media_description.value,"description")
       console.log(this.props.truegetmethod,"statevalue")
