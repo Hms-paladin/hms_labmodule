@@ -45,6 +45,8 @@ export default class AdvertiseList extends React.Component{
              pageno:1,
              dataOnload: true
     }
+
+    console.log("asdfkjsadhfkjsdsd",this.props)
 }
 
 
@@ -70,14 +72,17 @@ getAdBooking = () => {
 
 
 componentWillMount() {
+    console.log("sdfjshadfkhlasdkfjhdsj",this.props)
     // this.props.getAdvertiseList()
     this.getAdBooking()
 }
 
-UNSAFE_componentWillReceiveProps(){
-    // if(this.props.recallget){
-this.getAdDetails()
-// }
+componentWillReceiveProps(props){
+ 
+this.setState({
+    ad_details:props.ad_details
+})
+console.log("asdfkjsadhfkjsdsdprops",this.props)
 }
 
 

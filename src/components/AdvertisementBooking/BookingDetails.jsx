@@ -455,10 +455,13 @@ export default class AdBooking extends React.Component {
             data: details
         }).then((response) => {
 
-            console.log("sadfjksdhfjksdhfjsd", response)
-
-            this.getAdBooking()
+          
+            this.getAdBooking();
+            
             this.props.generateAlert("Advertisement added successfully")
+
+
+          
 
             this.state.adfeeperday = "";
             this.state.location = "";
@@ -466,6 +469,8 @@ export default class AdBooking extends React.Component {
             this.state.imageName = "";
             this.state.adsize = "";
             this.state.imagedata=[];
+
+           
 
             this.setState({hidefilelist:true,recallget:true})
 
@@ -501,6 +506,7 @@ export default class AdBooking extends React.Component {
 
     //   get the ad details
     getAdBooking = () => {
+        alert("hlooo")
         Axios({
             method: 'POST',
             url: apiurl + '/getAdBooking',
@@ -513,7 +519,7 @@ export default class AdBooking extends React.Component {
             console.log("sdfjhsdfjhsdjfhsdjlfhdf", response.data.data)
             this.setState({
                 ad_details: response.data.data[0].details
-            }, () => console.log("sfdshfjsdhfjsdhfsdf", this.state.details))
+            }, () => console.log("sfdshfjsdhfjsdhfsdf", this.state.ad_details))
         }).catch((error) => {
             alert(JSON.stringify(error))
         })
