@@ -19,7 +19,9 @@ export default class TestView extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      testActive:false,
+      testList:[],
+      categoryList: [],
+      testActive: false,
       activeKey: "1",
       name: "",
       testCost: [],
@@ -33,6 +35,12 @@ export default class TestView extends Component {
         },
       },
       labmanage_addtestcost: {
+        'lab_test_category': {
+          'value': '',
+          validation: [{ 'name': 'required' }],
+          error: null,
+          errmsg: null,
+        },
         lab_test_name: {
           'value': '',
           validation: [{ 'name': 'required' }],
@@ -56,15 +64,37 @@ export default class TestView extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props,"checing")
+    console.log(this.props, "checing")
     if (this.props.edithide) {
-      this.state.labmanage_test.lab_test_category.value = this.props.editdata[0].lab_test_category
+      this.state.labmanage_addtestcost.lab_test_category.value = this.props.editdata[0].lab_test_category_id
       this.state.labmanage_addtestcost.lab_test_name.value = this.props.editdata[0].lab_test_name
-      this.state.labmanage_addtestcost.lab_cost.value = this.props.editdata[0].lab_cost
+      this.state.labmanage_addtestcost.lab_cost.value = this.props.editdata[0].cost
       this.state.labmanage_addtestcost.lab_instruction.value = this.props.editdata[0].test_instruction
-      this.state.testActive=this.props.editdata[0].active_flag === 1 ? true : false
+      this.state.testActive = this.props.editdata[0].is_active === 1 ? true : false
       this.setState({})
     }
+    this.getTestCategory()
+  }
+
+  getTestCategory = () => {
+    axios({
+      method: 'POST',
+      url: apiurl + '/get_mas_lab_test_category',
+      data: {
+        lab_vendor_id: "2"
+      }
+    }).then((response) => {
+      console.log(response.data.data.map((val) => { return { id: val.test_category_id, category: val.lab_test_category } }),
+        "sadfasdf")
+      this.setState({
+        categoryList: response.data.data.map((val) => {
+          return { id: val.test_category_id, category: val.lab_test_category }
+        })
+      })
+      this.setState({})
+    }).catch((error) => {
+      alert(JSON.stringify(error))
+    })
   }
 
 
@@ -139,7 +169,7 @@ export default class TestView extends Component {
           method: 'POST',
           url: apiurl + '/insert_mas_lab_test',
           data: {
-            "lab_test_category": this.state.labmanage_test.lab_test_category.value,
+            "lab_test_category_id": this.state.labmanage_test.lab_test_category.value,
             "lab_test_list": this.state.lab_test_list,
             "lab_vendor_id": "2",
             "lab_created_on": dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss"),
@@ -181,6 +211,7 @@ export default class TestView extends Component {
     } else {
       this.setState({ error: false })
     }
+    this.setState({})
   }
 
 
@@ -213,17 +244,51 @@ export default class TestView extends Component {
       lab_test_list.push(...this.state.lab_test_list, {
         "lab_test_name": this.state.labmanage_addtestcost.lab_test_name.value,
         "lab_cost": this.state.labmanage_addtestcost.lab_cost.value,
-        "lab_test_instruction": this.state.labmanage_addtestcost.lab_instruction.value
+        "lab_test_instruction": this.state.labmanage_addtestcost.lab_instruction.value,
+        "active": this.state.testActive === 1 ? "true" : "false"
       })
-      this.state.labmanage_addtestcost.lab_test_name.value = ""
-      this.state.labmanage_addtestcost.lab_cost.value = ""
-      this.state.labmanage_addtestcost.lab_instruction.value = ""
-
-      this.setState({ testCost: testCost, lab_test_list: lab_test_list })
+      this.setState({ testCost: testCost, lab_test_list: lab_test_list }, () => this.submitData())
 
     }
+
     this.setState({ labmanage_addtestcost })
   }
+
+  submitData = () => {
+    if (this.props.edithide) {
+      this.update()
+    } else {
+      // this.props.closemodal(true)
+      var self = this
+      axios({
+        method: 'POST',
+        url: apiurl + '/insert_mas_lab_test',
+        data: {
+          "lab_vendor_id": "2",
+          "lab_test_category_id": this.state.labmanage_addtestcost.lab_test_category.value,
+          "lab_test_name": this.state.labmanage_addtestcost.lab_test_name.value,
+          "test_instruction": this.state.labmanage_addtestcost.lab_instruction.value,
+          "lab_cost": this.state.labmanage_addtestcost.lab_cost.value,
+          "is_active": this.state.testActive === true ? 1 : 0,
+        }
+      })
+        .then((response) => {
+          this.state.testList.push({
+            "lab_test_category_id": this.state.labmanage_addtestcost.lab_test_category.value,
+            "lab_test_id": response.data.data.insertId,
+            "lab_test_name": this.state.labmanage_addtestcost.lab_test_name.value,
+            "test_instruction": this.state.labmanage_addtestcost.lab_instruction.value,
+            "lab_cost": this.state.labmanage_addtestcost.lab_cost.value,
+            "is_active": this.state.testActive === true ? 1 : 0,
+          })
+          console.log(response, "response_checkingg")
+          this.props.callget("Added")
+          this.resetForm()
+        })
+    }
+
+  }
+
 
   update = () => {
     this.props.closemodal(true)
@@ -232,24 +297,28 @@ export default class TestView extends Component {
       method: 'PUT',
       url: apiurl + '/edit_mas_lab_test',
       data: {
-        // "lab_instruction": this.state.labmanage_test.lab_instruction.value,
-        "lab_test_category_id": this.props.editdata[0].lab_test_category_id,
-        "lab_test_category": this.state.labmanage_test.lab_test_category.value,
-        "active_flag": this.state.testActive === true ? 1 : 0,
-        "test_info": [
-          {
-            "lab_test_id": this.props.editdata[0].lab_test_id,
-            "test_name": this.state.labmanage_addtestcost.lab_test_name.value,
-            "cost": this.state.labmanage_addtestcost.lab_cost.value,
-            "instruction": this.state.labmanage_addtestcost.lab_instruction.value
-          }
-        ]
+        "lab_vendor_id": "2",
+        "lab_test_id": this.props.editdata[0].lab_test_id,
+        "lab_test_category_id": this.state.labmanage_addtestcost.lab_test_category.value,
+        "lab_test_name": this.state.labmanage_addtestcost.lab_test_name.value,
+        "test_instruction": this.state.labmanage_addtestcost.lab_instruction.value,
+        "lab_cost": this.state.labmanage_addtestcost.lab_cost.value,
+        "is_active": this.state.testActive === true ? 1 : 0,
       }
     })
       .then((response) => {
         console.log(response, "response_data")
         self.props.callget("Updated")
+        this.resetForm()
       })
+  }
+
+  resetForm = () => {
+    this.state.labmanage_addtestcost.lab_test_name.value = ""
+    this.state.labmanage_addtestcost.lab_cost.value = ""
+    this.state.labmanage_addtestcost.lab_instruction.value = ""
+    this.state.testActive = false
+    this.setState({})
   }
 
   callback = (key) => {
@@ -259,14 +328,14 @@ export default class TestView extends Component {
   }
 
   deleteCard = (index) => {
-    this.state.lab_test_list.splice(index,1)
+    this.state.testList.splice(index, 1)
     this.setState({})
   }
 
   testActiveCheck = (e) => {
     this.setState({
       testActive: e.target.checked
-  })
+    })
   }
 
 
@@ -282,14 +351,25 @@ export default class TestView extends Component {
                 <Grid item xs={12} md={5}>
                   <div className="instruction_area">
                     <Labelbox
+                      type="select"
+                      labelname="Test Category"
+                      valuelabel={'category'}
+                      valuebind={"id"}
+                      dropdown={this.state.categoryList}
+                      changeData={(data) => this.addtestcostchangedyn(data, 'lab_test_category')}
+                      value={this.state.labmanage_addtestcost.lab_test_category.value}
+                      error={this.state.labmanage_addtestcost.lab_test_category.error}
+                      errmsg={this.state.labmanage_addtestcost.lab_test_category.errmsg} />
+                    {/* <Labelbox
                       type="text"
                       labelname="Test Category"
                       changeData={(data) => this.changeDynamic(data, 'lab_test_category')}
                       value={this.state.labmanage_test.lab_test_category.value}
                       error={this.state.labmanage_test.lab_test_category.error}
-                      errmsg={this.state.labmanage_test.lab_test_category.errmsg} />
+                      errmsg={this.state.labmanage_test.lab_test_category.errmsg} /> */}
                   </div>
-                  <Checkbox className="Deal_active_check" checked={this.state.testActive} onChange={(e) => this.testActiveCheck(e)} /><span>Test Active</span>
+
+
 
                 </Grid>
 
@@ -326,11 +406,14 @@ export default class TestView extends Component {
                           value={this.state.labmanage_addtestcost.lab_instruction.value}
                           error={this.state.labmanage_addtestcost.lab_instruction.error}
                           errmsg={this.state.labmanage_addtestcost.lab_instruction.errmsg} />
+                        <Checkbox className="Deal_active_check" checked={this.state.testActive} onChange={(e) => this.testActiveCheck(e)} /><span>Active</span>
                       </div>
                       {
-                        this.props.visible === true &&
+
                         < div className="addBtn">
-                          <button className="btn btn-success" onClick={this.addtestcostcheckValidation}>Add</button>
+                          <button className="btn btn-success" onClick={this.addtestcostcheckValidation}>{
+                            this.props.visible === true ? "Add" : "Update"
+                          }</button>
                         </div>
                       }
 
@@ -340,14 +423,14 @@ export default class TestView extends Component {
                     </div>
                   </>
                 </Grid>
-                <div className={`${this.props.visible === true ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
+                {/* <div className={`${this.props.visible === true ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
                   <Button className="manage_test_Cancel" onClick={() => this.props.closemodal(false)}>Cancel</Button>
                   <Button className="manage_test_Submit" onClick={this.checkValidation} >
                     {
                       this.props.visible === true ? "Submit" : "Update"
                     }
                   </Button>
-                </div>
+                </div> */}
 
               </Grid>
 
@@ -357,7 +440,7 @@ export default class TestView extends Component {
             this.props.visible === true &&
             <TabPane tab="Preview" key="2">
               <Preview
-                previewData={this.state.lab_test_list}
+                previewData={this.state.testList}
                 deleteCard={this.deleteCard}
               />
             </TabPane>

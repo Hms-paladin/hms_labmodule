@@ -110,7 +110,7 @@ class ProfileComp extends Component {
                             <h5>
                               <IoIosGlobe className="group_icons" />
                             </h5>
-                            <p className="trainee_text">{val.vendor_contact_mobile}</p>
+                            <p className="trainee_text">{val.vendor_website}</p>
                           </div>
                           <div>
                             <h4 className="working_hour">

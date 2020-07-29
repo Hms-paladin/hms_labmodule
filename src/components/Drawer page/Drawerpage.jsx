@@ -56,6 +56,7 @@ import { apiurl } from "../../App";
 import Axios from "axios";
 import {notification} from 'antd';
 import Noimageavailable from "../../Images/Noimageavailable.png"
+import ManageCategory from "../ManageCategory";
 
 
 const drawerWidth = 260;
@@ -436,6 +437,15 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Revenue" />
               </MenuItem>
 
+              <MenuItem component={Link} to="/Home/Category">
+                <ListItemIcon>
+                  <div className="icon-container">
+                    <ReactSVG src={managetest} />
+                  </div>
+                </ListItemIcon>
+                <ListItemText primary="Manage Category" />
+              </MenuItem>
+
               <MenuItem component={Link} to="/Home/Test">
                 <ListItemIcon>
                   <div className="icon-container">
@@ -515,6 +525,11 @@ class Drawerpage extends React.Component {
             <Route
               path={`${this.props.match.path}/Revenue`}
               component={RevenueMaster}
+              exact
+            />
+            <Route
+              path={`${this.props.match.path}/Category`}
+              component={ManageCategory}
               exact
             />
             <Route
