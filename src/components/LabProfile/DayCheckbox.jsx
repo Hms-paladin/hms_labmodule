@@ -32,7 +32,6 @@ export default class WorkingHours extends React.Component {
     super(props)
     this.state =
     {
-      fromTimeValue: '', toTimeValue: '',
       Friday: [], Saturday: [], Sunday: [], Monday: [], Tuesday: [], Wednesday: [], Thursday: [],
       countArray: [], count: 0, addMoreHours: false, checkedA: false, checkedB: false, checkedC: false, checkedD: false, checkedE: false, checkedF: false, checkedG: false,
       time: false, showtimepicker: false, timeout: false, choosetime: false, checkList: [], addMoreHoursList: [],
