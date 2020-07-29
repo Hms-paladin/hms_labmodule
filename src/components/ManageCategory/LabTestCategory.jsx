@@ -102,17 +102,15 @@ class LabTestCategory extends React.Component {
             data: {
                 "test_category_id": this.state.iddata,
             }
-        })
-            .then(function (response) {
+        }).then(function (response) {
                 if (response.data.msg === "Success") {
                     self.getTableData("Deleted")
                 } else {
-                    self.getTableData("Child record is append", true)
+                    self.getTableData("Test name already existes for this category", true)
                 }
-
             })
             .catch(function (error) {
-                alert("error")
+                // alert("error")
             });
         this.setState({ props_loading: false })
     }
