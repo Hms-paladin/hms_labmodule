@@ -46,15 +46,17 @@ class LabTestTable extends React.Component {
         }
     })
     .then((response) => {
-      console.log(response,"response_data")
+      console.log(response.data,"response_data")
 
       var tableData = [];
       var responseAllData = [];
-        response.data.data.map((val) => {
+      if(response.data.msg !== "Failed" ){
+      response.data.data.map((val) => {
             tableData.push({ test: val.lab_test_name,cost:val.lab_cost,date:moment(val.lab_created_on).format('DD-MM-YYYY'),
              id: val.lab_test_id })
             responseAllData.push(val) 
         })
+      }
         self.setState({
           tableData:tableData,
           responseAllData:responseAllData,

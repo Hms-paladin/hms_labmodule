@@ -7,9 +7,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Workflow from "../../Images/workflow.svg";
 import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import DeleteMedia from "./DeleteMedia";
+import NotfoundIcon from "../../Images/NotFound.svg";
 import { apiurl } from "../../App";
 import axios from 'axios';
-import { notification } from "antd"
+import { notification, Spin } from "antd"
 
 import "./DealList.css";
 
@@ -46,13 +47,15 @@ export default class DealList extends React.Component {
   //   }
   // }
 
-  UNSAFE_componentWillReceiveProps(){
-        if(this.props.afteredit){
+  UNSAFE_componentWillReceiveProps(newprops){
+        if(newprops.afteredit){
     this.getlistdata()
+    newprops.aftereditfalse()
     }
   }
 
   getlistdata=(notifymsg)=>{
+    this.setState({dataOnload:true})
     var self = this
     axios({
         method: 'post',
@@ -134,7 +137,7 @@ export default class DealList extends React.Component {
         });
       }
 
-      self.setState({dyndeallist:dyndeallist,dyndealAlllist:dyndealAlllist})
+      self.setState({dyndeallist:dyndeallist,dyndealAlllist:dyndealAlllist,dataOnload:false})
       
     })
   }
@@ -215,6 +218,7 @@ export default class DealList extends React.Component {
   }
 
   deleteDealLIst=()=>{
+    this.setState({dataOnload:true,open: false})
     var self=this
     axios({
       method:'DELETE',
@@ -224,7 +228,6 @@ export default class DealList extends React.Component {
       }
     })
     .then((response)=>{
-      self.setState({open: false})
       self.getlistdata("Deal Deleted Successfully")
     })
   }
@@ -234,6 +237,10 @@ export default class DealList extends React.Component {
     console.log(this.state.openstepper,"openstepper")
 
     return (
+        <Spin className="spinner_align" spinning={this.state.dataOnload}>
+
+        {this.state.dyndeallist.length === 0 ? <div className={"noFoundIconCenter_ad"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
+
       <div className="deal_list_paper_maincontainer">
         <Grid container>
       {this.state.dyndeallist}
@@ -247,7 +254,8 @@ export default class DealList extends React.Component {
         >
           <DeleteMedia closemodal={this.handleClose} deleteitem={this.deleteDealLIst} closeDeleteModel={this.handleClose}/>
         </Modalcomp>
-      </div>
+      </div>}
+      </Spin>
     );
   }
 }
