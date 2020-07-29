@@ -24,7 +24,6 @@ class ManageCategory extends React.Component {
             callgetapi: true
         })
     }
-
     render() {
         const { Search } = Input;
         return (
