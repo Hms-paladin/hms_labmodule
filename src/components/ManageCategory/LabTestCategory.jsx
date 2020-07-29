@@ -110,7 +110,6 @@ class LabTestCategory extends React.Component {
                 }
             })
             .catch(function (error) {
-                // alert("error")
             });
         this.setState({ props_loading: false })
     }
