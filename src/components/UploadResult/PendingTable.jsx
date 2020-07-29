@@ -69,6 +69,7 @@ UNSAFE_componentWillReceiveProps(newProps){
     tableData:newProps.weekMonthYearDatapending,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
     search:newProps.searchData,
+    selectedDatepen:newProps.selectedDatepen
   })
 // }
 }
@@ -105,6 +106,47 @@ openuploadForpending=(id)=>{
     return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
 }
 
+duplicaterecall=()=>{
+  this.setState({props_loading:true})
+  var self = this
+  var startdate = dateformat(this.state.selectedDatepen[0].startDate, "yyyy-mm-dd")
+  var enddate = dateformat(this.state.selectedDatepen[0].endDate, "yyyy-mm-dd")
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getTestPendingResult',
+        data:{
+          "lab_id": "2",
+          "date":startdate,
+          "period": "Day",
+          "date_to":enddate
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
+
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+            tableData.push({
+              name: val.customer,
+              test: val.test,
+              date: val.test_date,
+              time: val.uploaded_time ? val.uploaded_time : '-',
+            status: <span className="pending_clrred">{val.status}</span>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
+            id:index
+            })
+            tableDatafull.push(val)
+        self.props.tabledataFun(tableData)
+        })
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+    })
+}
+
   render() {
     const searchdata = []
     this.state.tableDatafull.filter((data,index) => {
@@ -114,18 +156,18 @@ openuploadForpending=(id)=>{
           name: data.customer,
           test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
-          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) :'-',
+          time: data.test_time ? this.formatTimeShow(data.test_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
         action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index
         })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && dateformat(data.test_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && dateformat(data.test_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
           test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
-          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) :'-',
+          time: data.test_time ? this.formatTimeShow(data.test_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
         action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
         id:index
@@ -156,7 +198,7 @@ openuploadForpending=(id)=>{
           closemodal={(e) => this.closemodal(e)}
           modelwidthClass={"resultviewModelWidth"}
         >
-          <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} />
+          <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} getrecall={this.duplicaterecall} />
         </Modalcomp>
 
         <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>

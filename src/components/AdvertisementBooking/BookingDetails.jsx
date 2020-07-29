@@ -25,6 +25,7 @@ import { FiInfo } from "react-icons/fi";
 import dateformat from 'dateformat';
 import 'antd/dist/antd.css';
 import { notification, Select } from 'antd';
+import moment from 'moment';
 
 
 const { Option } = Select;
@@ -59,6 +60,9 @@ const openNotification = () => {
     });
 }
 
+var startdate = dateformat(new Date(), "yyyy-mm-dd")
+
+var enddate = dateformat(new Date(), "yyyy-mm-dd")
 export default class AdBooking extends React.Component {
     constructor(props) {
         super(props)
@@ -80,8 +84,9 @@ export default class AdBooking extends React.Component {
             adsize: "",
             ad_details: [],
             activeKey: "1",
-            startdate: "",
-            endDate: "",
+            startdate: startdate,
+            endDate:  enddate,
+            checked:false,
 
 
 
@@ -91,7 +96,10 @@ export default class AdBooking extends React.Component {
             locationError: "",
             imageError: "",
             feeError: "",
-            totalcostError: ""
+            totalcostError: "",
+            dateError:false,
+            hidefilelist:false,
+            totalDays:null
         }
 
         console.log("sdfsdafjlshjerhsdf", this.props)
@@ -113,44 +121,75 @@ export default class AdBooking extends React.Component {
     // }
 
 
-    getRangeData = (data) => {
-        this.setState({
-            startdate: dateformat(new Date(data[0].split(" ").reverse().join("/")), "yyyy-mm-dd"),
-            endDate: dateformat(new Date(data[1].split(" ").reverse().join("/")), "yyyy-mm-dd")
-        })
-        this.setState({})
-    }
+        getRangeData = (data) => {
+          
+            console.log(data,"getRangeData")
+            if(data.enddate===null){
+              
+                this.setState({startdate:data.startdate},() => this.compareDate())
+            }else{
+                if(data.startdate<data.enddate){
+                   
+                this.setState({startdate:data.startdate,endDate:data.enddate},() => this.compareDate())
+                }else{
+                this.setState({startdate:data.enddate,endDate:data.startdate},() => this.compareDate())
+                }
+            }
+                    // this.setState({
+        //     startdate: dateformat(new Date(data[0].split(" ").reverse().join("/")), "yyyy-mm-dd"),
+        //     endDate: dateformat(new Date(data[1].split(" ").reverse().join("/")), "yyyy-mm-dd")
+        // })
+        // this.setState({})
+        }
+
 
 
     handleChange = info => {
-        console.log("sfdfjhsdfjhsdjfhsdjfkhsdf", info)
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true, imageUrl: '' });
-            return;
-        }
-        if (info.file.status === 'done') {
+        let fileList = [...info.fileList];
 
-            this.setState({
-                imagedata: info
-            }, () => console.log("sdfdsfsdhfjhsdfhsdfd", this.state.imagedata))
 
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                    imageName: info.file.name,
-                    imageChanged: true
-                }),
-            );
-            // console.log("infofile",info.file)
+        fileList = fileList.slice(-1);
+    
+    
+        fileList = fileList.map(file => {
+          if (file.response) {
+    
+            file.url = file.response.url;
+          }
+          return file;
+        });
+    
+        this.setState({ fileList,imagedata:fileList,imageChanged: true,hidefilelist:false });
+        console.log(fileList, "fileList")
+        // console.log("sfdfjhsdfjhsdjfhsdjfkhsdf", info)
+        // if (info.file.status === 'uploading') {
+        //     this.setState({ loading: true, imageUrl: '' });
+        //     return;
+        // }
+        // if (info.file.status === 'done') {
 
-        }
+        //     this.setState({
+        //         imagedata: info
+        //     }, () => console.log("sdfdsfsdhfjhsdfhsdfd", this.state.imagedata))
+
+        //     // Get this url from response in real world.
+        //     getBase64(info.file.originFileObj, imageUrl =>
+        //         this.setState({
+        //             imageUrl,
+        //             loading: false,
+        //             imageName: info.file.name,
+        //             imageChanged: true
+        //         }),
+        //     );
+        //     // console.log("infofile",info.file)
+
+        // }
     };
 
 
 
     changeTabFun = (data) => {
+        console.log("asfshdfsdfksd",data)
         if(new Date (data.ad_start_date) < new Date() && new Date (data.ad_end_date) < new Date() ){
             notification.info({
                 description:
@@ -170,7 +209,7 @@ export default class AdBooking extends React.Component {
             editData: data,
             imageChanged: false,
             edit: true
-        })
+        },() => this.storeadSize(this.state.editData.ad_size))
 
         // For Edit Data form filling
         this.state.id = data.id
@@ -181,9 +220,12 @@ export default class AdBooking extends React.Component {
         this.state.location = data.ad_location_id
         this.state.adfeeperday = data.ad_fee_per_day
         this.state.adtotalcost = data.ad_total_cost
-        this.state.imagedata = data.ad_filename
+        this.state.imagedata = [{name:data.ad_filename}]
+        this.state.imageName = data.ad_filename
 
         this.setState({})
+
+        console.log("adfksgadfsgdlfhgdslfh",this.state.editData)
     }
 
     }
@@ -337,6 +379,7 @@ export default class AdBooking extends React.Component {
             data: ratedata
         }).then((response) => {
             this.setState({ adfeeperday: response.data.data[0].rate })
+            this.checkHours()
         }).catch((err) => {
 
         })
@@ -362,10 +405,14 @@ export default class AdBooking extends React.Component {
 
         }
 
+        console.log("adfeee",this.state.adfeeperday)
+        // this.state.startdate = dateformat(data.ad_start_date, "yyyy-mm-dd")
+        // this.state.endDate = dateformat(data.ad_end_date, "yyyy-mm-dd")
+
         formdata.set('adtitle', "Nurse")
-        formdata.set('startdate', this.state.startdate)
-        this.state.edit ? formdata.set('enddate', this.state.endDate) : formdata.set('endDate', this.state.endDate)
-        formdata.set('adtotaldays', 4)
+        formdata.set('startdate', dateformat(this.state.startdate,"yyyy-mm-dd"))
+        this.state.edit ? formdata.set('enddate', dateformat(this.state.endDate,"yyyy-mm-dd")) : formdata.set('endDate', dateformat(this.state.endDate, "yyyy-mm-dd"))
+        formdata.set('adtotaldays', this.state.totalDays)
         formdata.set('adsize', this.state.adsize)
         formdata.set('adlocationId', this.state.location)
         formdata.set('adfeeperday', this.state.adfeeperday)
@@ -386,12 +433,12 @@ export default class AdBooking extends React.Component {
         const isValid = this.validation()
 
 
-        if (this.state.edit === false && isValid) {
+        if (this.state.edit === false && isValid && !this.state.dateError) {
 
             this.insertAdBooking(formdata)
         }
 
-        if (this.state.edit === true && isValid) {
+        if (this.state.edit === true && isValid && !this.state.dateError) {
             this.editAdBooking(formdata)
         }
 
@@ -408,18 +455,24 @@ export default class AdBooking extends React.Component {
             data: details
         }).then((response) => {
 
-            console.log("sadfjksdhfjksdhfjsd", response)
+          
+            this.getAdBooking();
+            
+            this.props.generateAlert("Advertisement added successfully")
 
-            this.getAdBooking()
-            this.props.generateAlert("Advertisement Booked successfully")
+
+          
 
             this.state.adfeeperday = "";
             this.state.location = "";
             this.state.adtotalcost = "";
             this.state.imageName = "";
             this.state.adsize = "";
+            this.state.imagedata=[];
 
-            this.setState({})
+           
+
+            this.setState({hidefilelist:true,recallget:true})
 
         }).catch((error) => {
             // alert(JSON.stringify(error))
@@ -437,6 +490,14 @@ export default class AdBooking extends React.Component {
         }).then((response) => {
 
             this.getAdBooking()
+            this.props.generateAlert("Advertisement updated successfully")
+            this.setState({activeKey:"2",edit:false})
+            this.state.adfeeperday = "";
+            this.state.startdate = startdate;
+            this.state.endDate = enddate;
+            this.state.adtotalcost = "";
+            this.state.imageName = "";
+            this.state.adsize = "";
         }).catch((error) => {
             alert(JSON.stringify(error))
         })
@@ -457,7 +518,7 @@ export default class AdBooking extends React.Component {
             console.log("sdfjhsdfjhsdjfhsdjlfhdf", response.data.data)
             this.setState({
                 ad_details: response.data.data[0].details
-            }, () => console.log("sfdshfjsdhfjsdhfsdf", this.state.details))
+            }, () => console.log("sfdshfjsdhfjsdhfsdf", this.state.ad_details))
         }).catch((error) => {
             alert(JSON.stringify(error))
         })
@@ -507,20 +568,108 @@ export default class AdBooking extends React.Component {
 
     }
 
+    checkHours = () => {
+        var startDate = moment(this.state.endDate).format('DD')
+        var endDate = moment(this.state.startdate).format('DD')
+        var fromMonth = moment(this.state.startdate).format('MM');
+        var toMonth = moment(this.state.endDate).format('MM');
+        var current_year  =  moment().year();
+        var to_year = moment(this.state.endDate).year()
+    
+    
+       
+        console.log("sdfhsdjlk",fromMonth)
+        console.log("sdfhsdjlk",toMonth)
+    
+       if(parseInt(fromMonth) < parseInt(toMonth)){
+         
+           var monthDiff = moment(this.state.endDate).format('MM') - moment(this.state.startdate).format('MM')
+       }else if(parseInt(toMonth) < parseInt(fromMonth)){
+           
+        var monthabs = moment(this.state.startdate).format('MM') - moment(this.state.toDate).format('MM') - (12 * (to_year - current_year))
+    
+        var monthDiff = Math.abs(monthabs)
+       }else if(parseInt(fromMonth) == parseInt(toMonth)) {
+           var monthDiff = 0;
+       }
+    
+
+        console.log("asfjksdhfjsdfhljsdfsd",monthDiff)
+    
+        var daysInMonth = 0;
+        for(let i=0;i<monthDiff;i++){
+          var filteredMonth = parseInt(fromMonth) + parseInt(i);
+           daysInMonth += new Date(current_year,filteredMonth,0).getDate();
+        }
+    
+       
+    
+    
+       console.log("sdfjsdhfjsdhfljsdfhsdkjf",daysInMonth)
+    
+    
+        
+    
+        if(parseInt(endDate) < parseInt(startDate)){
+           var totalDays = moment(this.state.endDate).format('DD') - moment(this.state.startdate).format('DD') + daysInMonth+1;
+           console.log("sdjfhsdlkjfhdsjf",totalDays)
+
+           this.setState({totalDays})
+        }else{
+            console.log("sdjfhsdlkjfhdsjf",totalDays)
+          var totalDays = daysInMonth+1 - (moment(this.state.startdate).format('DD') - moment(this.state.endDate).format('DD'));
+
+          this.setState({totalDays})
+        }
+    
+    
+    
+        console.log("sfsdfsdfjshdfjksdf",this.state.adsize)
+
+
+        var totalcost = totalDays * this.state.adfeeperday;
+
+        if(this.state.adsize == "" || this.state.adsize == 2) {
+            this.setState({adtotalcost:totalcost})   
+        }
+
+        if(this.state.adsize == 1) {
+            this.setState({adtotalcost:totalcost/2}) 
+        }
+
+         
+
+    
+    
+    
+
+      
+      }
+    
+
 
     datepickerChange = (data, key) => {
         if (key === 'startdate') {
             this.setState({
                 startdate: data
-            })
+            },() => this.compareDate())
         }
         if (key === 'enddate') {
             this.setState({
                 endDate: data
-            })
+            },() => this.compareDate())
         }
     }
 
+    compareDate = () => {
+        console.log(this.state.startdate,"arjsirusiodfsdjfsak;dfj")
+        if(dateformat(this.state.startdate,'mm-dd-yyyy') <= dateformat(this.state.endDate,'mm-dd-yyyy')) {
+             this.setState({dateError:false})
+             this.checkHours()
+        }else{
+            this.setState({dateError:true})
+        }
+    }
 
     placementLocation = () => {
         let locations = [];
@@ -534,7 +683,10 @@ export default class AdBooking extends React.Component {
 
 
     storeadSize = (data) => {
-        this.setState({ adsize: data }, () => this.setState({ sizeError: false }))
+        
+        console.log("sdfjdshfjksdhfkjsdhf",this.state.adsize)
+        this.setState({ adsize: data }, () =>  this.checkHours() )
+       
     }
 
 
@@ -542,6 +694,11 @@ export default class AdBooking extends React.Component {
     render() {
         console.log("sdfkjsdfksdf", this.state.imagedata)
         const { TabPane } = Tabs;
+        const props = {
+            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+            onChange: this.handleChange,
+            multiple: true,
+          };
 
         return (
             <div className="booking_createlist booking_createlist--advertisement">
@@ -568,14 +725,15 @@ export default class AdBooking extends React.Component {
 
                                             {
                                                 this.state.sizeData.length > 0 && this.state.sizeData.map(checkingsize =>
-
+                                                
                                                     <div className="ad__size">
-                                                        <Checkbox checked={this.state.edit ? this.state.adsize : checkingsize.ad_size} value={this.state.edit ? this.state.adsize : checkingsize.ad_size} onChange={() => this.storeadSize(checkingsize.id)}
+                                                        <Checkbox checked={this.state.adsize == checkingsize.id ? true : false} value={this.state.edit ? this.state.adsize : checkingsize.ad_size} onChange={() => this.storeadSize(checkingsize.id)}
 
                                                         >
                                                         </Checkbox>
                                                         {checkingsize.size}
                                                     </div>
+                                                   
                                                 )}
 
 
@@ -598,6 +756,7 @@ export default class AdBooking extends React.Component {
                                                 value={this.state.endDate} 
                                                 changeData={(data) => this.datepickerChange(data,'enddate')}/>
                                         </div>
+                                        <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
                                         <div className="validation__error">{this.state.enddateError && this.state.enddateError}</div>
 
 
@@ -611,19 +770,19 @@ export default class AdBooking extends React.Component {
                                             </Select>
                                         </div>
                                         <div className="validation__error">{this.state.locationError && this.state.locationError}</div>
-                                        <div className="advertise_cost">
+                                        <div className="advertise_cost--unique">
                                             <p className="fees_cost">Total Cost (KWD)</p>
-                                            <input type="number" className="html__input" value={this.state.adtotalcost} onChange={(e) => this.changeData(e, 'total')}></input>
+                                            <input type="number" className="html__input" value={this.state.adtotalcost} ></input>
                                         </div>
                                         <div className="validation__error">{this.state.totalcostError && this.state.totalcostError}</div>
                                     </Grid>
 
                                     <Grid item xs={12} md={12} className="create_container">
-                                        <div className="advertise_upload"><label>Upload Advertisement</label>
+                                        <div className={`${this.state.hidefilelist && "advertise_uploadfile"} advertise_upload`}><label>Upload Advertisement</label>
                                             <span><FiInfo className="info_icon" onClick={this.handleOpen} /></span>
 
                                         </div>
-                                        <Upload
+                                        {/* <Upload
 
                                             showUploadList={false}
                                             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -633,7 +792,18 @@ export default class AdBooking extends React.Component {
 
                                             <span><Button className="button_browse">Browse</Button></span>
                                         </Upload>
-                                        <div className="validation__error">{this.state.imageError && this.state.imageError}</div>
+                                        <div className="validation__error">{this.state.imageError && this.state.imageError}</div> */}
+
+                            <div >
+                                <Upload {...props} style={{ width: "100%" }} 
+                                fileList={this.state.fileList}
+                                >
+                                    <p className="myimage_upload">
+                                        {this.state.imagedata && this.state.imagedata[0] ? this.state.imagedata[0].name : <span>My image.jpg</span>}
+                                        </p>
+                                    <Button className="button_browse">Browse</Button>
+                                </Upload>
+                            </div>
 
 
 

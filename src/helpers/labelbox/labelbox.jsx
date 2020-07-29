@@ -24,7 +24,7 @@ export default class Labelbox extends Component {
 	constructor(props) {
 		super(props);
 		console.log("valid date", props.value)
-		this.state = { gender: 'M', open: false, value: null, selectedtime: props.value ? props.value : new Date(), selecteddate: props.value ? props.value : new Date() };
+		this.state = { gender: 'M', open: false, value: null, selectedtime: props.value, selecteddate: props.value ? props.value : new Date() };
 	}
 	changeGender = (data) => {
 		this.setState({ gender: data });
@@ -44,7 +44,7 @@ export default class Labelbox extends Component {
 		var timeformat = dateFormat(time, changeFormat ? changeFormat :"hh:MM:ss");
 		console.log("timeformat", timeformat)
 		this.setState({ selectedtime: time });
-		this.props.changeData && this.props.changeData(timeformat);
+		this.props.changeData && this.props.changeData(timeformat,time);
 	};
 
 	componentWillReceiveProps(props) {
@@ -199,7 +199,6 @@ export default class Labelbox extends Component {
 								id="time-picker"
 								value={this.state.selectedtime}
 								onChange={(time) => this.timepickerChange(time,this.props.changeFormat)}
-
 								KeyboardButtonProps={{
 									'aria-label': 'change time',
 								}}

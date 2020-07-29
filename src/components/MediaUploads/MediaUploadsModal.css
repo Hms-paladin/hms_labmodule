@@ -92,3 +92,45 @@
 .lab_mediauploads {
     padding: 15px;
 }
+
+.upload__container {
+    
+   
+    position: relative;
+    width: 100%;
+   
+    border: 1px solid #ccc;
+    padding:3px;
+    border-radius:2px !important;
+}
+
+.html__input-box {
+    border: 0;
+    width: 93%;
+    font-size: 1.5rem;
+}
+
+.html__input-box:focus {
+    outline:none;
+}
+
+.upload__container--img {
+    position: absolute;
+    right: 3px;
+    top: -7px;
+    padding: 11px;
+    cursor: pointer;
+}
+
+.upload__pic {
+    width:20px;
+    
+}
+
+.fileupload {
+    display:none !important;
+}
+
+.lab_mediauploads .clinicmedia_upload {
+    margin-bottom: 4px !important;
+}

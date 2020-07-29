@@ -25,6 +25,14 @@ export default class AppointmentView extends React.Component {
   onclose = () => {
     this.setState({ view: false })
   }
+
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
+
   render() {
     const styles = "";
     const { classes, onClose, cancel, selectedValue, ...other } = this.props;
@@ -52,8 +60,8 @@ export default class AppointmentView extends React.Component {
               <p className="appointment__details appointment_master">Appointment Details</p>
 
               <div className="appointment__detailsdiv"><p className="appointment__details">Date</p><p className="appointment_date">{dateformat(viewdata && viewdata.test_date, "dd mmm yyyy")}</p></div>
-              <div className="appointment__detailsdiv"><p className="appointment__details_info">Time</p><p className="appointment_date">{viewdata && viewdata.uploaded_time ? viewdata.uploaded_time : "--"}</p></div>
-              <div className="appointment__detailsdiv"><p className="appointment__details_info">Test</p><p className="appointment_date">{viewdata && viewdata.test}</p></div>
+              <div className="appointment__detailsdiv"><p className="appointment__details_info">Time</p><p className="appointment_date">{viewdata && viewdata.test_time ? this.formatTimeShow(viewdata.test_time) : "--"}</p></div>
+              <div className="appointment__detailsdiv"><p className="appointment__details_info">Test Name</p><p className="appointment_date">{viewdata && viewdata.test}</p></div>
 
               <Divider className="dividerlist_root" />
 

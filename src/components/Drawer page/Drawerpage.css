@@ -375,9 +375,7 @@ body {
     color: #757575 !important;
 }
 
-.appbar_sideicons .MuiTypography-body1 {
-    color: #808080;
-}
+
 
 .icon-container .a:first-child{
     stroke: none;
@@ -459,3 +457,68 @@ body {
   .profile_logout_butt p {
     margin-bottom: 0px !important;
   }
+
+
+  .appbar_sideicons .MuiListItem-button:hover{
+    color: #86B149 !important;
+ }
+
+ .appbar_sideicons .MuiListItem-button:target{
+    color: #86B149 !important;
+ }
+ .appbar_sideicons .MuiListItem-button:focus{
+  text-decoration: none;
+  color: #86B149;     
+  outline: none !important;   
+ }
+
+ /* .appbar_sideicons .MuiTypography-body1{
+    color: #86B149 !important;
+ } */
+
+  .appbar_sideicons .MuiTypography-body1:active{
+    color: #86B149 !important;
+ }
+
+ .appbar_sideicons .MuiTypography-body1:visited{
+    color: #86B149 !important;
+ }
+
+
+ /* .appbar_sideicons .MuiListItemText-root:target {
+    color: #86B149 !important;
+ }
+
+ .appbar_sideicons .MuiListItemText-root:focus {
+    color: #86B149 !important;
+ }
+
+ .appbar_sideicons .MuiListItemText-root:active {
+    color: #86B149 !important;
+ } */
+
+ .appbar_sideicons .MuiMenuItem-root:hover path  {
+    fill: #86b149 !important;
+ }
+
+ .appbar_sideicons .MuiMenuItem-root:focus path  {
+    fill: #86b149 !important;
+ }
+ .appbar_sideicons .MuiMenuItem-root:hover rect  {
+    fill: #86b149 !important;
+ }
+ .appbar_sideicons .MuiMenuItem-root:focus rect  {
+    fill: #86b149 !important;
+ }
+
+
+ .active_text_heading, .active_text_heading.MuiMenuItem-root path, .active_text_heading.MuiMenuItem-root rect {
+    color: #86B149 !important;
+    text-decoration: none !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    fill: #86b149;
+}
+
+.active_text_heading.MuiButtonBase-root{
+    outline: none;
+}

@@ -7,6 +7,7 @@ import './AdvertiseList.css'
 import Workflow from '../../Images/workflow.svg'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Half from '../../Images/Full.svg';
 import Full from '../../Images/half.svg';
 
 import DeleteMedia from './DeleteMedia'
@@ -44,6 +45,8 @@ export default class AdvertiseList extends React.Component{
              pageno:1,
              dataOnload: true
     }
+
+    console.log("asdfkjsadhfkjsdsd",this.props)
 }
 
 
@@ -61,7 +64,7 @@ getAdBooking = () => {
             ad_details: response.data.data[0].details,
             total_count:response.data.data[0].total_count,
             dataOnload: false
-        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.details))
+        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.ad_details))
     }).catch((error) => {
         alert(JSON.stringify(error))
     })
@@ -69,8 +72,17 @@ getAdBooking = () => {
 
 
 componentWillMount() {
+    console.log("sdfjshadfkhlasdkfjhdsj",this.props)
     // this.props.getAdvertiseList()
     this.getAdBooking()
+}
+
+componentWillReceiveProps(props){
+ 
+this.setState({
+    ad_details:props.ad_details
+})
+console.log("asdfkjsadhfkjsdsdprops",this.props)
 }
 
 
@@ -88,9 +100,9 @@ getAdDetails = (data) => {
         console.log("sdfjhsdfjhsdjfhsdjlfhdf",response.data.data[0].total_count)
         this.setState({
             ad_details: response.data.data[0].details,
-        })
+        },() => console.log("sdfsdhfejdhfdsf",this.state.ad_details))
     }).catch((error) => {
-        alert(JSON.stringify(error))
+        // alert(JSON.stringify(error))
     })
 }
 
@@ -117,10 +129,10 @@ getAdDetails = (data) => {
         }).then((response) => {
             console.log(response)
             // this.resetFormValue()
-            this.getDealsList()
+            this.getAdDetails()
     
         }).catch((error) => {
-            alert(JSON.stringify(error))
+            // alert(JSON.stringify(error))
         })
         console.log("deletedetails", details)
     }
@@ -142,7 +154,7 @@ getAdDetails = (data) => {
         console.log("sdfjskdhfjsdkhfds",this.props)
         return(
             <Spin className="spinner_align" spinning={this.state.dataOnload}>
-          {this.state.ad_details.length === 0 ? <div className={"noFoundIconCenter_deal"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
+          {this.state.ad_details.length === 0 ? <div className={"noFoundIconCenter_ad"}><img src={NotfoundIcon} /><div>No Data Found</div></div>:
           <>
 
             <div className="location_add_container">    
@@ -163,7 +175,7 @@ getAdDetails = (data) => {
                                 
                                 <div className="advertise_contentSpace">
                                     <label className="list_head">Days</label>
-                            <h5 className="list_subhead">{bookingDetails.ad_total_cost}</h5>
+                            <h5 className="list_subhead">{bookingDetails.ad_total_days}</h5>
                                 </div>
                                 
                             </div>
@@ -193,8 +205,8 @@ getAdDetails = (data) => {
                             </div>
     
                                 <div>
-                                    <div className="advertise_image"> <img src={Full} /> </div>
-                                    <p className="image_size">Full</p>
+                                    <div className="advertise_image"> <img src={bookingDetails.ad_size == "1" ? Half : Full} /> </div>
+                                    <p className="image_size">{bookingDetails.ad_size == "1" ? "Half" : "Full"}</p>
                                     {/* <h5 className="full_half_div">{bookingDetails.ad_filename}</h5> */}
                                         <div>
                                             <img src={Workflow} className="listdelete_icon" onClick={(id)=>this.workflowopen(bookingDetails.id)} />

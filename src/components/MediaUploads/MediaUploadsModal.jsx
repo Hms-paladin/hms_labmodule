@@ -15,32 +15,16 @@ import {message } from 'antd';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
 import ValidationLibrary from "../../helpers/validationfunction";
-// var fileListData=[];
-// const props = {
-//   name: 'file',
-//   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-//   headers: {
-//     authorization: 'authorization-text',
-//   },
-//   onChange(info) {
-//     if (info.file.status !== 'uploading') {
-//       console.log(info.file, info.fileList);
-//       alert("file")
-//     }
-//     if (info.file.status === 'done') {
-//       console.log("asdfjkasdfjsd",info.fileList)
-//       message.success(`${info.file.name} file uploaded successfully`);
-//       fileListData=info.fileList;
-//     } else if (info.file.status === 'error') {
-//       message.error(`${info.file.name} file upload failed.`);
-//     }
-//   },}
+import UploadPic from '../../Images/uploadfile.png';
+
+
+var result = [];
 export default class MediaUploadsModal extends Component {
     constructor(props){
         super(props)
         this.state={
             open:false,
-            imageurl:"",
+            imageurl: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
             mediaupload_lab: {
               'media_title': {
                 'value': '',
@@ -57,7 +41,13 @@ export default class MediaUploadsModal extends Component {
       },
       'mediaupload_active':false,
       'upload_browser':{},
+      type:"",
+      mediatype:  this.props.editData && this.props.editData.media_type ? this.props.editData.media_type : "",
+      sortorder:this.props.editData && this.props.editData.media_sortorder ? this.props.editData.media_sortorder : 1,
+      filename: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
 }
+
+console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
 }
     handleOpen=()=>
     {
@@ -66,6 +56,24 @@ export default class MediaUploadsModal extends Component {
     handleClose=()=>
     {
         this.setState({open:false})
+    }
+
+    componentWillMount() {
+
+      if(this.props.editData){
+       
+      var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
+      var imgarr = imageurl.split('/');
+      var s = imgarr[imgarr.length - 1];
+     
+ 
+      var splitted = s.split('mediaDoc');
+ 
+      this.setState({filename : splitted[1].slice(5)})
+      }else{
+            
+      }
+      
     }
     changeDynamic = (data, key) => {
     //   if (key === 'profile_pic') {
@@ -101,13 +109,15 @@ export default class MediaUploadsModal extends Component {
       this.setState({mediaupload_lab})
     }
     onSubmitData = () => {
+     
 
       if(this.props.editData){
-        console.log(this.state.imageurl.name,"checking_imageurl_value")
         var formData = new FormData();
+        console.log(this.state.imageurl,"checking_imageurl_value")
+      
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype",this.state.imageurl && this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
-        formData.set("mediasortorder", 1)
+        formData.set("mediatype",this.state.mediatype);
+        formData.set("mediasortorder", this.state.sortorder)
         formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
         formData.set("createdby", 1)
@@ -121,10 +131,12 @@ export default class MediaUploadsModal extends Component {
         formData.set( "id",this.props.editData.id)
         this.mediaupload_labUpdateApi(formData)   // Update Api Call
       }else{
-        console.log(this.state.imageurl.name,"checking_imageurl_value")
-        var formData = new FormData();
+          var formData = new FormData();
+       
+      
+      
         formData.append('imageArray', this.state.imageurl)
-        formData.set("mediatype",this.state.imageurl && this.state.imageurl.name.endsWith("mp4")?"Video":"Image");
+        formData.set("mediatype",this.state.mediatype);
         formData.set("mediasortorder", 1)
         formData.set("mediavendorId", 2)
         formData.set("activeflag", 1)
@@ -171,7 +183,11 @@ export default class MediaUploadsModal extends Component {
         alert(JSON.stringify(error))
       })
     }
+
+  
 componentDidMount(){
+  
+
       const {editData,editopenModal} = this.props;
       if(editopenModal === true){
         this.state.editId= editData.id
@@ -201,10 +217,31 @@ componentDidMount(){
 
     uploadFile=(e)=>{
        this.setState({
-        imageurl:e.target.files[0]
-       })
+        imageurl:e.target.files[0],
+        filename:e.target.files[0].name,
+        type:e.target.files[0].type
+       },() => this.checkType())
     }
+
+    checkType = () => {
+      if(this.state.type == "image/jpeg" || this.state.type == "image/png") {
+        
+        this.setState({mediatype:"Image"})
+      }
+
+      if(this.state.type == "video/mp4") {
+        
+        this.setState({mediatype:"Video"})
+      }
+    }
+
     render() {
+   
+      console.log("sdfljsdhfkjsdfhjdfjsk",this.state.filename)
+    
+
+   
+
       console.log(this.state.mediaupload_lab.media_description.value,"description")
       console.log(this.props.truegetmethod,"statevalue")
       const props = {
@@ -234,17 +271,17 @@ componentDidMount(){
              <Grid item xs={12} md={6}>
              <div className="clinicmedia_upload">Upload<span><FiInfo className="info_icon" onClick={this.handleOpen}/></span></div>
              <div className="labupload_container">
-               {/* <Upload {...props} className="upload-field"> 
-             <div className="labmedia_button"> <Button className="clinicButton-container">
-             Browse File<div className="uploadimage-container">
-               <img className="uploadimage" src={uploadimage}/>
+              
+             </div>
+            
+               <div className="upload__container">
+                 <input type="text" value={this.state.filename} className="html__input-box" placeholder="Browse file"  onClick={() => document.getElementById('getFile').click()} />
+                  <div className="upload__container--img">
+                    <img src={UploadPic} className="upload__pic"  onClick={() => document.getElementById('getFile').click()} />
+                  </div>
                </div>
-             </Button>
-             </div>
-             </Upload> */}
-             </div>
-             <input  type="file" className="" onChange={this.uploadFile}/>
-             {/* <input type="file" onChange={this.onFileChange} id="pdfupload" ref={ref => this.fileInput = ref}/> */}
+            
+             <input  type="file" id="getFile" className="fileupload" onChange={this.uploadFile}/>
          </Grid>
          <Grid item xs={12} md={12}>
          <div className="labmedia_checkbox">

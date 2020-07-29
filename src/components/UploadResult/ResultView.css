@@ -151,9 +151,6 @@
   .pending_browse_btn {
     float: right;
     border-radius: 0px !important;
-    /* display: flex; */
-    /* align-items: flex-end;
-    justify-content: flex-end; */
     }
   @media screen and (max-width: 959px) 
   {

@@ -6,6 +6,9 @@ import dateFormat from 'dateformat';
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
 import dateformat from 'dateformat';
+import { apiurl } from "../../App";
+import Axios from "axios";
+import { Spin } from "antd"
 
 
 const moment = extendMoment(originalMoment);
@@ -25,6 +28,10 @@ export default class Calendar extends React.Component {
     fulldate: "",
     rangeSelect: [],
     rangeSelectFirst: [],
+    slotSubtract: 1,
+    slotAdd: 1,
+    TotalslotsAvailable: [],
+    spinLoad: true
   };
 
 
@@ -117,6 +124,44 @@ export default class Calendar extends React.Component {
   };
 
   onPrev = () => {
+    this.setState({spinLoad: true})
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var monthmatch = []
+    var yearmatch = []
+
+    for(let i = 0;i<monthNames.length;i++){
+      if(this.month()===monthNames[i]){
+        if(this.month()==="Jan"){
+          yearmatch.push(Number(this.year())-1)
+          monthmatch.push("Dec")
+          break;
+        }else{
+        monthmatch.push(monthNames[i-1])
+        yearmatch.push(this.year())
+        break;
+        }
+      }
+    }
+    var monthmatchNum = []
+
+    for(let j=0;j<monthNames.length;j++){
+      if(monthNames[j]===monthmatch[0]){
+        monthmatchNum.push(j+1)
+      }
+    }
+
+    var totaldaycount = new Date(Number(yearmatch[0]), Number(monthmatchNum[0]), 0).getDate()
+    console.log(totaldaycount,"totaldaycount")
+
+    var fromdate = dateformat(yearmatch[0] +" " +monthmatch[0] +" " +1, "yyyy-mm-dd")
+    var todate = dateformat(yearmatch[0] +" " +monthmatch[0] +" " +totaldaycount, "yyyy-mm-dd")
+
+    console.log(fromdate,"monthmatch")
+    console.log(todate,"monthmatch")
+
+    this.getslots(fromdate,todate )
+
     let curr = "";
     if (this.state.showYearTable === true) {
       curr = "year";
@@ -129,6 +174,45 @@ export default class Calendar extends React.Component {
     });
   };
   onNext = () => {
+    this.setState({spinLoad:true})
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var monthmatch = []
+    var yearmatch = []
+
+    for(let i = 0;i<monthNames.length;i++){
+      if(this.month()===monthNames[i]){
+        if(this.month()==="Dec"){
+          yearmatch.push(Number(this.year())+1)
+          monthmatch.push("Jan")
+          break;
+        }else{
+        monthmatch.push(monthNames[i+1])
+        yearmatch.push(this.year())
+        break;
+        }
+      }
+    }
+
+    var monthmatchNum = []
+
+    for(let j=0;j<monthNames.length;j++){
+      if(monthNames[j]===monthmatch[0]){
+        monthmatchNum.push(j+1)
+      }
+    }
+
+    var totaldaycount = new Date(Number(yearmatch[0]), Number(monthmatchNum[0]), 0).getDate()
+    console.log(totaldaycount,"totaldaycount")
+
+    var fromdate = dateformat(yearmatch[0] +" " +monthmatch[0] +" " +1, "yyyy-mm-dd")
+    var todate = dateformat(yearmatch[0] +" " +monthmatch[0] +" " +totaldaycount, "yyyy-mm-dd")
+
+    console.log(fromdate,"monthmatch")
+    console.log(todate,"monthmatch")
+
+    this.getslots(fromdate,todate )
+
     let curr = "";
     if (this.state.showYearTable === true) {
       curr = "year";
@@ -211,6 +295,7 @@ export default class Calendar extends React.Component {
       </table>
     );
   };
+
   onDayClick = (e, d) => {
     console.log(d, this.month(), this.year(), "insideclick")
     var datearr = []
@@ -223,32 +308,37 @@ export default class Calendar extends React.Component {
     if (this.state.fulldate.length === 0) {
       startDatestore.push(new Date(this.month() + "-" + this.year() + "-" + d))
       rangeSelect.push(`selectedclr${d}_${this.month()}_${this.year()}`)
+
+      // send date value to parent
+      this.props.getDate({startdate:new Date(this.month() + "-" + this.year() + "-" + d),enddate:null})
     }
     else if (this.state.fulldate.length === 1) {
 
       var initialstartDate = this.state.startDatestore[0]
       var initialendDate = new Date(new Date(this.month() + "-" + this.year() + "-" + d))
 
+      // send date value to parent
+      this.props.getDate({startdate:initialstartDate,enddate:new Date(this.month() + "-" + this.year() + "-" + d)})
       var startDate = []
       var endDate = []
 
-     if (initialstartDate > initialendDate){
-      startDate.push(new Date(new Date(this.month() + "-" + this.year() + "-" + d)))
-      endDate.push(this.state.startDatestore[0])
-     }
-     else if (initialstartDate < initialendDate){
+      if (initialstartDate > initialendDate) {
+        startDate.push(new Date(new Date(this.month() + "-" + this.year() + "-" + d)))
+        endDate.push(this.state.startDatestore[0])
+      }
+      else if (initialstartDate < initialendDate) {
         startDate.push(this.state.startDatestore[0])
         endDate.push(new Date(new Date(this.month() + "-" + this.year() + "-" + d)))
-     }
-     else{
-       startDate.push(this.state.startDatestore[0])
-       endDate.push(this.state.startDatestore[0])
-     }
+      }
+      else {
+        startDate.push(this.state.startDatestore[0])
+        endDate.push(this.state.startDatestore[0])
+      }
 
 
       var
         arr = new Array(),
-        dt = new Date(startDate[0]-1);
+        dt = new Date(startDate[0] - 1);
 
       while (dt <= endDate[0] - 1) {
         arr.push(new Date(dt));
@@ -260,6 +350,9 @@ export default class Calendar extends React.Component {
     else if (this.state.fulldate.length === 2) {
       startDatestore.push(new Date(this.month() + "-" + this.year() + "-" + d))
       rangeSelect.push(`selectedclr${d}_${this.month()}_${this.year()}`)
+      
+      // send date value to parent
+      this.props.getDate({startdate:new Date(this.month() + "-" + this.year() + "-" + d),enddate:null})
     }
 
 
@@ -282,6 +375,35 @@ export default class Calendar extends React.Component {
       },
     );
   };
+
+  componentDidMount() {
+    this.getslots()
+  }
+
+  getslots = (fromDate, toDate) => {
+
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    console.log(fromDate, "finaltest")
+    console.log(toDate, "finaltest")
+
+    var self = this
+
+    Axios({
+      method: 'POST',
+      url: apiurl + '/labCalendarSlots',
+      data: {
+        "lab_id": "2",
+        "from_date": fromDate ? fromDate : dateformat(firstDay, "yyyy-mm-dd"),
+        "to_date": toDate ? toDate : dateformat(lastDay, "yyyy-mm-dd")
+      }
+    }).then((response) => {
+      console.log(response.data, "resdate")
+      self.setState({ TotalslotsAvailable: response.data.data, spinLoad: false })
+    })
+  }
 
   render() {
 
@@ -307,14 +429,14 @@ export default class Calendar extends React.Component {
 
       daysInMonth.push(
 
-        <td key={d} className={`calendar-day ${currentDay}`}  onClick={e => {this.onDayClick(e, d);}}>
+        <td key={d} className={`calendar-day ${currentDay}`} onClick={e => { this.onDayClick(e, d); }}>
           <div className="range_parent w-100">
 
             <div className="range_child w-25">
             </div>
             <div
               className={`${startdate === this.state.rangeSelect[0] && "table_fir_sel" ||
-                startdate === this.state.rangeSelect[this.state.rangeSelect.length-1] && "table_sec_sel" ||
+                startdate === this.state.rangeSelect[this.state.rangeSelect.length - 1] && "table_sec_sel" ||
                 this.state.rangeSelect.includes(startdate) && "table_inter_sel"
                 }`}
             >
@@ -326,23 +448,22 @@ export default class Calendar extends React.Component {
             </div>
           </div>
 
-          <div className="inner_totalslots">
-
-            {this.props.slots ? this.props.slots.map((val) => {
-              return (
-                val.currentDayId === 3 && d === 22 && val.totalSlots
-              )
+          {
+              this.state.TotalslotsAvailable[d - 1] && this.state.TotalslotsAvailable[d - 1].day !==5 &&
+              <div className="inner_totalslots">
+            {
+              this.state.TotalslotsAvailable[d - 1] && this.state.TotalslotsAvailable[d - 1].total
             }
-            ) : "0"}
-          </div>
+           </div>
+      }
 
-          <div className="inner_availslots">
+          {/* <div className="inner_availslots">
             {this.props.slots ? this.props.slots.map((val) => {
               return (
                 val.currentDayId === 4 && d === 22 && val.availableSlots
               )
             }) : "0"}
-          </div>
+          </div> */}
 
         </td>
       );
@@ -398,17 +519,18 @@ export default class Calendar extends React.Component {
           )}
         </div>
 
+
+
         {this.state.showDateTable && (
           <div className="calendar-date">
-            <table className="calendar-day">
-              <thead className="weekday_shortname">
-                <tr>{weekdayshortname}</tr>
-              </thead>
-              <tbody className="table_body">{daysinmonth}</tbody>
-
-
-
-            </table>
+            <Spin className="spinner_align" spinning={this.state.spinLoad}>
+              <table className="calendar-day">
+                <thead className="weekday_shortname">
+                  <tr>{weekdayshortname}</tr>
+                </thead>
+                <tbody className="table_body">{daysinmonth}</tbody>
+              </table>
+            </Spin>
 
             <div className="calslots_container">
               <div className="total_slots_div"><p className="total_slots"></p><span className="total_slots_text">Total Slots</span></div>

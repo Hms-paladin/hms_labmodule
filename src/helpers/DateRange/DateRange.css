@@ -63,15 +63,18 @@
 }
 
 .rangePicker_Master .formdiv {
-    width: 122% !important;
+    width: 120% !important;
     margin-top: 20px;
     height: 51.5px;
 }
 
 .rangePicker_Master .brdrcls {
+    width: 90% !important;
     height: 30px;
-    font-size: 14px;
-    padding-inline-start: 15px !important;
+    font-size: 13.5px;
+    padding-inline-start: 8px !important;
+    text-overflow: ellipsis;
+    border-right: none !important;
 }
 
 .rangePicker_Master input::placeholder {
@@ -84,10 +87,22 @@
 }
 
 .rangePicker_Calendericon {
-    z-index: 1;
+    /* z-index: 1;
     color: gray;
     position: relative;
-    left: 20px;
+    left: 16px;
+    bottom: 1px; */
+    z-index: 1;
+    color: gray;
+    width: 24px !important;
+    height: 30px !important;
+    padding: 2px 6px 2px 2px;
+    border: 1px solid #ccc;
+    border-left: none;
+    position: relative;
+    background-color: white;
+    bottom: 1px;
+    left: 7px;
     bottom: 1px;
 }
 
@@ -154,8 +169,36 @@
     left: 0px;
 }
 
-@media screen and (max-width: 883px) {
+/* @media screen and (max-width: 883px) {
     .daterangeMaster .rdrCalendarWrapper {
         font-size: 9px;
     }
 }
+
+@media screen and (max-width: 968px){
+    .rangePicker_Label{
+        width: 17%;
+    }
+}
+
+@media screen and (max-width: 860px){
+    .rangePicker_Master .brdrcls{
+        padding-inline-start: 5px !important;
+        padding-inline-end: 30px !important;
+    }
+    .rangePicker_Calendericon{
+        left:17px
+    }
+}
+
+@media screen and (max-width: 800px){
+    .rangePicker_Label{
+        font-size: 12px;
+    }
+    .rangePicker_Master .brdrcls{
+        padding-inline-start: 5px !important;
+    }
+    .rangePicker_Calendericon{
+        left:10px
+    }
+} */

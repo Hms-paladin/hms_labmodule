@@ -86,6 +86,12 @@ class AppointmentsList extends Component {
   //     })
   // }
 
+  formatTimeShow=(h_24)=> {
+    var h = Number(h_24.substring(0, 2)) % 12;
+    if (h === 0) h = 12;
+    return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
+  }
+
   dayReport=(data,firstOpen)=>{
     console.log(data,"itemdaterange")
     var startdate = dateformat(data[0].startDate, "yyyy-mm-dd")
@@ -115,7 +121,7 @@ class AppointmentsList extends Component {
             name: val.customer,
             test: val.test,
             date: dateformat(val.test_date, "dd mmm yyyy"),
-            time: val.uploaded_time ? val.uploaded_time : '-',
+            time: this.formatTimeShow(val.test_time),
             id: index
           })
         })

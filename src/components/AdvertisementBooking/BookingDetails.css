@@ -226,6 +226,10 @@
     margin-top: 25px;
 }
 
+.advertise_cost--unique {
+    margin-top: 37px;
+}
+
 .advertise_upload{
     margin-top: 15px;
 }
@@ -363,4 +367,12 @@
 
 .ant-notification {
     z-index: 999999999999!important;
+}
+
+.advertise_uploadfile ~ div .ant-upload-list{
+    display: none ;
+}
+
+.myimage_upload span {
+    opacity: .55;
 }

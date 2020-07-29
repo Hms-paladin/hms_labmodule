@@ -53,3 +53,15 @@ button:focus {
 .MuiButton-root{
   border-radius: 2px !important;
 }
+
+
+.validation__error--minus {
+  margin-top:-12px;
+  font-size: 12px;
+  color: red;
+}
+
+.label_txt {
+  color: #666666 !important;
+  font-weight: 100;
+}

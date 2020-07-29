@@ -127,7 +127,7 @@ class UploadMaster extends Component {
 }
 
 dayReport=(data)=>{
-    this.setState({spinner:true})
+    this.setState({spinner:true,selectedDatepen:data})
   console.log(data,"itemdaterange")
   var startdate = dateformat(data[0].startDate, "yyyy-mm-dd")
   var enddate = dateformat(data[0].endDate, "yyyy-mm-dd")
@@ -423,7 +423,7 @@ Notification=()=>{
           </div>
         </div>
         <Paper>
-          <UploadDetails tabledataFun={(data)=>this.setState({tableData:data})} weekMonthYearData={this.state.weekMonthYearData} tabindex={(data)=>this.tabhandle(data)} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_Data} searchData={this.state.searchData} propsopen={this.state.propsopen} />
+          <UploadDetails tabledataFun={(data)=>this.setState({tableData:data})} weekMonthYearData={this.state.weekMonthYearData} tabindex={(data)=>this.tabhandle(data)} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_Data} searchData={this.state.searchData} propsopen={this.state.propsopen} selectedDatepen={this.state.selectedDatepen} />
         </Paper>
       </Paper>
               <Modalcomp

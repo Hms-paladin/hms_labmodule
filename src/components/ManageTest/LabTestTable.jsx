@@ -56,6 +56,7 @@ class LabTestTable extends React.Component {
           })
           responseAllData.push(val)
         })
+      // }
         self.setState({
           tableData: tableData,
           responseAllData: responseAllData,

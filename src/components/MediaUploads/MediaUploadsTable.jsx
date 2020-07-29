@@ -64,12 +64,12 @@ UNSAFE_componentWillReceiveProps(newProps) {
     var self = this
     axios({
         method: 'POST', //get method 
-        url: apiurl + '/mediauploaddetails',
+        url: apiurl + '/Common/mediaupload_details',
         data:{
-          doctorid:2,
-          // vendor_id:1,
+          // doctorid:2,
+          vendor_id:2,
           limit:100,
-          offset:1,
+          // offset:1,
           pageno:1         
         }
     })
@@ -78,9 +78,12 @@ UNSAFE_componentWillReceiveProps(newProps) {
       console.log(response,"response_data_table")
       var tableData = [];
         response.data.data[0].details.map((val,index) => {
+         
           // for(let i=0;i<50;i++){
             tableData.push({ title: val.media_title,type:val.media_type,uploaded:dateformat(val.created_on, "dd mmm yyyy hh:MM"),status:val.is_active,id: val.id,indexid:index.toString(),sortorder:val.media_sortorder })
             console.log(val.id,"idddddd")
+
+             console.log("sdfjksdhfshdfjsdhjdsf",val)
           // }
 
         })
@@ -130,6 +133,7 @@ deleterow = () => {
   this.setState({ props_loading: false })
 }
   render() {
+   console.log("sadfkjsdhfjkdshfjdsf",this.state.tableData)
     const img_var = <ReactSVG src={order} />;
     return (
       <Spin className="spinner_align" spinning={this.state.loading}>
