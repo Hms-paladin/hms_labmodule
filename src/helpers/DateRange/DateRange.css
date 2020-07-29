@@ -69,10 +69,12 @@
 }
 
 .rangePicker_Master .brdrcls {
+    width: 90% !important;
     height: 30px;
-    font-size: 14px;
-    padding-inline-start: 15px !important;
+    font-size: 13.5px;
+    padding-inline-start: 8px !important;
     text-overflow: ellipsis;
+    border-right: none !important;
 }
 
 .rangePicker_Master input::placeholder {
@@ -85,10 +87,22 @@
 }
 
 .rangePicker_Calendericon {
-    z-index: 1;
+    /* z-index: 1;
     color: gray;
     position: relative;
     left: 16px;
+    bottom: 1px; */
+    z-index: 1;
+    color: gray;
+    width: 24px !important;
+    height: 30px !important;
+    padding: 2px 6px 2px 2px;
+    border: 1px solid #ccc;
+    border-left: none;
+    position: relative;
+    background-color: white;
+    bottom: 1px;
+    left: 7px;
     bottom: 1px;
 }
 
@@ -155,7 +169,7 @@
     left: 0px;
 }
 
-@media screen and (max-width: 883px) {
+/* @media screen and (max-width: 883px) {
     .daterangeMaster .rdrCalendarWrapper {
         font-size: 9px;
     }
@@ -182,10 +196,9 @@
         font-size: 12px;
     }
     .rangePicker_Master .brdrcls{
-        /* width: 115% !important; */
         padding-inline-start: 5px !important;
     }
     .rangePicker_Calendericon{
         left:10px
     }
-}
+} */

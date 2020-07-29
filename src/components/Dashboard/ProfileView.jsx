@@ -6,7 +6,10 @@ import { withStyles } from "@material-ui/core/styles";
 import "./ProfileView.css";
 import Patient from '../../Images/11.jpg'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import CloseIcon from '@material-ui/icons/Close';
+
 var moment = require('moment');
+
 
 
 const styles = {};
@@ -48,6 +51,7 @@ export default class ProfileView extends React.Component {
           {...other}
           className="lab_profile_modal"
         >
+          <CloseIcon className="on_close" onClick={()=>this.props.onClose()}/>
             <div><img src={viewdata && viewdata.profile_image ? viewdata.profile_image : Patient} className="lab"/></div>
          <div className="lab_dashboard_view">
          <div className="lab_details_container">

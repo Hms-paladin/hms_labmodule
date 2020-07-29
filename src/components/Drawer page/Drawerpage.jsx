@@ -311,7 +311,7 @@ class Drawerpage extends React.Component {
                       </Button> */}
                       <a
                         component={NavLink}
-                        href="/"
+                        href="/labmodule/?/"
                         className="logout_butt"
                         // onClick={this.handleClose}
                         onClose={this.props.onClose}

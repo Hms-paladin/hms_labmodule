@@ -40,7 +40,6 @@ export default class DeleteMedia extends Component {
       
 
       if(this.props.listName === "advertisement"){
-          alert("inside")
         this.props.getAdvertiseList();
         this.props.generateAlert("Advertisement Deleted Successfully")
         this.props.closemodal()

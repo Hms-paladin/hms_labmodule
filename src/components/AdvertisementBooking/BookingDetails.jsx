@@ -582,10 +582,8 @@ export default class AdBooking extends React.Component {
         console.log("sdfhsdjlk",toMonth)
     
        if(parseInt(fromMonth) < parseInt(toMonth)){
-          alert("hey")
            var monthDiff = moment(this.state.endDate).format('MM') - moment(this.state.startdate).format('MM')
        }else if(parseInt(toMonth) < parseInt(fromMonth)){
-           alert("ooo")
         var monthabs = moment(this.state.startdate).format('MM') - moment(this.state.toDate).format('MM') - (12 * (to_year - current_year))
     
         var monthDiff = Math.abs(monthabs)
