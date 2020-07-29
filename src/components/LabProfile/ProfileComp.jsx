@@ -183,7 +183,6 @@ class ProfileComp extends Component {
           ProfileGetApi={() => this.ProfileGetApi()}
           ProfileData={this.state.ProfileData}
         />
-
       </div>
 
 

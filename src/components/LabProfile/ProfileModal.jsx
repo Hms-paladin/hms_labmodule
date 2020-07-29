@@ -187,7 +187,7 @@ class Modalcomp extends React.Component {
                   imageData={this.state.imageData}
                   imageChanged={this.state.imageChanged}
                 />
-                : this.state.Workingdetails === true && <CheckboxLabels />}
+                : this.state.Workingdetails === true && <CheckboxLabels ProfileGetApi={() => this.props.ProfileGetApi()} onClose={() => this.props.onClose(false)}/>}
             </div>
           </DialogContent>
         </Dialog>
