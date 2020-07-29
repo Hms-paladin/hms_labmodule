@@ -14,6 +14,7 @@ import ValidationLibrary from '../../helpers/validationfunction';
 import dateformat from 'dateformat';
 import {Select} from 'antd';
 
+
 const {Option} = Select;
 
 export default class BookingDetails extends React.Component {
@@ -22,6 +23,7 @@ export default class BookingDetails extends React.Component {
         this.state = {
             name: "",
             serviceType: [],
+            serviceTypeAll:false,
             edit:false,
             activeKey: "1",
             serviceTypeAll: false,
@@ -33,6 +35,7 @@ export default class BookingDetails extends React.Component {
             valideToerror:false,
             dateError:false,
             servicetype: 1,
+            services:[],
             serviceTypeValue:"All",
             bookingDetails: {
                
@@ -50,6 +53,8 @@ export default class BookingDetails extends React.Component {
                 }
             }
         }
+
+        console.log("consptops",this.props)
     }
     callback = (key) => {
         this.setState({
@@ -59,9 +64,10 @@ export default class BookingDetails extends React.Component {
     changeTabFun = (data) => {
         console.log(data, "editdata")
         this.setState({
+            edit: true,
             activeKey: "1",
             editData: data,
-            // edit: true
+           
         },() => this.svalue(data))
         // For Edit Data form filling
         // this.state.bookingDetails.service_type.value =   data.deal_service_type == "" ? "All" : data.deal_service_type;
@@ -80,6 +86,7 @@ export default class BookingDetails extends React.Component {
 
     svalue = (data) => {
        let wtf = data.deal_service_type == "" ? "All" : data.deal_service_type;
+        wtf == "All" ? this.setState({serviceTypeAll:false}) : this.setState({serviceTypeAll:true})
         this.setState({serviceTypeValue:wtf,edit:true,servicetype:this.state.editData.deal_service_type_id})
     }
 
@@ -103,13 +110,13 @@ export default class BookingDetails extends React.Component {
             method: "POST",
             url: apiurl + "/get_mas_lab_test",
             data: {
-                "labId":"2"
+                "lab_vendor_id":"2"
             },
           })
             .then((response) => {
               console.log(
                 response.data.data.map((val) => {
-                  return { id: val.id, serviceType: val.service_type };
+                  return { id: val.lab_test_id, serviceType: val.lab_test_name };
                 }),
                 "sadfasdf"
               );
@@ -204,6 +211,7 @@ export default class BookingDetails extends React.Component {
         let services = [];
         for(let i=0;i<this.state.serviceType.length;i++) {
             services.push(<Option value={this.state.serviceType[i].id}>{this.state.serviceType[i].serviceType}</Option>)
+          
         }
 
         return services;
@@ -211,10 +219,16 @@ export default class BookingDetails extends React.Component {
     }
 
     onSubmitData = () => {
+        var serviceId = !this.state.edit && !this.state.serviceTypeAll 
+        var data = [];
+        if(!this.state.serviceTypeAll) {
+            this.state.serviceType.map(val => val.id > 1 && data.push(val.id))    
+        }
+        console.log("sajkdfhjskdfhkdsjh",this.state.servicetype)
         var bookingDetails = {
             userId: 1,
             dealvendorId: 2,
-            dealservicetypeId: this.state.servicetype,
+            dealservicetypeId: this.state.serviceTypeAll ? this.state.servicetype : data,
             dealtitle: this.state.bookingDetails.deal_title.value,
             dealvalidfrom: dateformat(this.state.deal_valid_from, "yyyy-mm-dd"),
             dealvalidto: dateformat(this.state.deal_valid_to, "yyyy-mm-dd"),
@@ -329,9 +343,14 @@ export default class BookingDetails extends React.Component {
 
 
     storeService = (data) => {
-        
-        this.setState({servicetype:data})
+        if(data == 1) {
+            this.setState({serviceTypeAll:false})
+        }else{
+        this.setState({servicetype:data,serviceTypeAll:true})
+        }
     }
+
+ 
 
     render() {
         const { TabPane } = Tabs;
@@ -355,7 +374,7 @@ export default class BookingDetails extends React.Component {
                                   
                                                 <div>
                                                     <label className="label_txt">Test Name</label>
-                                                <Select defaultValue={editValue ? this.state.serviceTypeValue : "All"}  style={{width:"100%"}} onChange={this.storeService}>
+                                                <Select defaultValue={this.state.edit ? this.state.editData.deal_service_type : "All"}  style={{width:"100%"}} onChange={this.storeService}>
                                                     {this.services()}
                                                 </Select>
                                                 </div>
@@ -436,6 +455,8 @@ export default class BookingDetails extends React.Component {
                                     </div>
 
                                     </div>
+    
+       
 
                                     </Grid>
 

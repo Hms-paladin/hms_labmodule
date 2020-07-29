@@ -14,6 +14,7 @@ import { notification, Spin } from "antd"
 
 import "./DealList.css";
 
+import ReactPagination from "../Pagination/Pagination";
 var moment = require('moment');
 
 
@@ -26,6 +27,7 @@ export default class DealList extends React.Component {
      openstepper:[],
      dyndeallist:[],
      dyndealAlllist:[], 
+     total_count:""
     };
   }
 
@@ -47,14 +49,8 @@ export default class DealList extends React.Component {
   //   }
   // }
 
-  UNSAFE_componentWillReceiveProps(newprops){
-        if(newprops.afteredit){
-    this.getlistdata()
-    newprops.aftereditfalse()
-    }
-  }
 
-  getlistdata=(notifymsg)=>{
+  getPaginateList=(data)=>{
     this.setState({dataOnload:true})
     var self = this
     axios({
@@ -62,15 +58,17 @@ export default class DealList extends React.Component {
         url: apiurl + "/Common/getsingle_deals",
         data:{
           "vendor_id":"2", 
-          "limit":200, 
-          "pageno":1
+          "limit":10, 
+          "pageno":data+1
           
         } 
     })
     .then((response) => {
-      console.log(response.data.data,"response_data")
+      console.log(response.data.data[0].total_count,"response_data")
       var dyndeallist= []
-      var dyndealAlllist= []
+      var dyndealAlllist= [];
+
+      this.setState({total_count:response.data.data[0].totalCount})
 
       response.data.data[0].details.map((listdata)=>{
         dyndealAlllist.push(listdata)
@@ -81,8 +79,8 @@ export default class DealList extends React.Component {
                 <div className="aligndeallistdata">
                   <div>
                     <span>Test Name</span>
-                    {/* <div>{listdata.deal_title}</div> */}
-                    <div>{""}</div>
+                    <div>{listdata.deal_service_type == "" ? "All" : listdata.deal_service_type}</div>
+                    
                     
                   </div>
                   <div>
@@ -122,6 +120,111 @@ export default class DealList extends React.Component {
                 <div>
                 {/* {this.state.openstepper.includes(listdata.id) && <Stepper /> } */}
                 </div>
+
+                                           
+      
+  
+              </Paper>
+  
+            </Grid>
+          </>
+        )
+      })
+
+      // if(notifymsg){
+      //   notification.info({
+      //     description:notifymsg,
+      //       placement:"topRight",
+      //   });
+      // }
+
+      self.setState({dyndeallist:dyndeallist,dyndealAlllist:dyndealAlllist,dataOnload:false})
+      
+    })
+  }
+
+  UNSAFE_componentWillReceiveProps(newprops){
+        if(newprops.afteredit){
+    this.getlistdata()
+    newprops.aftereditfalse()
+    }
+  }
+
+
+
+  getlistdata=(notifymsg)=>{
+    this.setState({dataOnload:true})
+    var self = this
+    axios({
+        method: 'post',
+        url: apiurl + "/Common/getsingle_deals",
+        data:{
+          "vendor_id":"2", 
+          "limit":10, 
+          "pageno":1
+          
+        } 
+    })
+    .then((response) => {
+      console.log(response.data.data,"response_data")
+      var dyndeallist= []
+      var dyndealAlllist= [];
+
+      this.setState({total_count:response.data.data[0].totalCount})
+
+      response.data.data[0].details.map((listdata)=>{
+        dyndealAlllist.push(listdata)
+        dyndeallist.push(
+          <>
+                    <Grid item xs={12} md={12}>
+              <Paper className="dyndeallistPaper">
+                <div className="aligndeallistdata">
+                  <div>
+                    <span>Test Name</span>
+                    <div>{listdata.deal_service_type == "" ? "All" : listdata.deal_service_type}</div>
+                    
+                    
+                  </div>
+                  <div>
+                    <span> Start Date</span>
+                    <div>{moment(listdata.deal_valid_from).format('DD-MM-YYYY')}</div>
+                  </div>
+                  <div>
+                    <span>End Date</span>
+                    <div>{moment(listdata.deal_valid_to).format('DD-MM-YYYY')}</div>
+                  </div>
+                  <div>
+                    <span>Amount</span>
+        <div>{listdata.deal_amount}{" "}{listdata.deal_options==="Amount"?"KWD":"%"}</div>
+                  </div>
+                </div>
+                <div className="aligndeallistdataRow2">
+                  <div className={"titleDealFlex"}>
+                  <div className={"listTitleWidth"}>
+                    <span>Title</span>
+                <div>{listdata.deal_title}</div>
+                  </div>
+                  <div>
+                    <span>Deal</span>
+                <div className="view">{listdata.deal_active==1?"Active":"Inactive"}</div>
+                  </div>
+                  </div>
+                  <div className="iconsdiv">
+                  {/* <img src={Workflow} alt="error" onClick={()=>this.openstepper(listdata.id)} /> */}
+                  <EditIcon className="edit_icon_div" onClick={()=>this.props.changeTab(listdata)}/>
+                  <DeleteIcon
+                    className="delete_icon_div"
+                    onClick={()=>this.handleOpen(listdata.id)}
+                  />
+                </div>
+                </div>
+
+                <div>
+                {/* {this.state.openstepper.includes(listdata.id) && <Stepper /> } */}
+                </div>
+
+                                           
+      
   
               </Paper>
   
@@ -245,6 +348,7 @@ export default class DealList extends React.Component {
         <Grid container>
       {this.state.dyndeallist}
         </Grid>
+        
         <Modalcomp
           xswidth={"xs"}
           clrchange="textclr"
@@ -255,6 +359,13 @@ export default class DealList extends React.Component {
           <DeleteMedia closemodal={this.handleClose} deleteitem={this.deleteDealLIst} closeDeleteModel={this.handleClose}/>
         </Modalcomp>
       </div>}
+      {this.state.total_count !== "" && this.state.total_count > 10 &&
+      <div className="pagination__container">
+            <div className="pagination__box">
+                    <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getPaginateList} />
+            </div>
+        </div>
+  }
       </Spin>
     );
   }
