@@ -20,6 +20,7 @@ import Badge from "@material-ui/core/Badge";
 import bell from "../../Images/bell.png";
 import Logo from "../../Images/Logo.png";
 import home_svg from "../../Images/home_svg.svg";
+import Appoint from "../../Images/Appoint.svg";
 // import schedule_svg from '../../Images/schedule_svg.svg';
 import {
   Menulist,
@@ -147,10 +148,16 @@ class Drawerpage extends React.Component {
     ProfileData:[],
     date: date,
     time: time,
+    current_location:""
   };
 
   componentDidMount(){
     this.ProfileGetApi()
+
+    
+      this.setState({
+        current_location: window.location.href
+      },() => console.log("sfdshfjsdhfjsdhfsdf", this.state.current_location))
   }
   ProfileGetApi=()=>{
     var self=this
@@ -189,6 +196,10 @@ class Drawerpage extends React.Component {
   logoutClose = () => {
     this.setState({ logout: false });
   };
+
+  active_box = () => {
+    this.setState({current_location:window.location.href},() => console.log("sfkjhdsfljkldhsfk",this.state.current_location))
+  }
   render() {
     const { classes, theme, children } = this.props;
     if (this.state.custom_hide) {
@@ -377,8 +388,8 @@ class Drawerpage extends React.Component {
             </div>
             <Divider />
 
-            <MenuList className="appbar_sideicons">
-              <MenuItem component={Link} to="/Home/dashboard">
+            <MenuList className="appbar_sideicons" onClick={this.active_box}>
+              <MenuItem className={`${this.state.current_location.includes("/Dashboard" || "/dashboard") && "active_text_heading"}`} component={Link} to="/Home/Dashboard">
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={home_svg} />
@@ -386,15 +397,16 @@ class Drawerpage extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Home" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/AppointmentsList">
+              <MenuItem component={Link} to="/Home/AppointmentsList" className={`${this.state.current_location.includes("/AppointmentsList") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
-                    <ReactSVG src={appointmentlist} />
+                    <ReactSVG src={Appoint} />
                   </div>
                 </ListItemIcon>
                 <ListItemText primary="Appointment List" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/uploadresults">
+
+              <MenuItem component={Link} to="/Home/uploadresults" className={`${this.state.current_location.includes("/uploadresults") && "active_text_heading"}`} >
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={uploadresult} />
@@ -402,7 +414,8 @@ class Drawerpage extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Upload Results" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/CancelAppointments">
+
+              <MenuItem component={Link} to="/Home/CancelAppointments" className={`${this.state.current_location.includes("/CancelAppointments") && "active_text_heading"}`} >
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={cancelledappointments} />
@@ -410,7 +423,8 @@ class Drawerpage extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Cancelled Appointments" />
               </MenuItem>
-              <MenuItem component={Link} to="/Home/Advertisementbooking">
+
+              <MenuItem component={Link} to="/Home/Advertisementbooking" className={`${this.state.current_location.includes("/Advertisementbooking") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={advertisementbooking} />
@@ -419,7 +433,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Advertisement Booking" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Deal">
+              <MenuItem component={Link} to="/Home/Deal" className={`${this.state.current_location.includes("/Deal") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={deals} />
@@ -428,7 +442,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Deals" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Revenue">
+              <MenuItem component={Link} to="/Home/Revenue" className={`${this.state.current_location.includes("/Revenue") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={revenue} />
@@ -437,16 +451,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Revenue" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/Category">
-                <ListItemIcon>
-                  <div className="icon-container">
-                    <ReactSVG src={managetest} />
-                  </div>
-                </ListItemIcon>
-                <ListItemText primary="Manage Category" />
-              </MenuItem>
-
-              <MenuItem component={Link} to="/Home/Test">
+              <MenuItem component={Link} to="/Home/Test"  className={`${this.state.current_location.includes("/Test") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={managetest} />
@@ -455,7 +460,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Manage Test" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/mediauploads">
+              <MenuItem component={Link} to="/Home/mediauploads" className={`${this.state.current_location.includes("/mediauploads") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={upload_svg} />
@@ -464,7 +469,7 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Media Uploads" />
               </MenuItem>
 
-              <MenuItem component={Link} to="/Home/profile">
+              <MenuItem component={Link} to="/Home/profile" className={`${this.state.current_location.includes("/profile") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
                     <ReactSVG src={profile} onClick={this.viewmodalOpen} />

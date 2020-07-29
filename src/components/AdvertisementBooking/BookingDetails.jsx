@@ -582,8 +582,10 @@ export default class AdBooking extends React.Component {
         console.log("sdfhsdjlk",toMonth)
     
        if(parseInt(fromMonth) < parseInt(toMonth)){
+         
            var monthDiff = moment(this.state.endDate).format('MM') - moment(this.state.startdate).format('MM')
        }else if(parseInt(toMonth) < parseInt(fromMonth)){
+           
         var monthabs = moment(this.state.startdate).format('MM') - moment(this.state.toDate).format('MM') - (12 * (to_year - current_year))
     
         var monthDiff = Math.abs(monthabs)
@@ -797,7 +799,7 @@ export default class AdBooking extends React.Component {
                                 fileList={this.state.fileList}
                                 >
                                     <p className="myimage_upload">
-                                        {this.state.imagedata && this.state.imagedata[0] && this.state.imagedata[0].name}
+                                        {this.state.imagedata && this.state.imagedata[0] ? this.state.imagedata[0].name : <span>My image.jpg</span>}
                                         </p>
                                     <Button className="button_browse">Browse</Button>
                                 </Upload>

@@ -372,3 +372,7 @@
 .advertise_uploadfile ~ div .ant-upload-list{
     display: none ;
 }
+
+.myimage_upload span {
+    opacity: .55;
+}
