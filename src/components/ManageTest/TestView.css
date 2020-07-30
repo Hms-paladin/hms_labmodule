@@ -210,3 +210,14 @@
   justify-content: center;
   align-items: center;
 }
+
+.testInstruction{
+  display: block;
+  height: 50px;
+}
+
+.testStatus{
+  color: #86b149;
+  font-weight: bold;
+  float: right;
+}

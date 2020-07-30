@@ -6,6 +6,8 @@
     border: none;
     font-weight: 700;
     padding: 10px 15px;
+    margin-right: 240px;
+    margin-left: 240px;
 }
 
 .butt_parent {
@@ -41,8 +43,8 @@
 }
 
 .border_edit {
-    border: 1px solid !important;
-    margin-top: 4px;
+    border-left: 2px solid green;
+    min-height: 160px;
 }
 
 .Paper_edit {
@@ -74,4 +76,72 @@
 
 .overall_paper_div {
     width: 50%;
+}
+
+.statusbtn {
+    display: flex;
+    justify-content: center;
+    color: #82af3f;
+    font-size: 12px;
+}
+
+.textContent {
+    text-align: center;
+}
+
+.rowContent {
+    justify-content: space-between;
+}
+
+.instruction,
+.test {
+    color: #82af3f;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 6px;
+}
+
+.instructiondot {
+    width: 10px;
+    border-radius: 50%;
+    background: #82af3f;
+    height: 15px;
+    padding: 8px;
+}
+
+.instructionContent {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.rowMinHeight {
+    min-height: 30px;
+    margin: 0px;
+}
+
+.testContentLeft {
+    color: white;
+    background: #82af3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.rowMinHeight {
+    min-height: 55px;
+    margin: 0px;
+}
+
+.testContentRight {
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 4px;
+    font-size: 10px;
+}
+
+.mainRow {
+    margin: 0px;
+    justify-content: space-between;
 }

@@ -51,14 +51,13 @@ class LabTestCategory extends React.Component {
                 var responseAllData = [];
                 response.data.data.map((val) => {
                     tableData.push({
-                        test: val.lab_test_category, active: val.is_active === 1 ? "Active" : "Inactive",
+                        test: val.lab_test_category, active: val.is_active === 1 ? "Active":"Inactive",
                         id: val.test_category_id
                     })
-                    responseAllData.push(val)
                 })
                 self.setState({
                     tableData: tableData,
-                    responseAllData: responseAllData,
+                    responseAllData: tableData,
                     props_loading: false
                 })
                 if (notifyMsg) {
@@ -124,21 +123,25 @@ class LabTestCategory extends React.Component {
         const searchdata = []
         this.state.responseAllData.filter((data, index) => {
             console.log(data, "datadata")
+
             if (this.state.search === undefined || this.state.search === null) {
                 searchdata.push({
-                    test: data.lab_test_category,
-                    active: data.is_active === 1 ? "Active" : "Inactive",
-                    id: data.test_category_id
+                    test: data.test,
+                    active: data.active,
+                    id: data.id
                 })
             }
-            else if (data.lab_test_category !== null && data.lab_test_category.toLowerCase().includes(this.state.search.toLowerCase()) || data.is_active !== null && data.is_active === 1 ? "Actice" : "Inactive".toLowerCase().includes(this.state.search.toLowerCase())) {
+            else if (data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.active !== null && data.active.toLowerCase().includes(this.state.search.toLowerCase())) {
+                console.log(data, "datadata")
                 searchdata.push({
-                    test: data.lab_test_category,
-                    active: data.is_active === 1 ? "Active" : "Inactive",
-                    id: data.test_category_id
+                    test: data.test,
+                    active: data.active,
+                    id: data.id
                 })
             }
         })
+        // console.log(searchdata, "datadata")
+
 
         return (
             <div>
