@@ -742,3 +742,11 @@ margin-left: 29px; */
   display: flex;
   align-items: center;
 }
+
+.colornonepast{
+  color:rgba(0, 0, 0, 0.38);
+}
+
+.cursornonehide{
+  cursor: not-allowed !important;
+}

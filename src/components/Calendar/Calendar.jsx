@@ -421,15 +421,35 @@ export default class Calendar extends React.Component {
     }
 
     let daysInMonth = [];
+    var hidepastdataleft = []
 
 
+    for (let p = 1; p <= this.daysInMonth(); p++) {
+
+      if(dateformat(this.year()+" "+this.month()+" "+p,"yyyy,mm,dd") === dateformat(new Date(),"yyyy,mm,dd")){
+         hidepastdataleft.push(false)
+      }
+      else{
+        hidepastdataleft.push(true)
+      }
+
+      console.log(new Date(dateformat(this.year()+" "+this.month()+" "+p,"yyyy,mm,dd")),"newdate")
+      if(new Date() < new Date(dateformat(this.year()+" "+this.month()+" "+p,"yyyy,mm,dd")) || dateformat(this.year()+" "+this.month()+" "+p,"yyyy,mm,dd") === dateformat(new Date(),"yyyy,mm,dd") ){
+        var hidepastdata = true
+      }
+      else{
+        var hidepastdata = false
+      }
+    }
+    if(hidepastdata){
     for (let d = 1; d <= this.daysInMonth(); d++) {
       const startdate = `selectedclr${d}_${this.state.dateObject.format("MMM")}_${this.state.dateObject.format("Y")}`
       let currentDay = d == this.currentDay() ? "today" : "";
+      var textgreyhide = new Date() < new Date(dateformat(this.year()+" "+this.month()+" "+d,"yyyy,mm,dd")) || dateformat(this.year()+" "+this.month()+" "+d,"yyyy,mm,dd") === dateformat(new Date(),"yyyy,mm,dd") 
 
       daysInMonth.push(
 
-        <td key={d} className={`calendar-day ${currentDay}`} onClick={e => { this.onDayClick(e, d); }}>
+        <td key={d} className={`calendar-day ${currentDay} ${!textgreyhide && "cursornonehide"}`} onClick={textgreyhide && (e => { this.onDayClick(e, d); })}>
           <div className="range_parent w-100">
 
             <div className="range_child w-25">
@@ -440,7 +460,7 @@ export default class Calendar extends React.Component {
                 this.state.rangeSelect.includes(startdate) && "table_inter_sel"
                 }`}
             >
-              <span className="table-body">
+              <span className={`${!textgreyhide && "colornonepast"} table-body`}>
                 {d}
               </span>
             </div>
@@ -468,6 +488,7 @@ export default class Calendar extends React.Component {
         </td>
       );
     }
+  }
     var totalSlots = [...blanks, ...daysInMonth];
     let rows = [];
     let cells = [];
@@ -495,7 +516,7 @@ export default class Calendar extends React.Component {
         <div className="calendar-navi">
           <div>{Current_date}</div>
           <div className="move_lft_rgt">
-            <ChevronLeftIcon className="date_arrow" onClick={e => { this.onPrev(); }} />
+            <ChevronLeftIcon className="date_arrow" onClick={hidepastdataleft.every((val)=>val===true) && (e => { this.onPrev(); })} />
             {!this.state.showMonthTable && (
               <span
                 // onClick={e => {

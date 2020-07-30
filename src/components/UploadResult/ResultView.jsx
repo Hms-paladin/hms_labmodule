@@ -5,6 +5,7 @@ import { Upload, Button, notification } from 'antd';
 import axios from 'axios';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
+var moment = require('moment');
 
 
 export default class ResultView extends React.Component {
@@ -34,25 +35,27 @@ export default class ResultView extends React.Component {
     console.log(fileList, "fileList")
   };
 
-  Notification = () => {
-    const key = 'updatable';
+  // Notification = () => {
+  //   const key = 'updatable';
 
-    notification.info({
-      key,
-      description:
-        'Uploaded Succesfully',
-      placement: "topRight",
-    });
-  }
+  //   notification.info({
+  //     key,
+  //     description:
+  //       'Uploaded Succesfully',
+  //     placement: "topRight",
+  //   });
+  // }
 
   uploadFile = () => {
-    console.log(this.state.resultdata)
     var self = this
     for (let i = 0; i < this.state.fileList.length; i++) {
       var formData = new FormData();
       formData.append('test_result', this.state.fileList[i].originFileObj)
       formData.set("test_id", this.state.resultdata && this.state.resultdata[0].test_id);
       formData.set("booking_id", this.state.resultdata && this.state.resultdata[0].booking_id)
+      formData.set("upload_date",moment(new Date()).format("YYYY-MM-DD hh:mm:ss"))
+      formData.set("upload_time",moment(new Date()).format("hh:mm:ss"))
+
       axios({
         method: 'POST', //get method 
         url: apiurl + "/uploadTestResult",
@@ -61,8 +64,7 @@ export default class ResultView extends React.Component {
         .then((response) => {
           console.log(response, "response_dataweek")
           self.props.onClose()
-          self.Notification()
-          self.props.getrecall()
+          self.props.getrecall("uploaded")
         })
     }
 
@@ -118,6 +120,8 @@ export default class ResultView extends React.Component {
                 <Button type="primary" className="pending_browse_btn">Browse</Button>
               </Upload></div>
           </div>
+          <div className="Testnameupload">
+            <span>Test Name:</span>
 
           <div className="resultsecond_half">
             {
@@ -136,6 +140,7 @@ export default class ResultView extends React.Component {
                         <div className="upload_result_cont">
                             <p className="ectro_test" style={{width:"120px"}}>Electrocardiogram</p>
                         </div> */}
+          </div>
           </div>
         </div>
         <div className="user_buttons_container">

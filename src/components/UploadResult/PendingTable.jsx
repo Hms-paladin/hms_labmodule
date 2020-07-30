@@ -8,6 +8,8 @@ import axios from 'axios';
 import { apiurl } from "../../App";
 import UploadView from "./UploadView";
 import dateformat from 'dateformat';
+import { notification } from 'antd';
+
 
 import "./PendingTable.css";
 
@@ -106,8 +108,10 @@ openuploadForpending=(id)=>{
     return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
 }
 
-duplicaterecall=()=>{
+duplicaterecall=(notifymsg)=>{
   this.setState({props_loading:true})
+  const key = 'updatable';
+
   var self = this
   var startdate = dateformat(this.state.selectedDatepen[0].startDate, "yyyy-mm-dd")
   var enddate = dateformat(this.state.selectedDatepen[0].endDate, "yyyy-mm-dd")
@@ -144,6 +148,15 @@ duplicaterecall=()=>{
           tableDatafull:tableDatafull,
           props_loading:false
         })
+        if(notifymsg){
+
+          notification.info({
+            key,
+            description:
+              'Uploaded Succesfully',
+            placement: "topRight",
+          });
+        }
     })
 }
 
