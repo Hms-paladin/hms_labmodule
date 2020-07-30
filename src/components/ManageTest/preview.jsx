@@ -9,7 +9,7 @@ class Preview extends React.Component {
     componentWillReceiveProps() {
         console.log("checkingprops", this.props)
     }
-    deleterow = (id,index) => {
+    deleterow = (id, index) => {
         // this.setState({ props_loading: true })
         var self = this
         axios({
@@ -40,7 +40,8 @@ class Preview extends React.Component {
                                             <div className="left_header">{val.lab_cost} KWD</div>
                                         </div>
                                         <div className="col-md-7 right_content">
-                                            {val.test_instruction}
+                                            <span className="testInstruction">{val.test_instruction}</span>
+                                            <span className="testStatus">{val.is_active === 1 ? "Active" : "Inactive"}</span>
                                             <CloseIcon className="closeIconRightContent" onClick={() => this.deleterow(val.lab_test_category_id, index)} />
                                         </div>
                                     </div>

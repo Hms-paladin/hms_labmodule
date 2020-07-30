@@ -22,6 +22,7 @@ export default class TestView extends Component {
       testList:[],
       categoryList: [],
       testActive: false,
+      btnDisable:false,
       activeKey: "1",
       name: "",
       testCost: [],
@@ -247,7 +248,7 @@ export default class TestView extends Component {
         "lab_test_instruction": this.state.labmanage_addtestcost.lab_instruction.value,
         "active": this.state.testActive === 1 ? "true" : "false"
       })
-      this.setState({ testCost: testCost, lab_test_list: lab_test_list }, () => this.submitData())
+      this.setState({ testCost: testCost, lab_test_list: lab_test_list, btnDisable:true }, () => this.submitData())
 
     }
 
@@ -281,6 +282,9 @@ export default class TestView extends Component {
             "lab_cost": this.state.labmanage_addtestcost.lab_cost.value,
             "is_active": this.state.testActive === true ? 1 : 0,
           })
+          this.setState({
+            btnDisable:false
+          })
           console.log(response, "response_checkingg")
           this.props.callget("Added")
           this.resetForm()
@@ -308,6 +312,9 @@ export default class TestView extends Component {
     })
       .then((response) => {
         console.log(response, "response_data")
+        this.setState({
+          btnDisable:false
+        })
         self.props.callget("Updated")
         this.resetForm()
       })
@@ -411,7 +418,7 @@ export default class TestView extends Component {
                       {
 
                         < div className="addBtn">
-                          <button className="btn btn-success" onClick={this.addtestcostcheckValidation}>{
+                          <button className="btn btn-success" disabled={this.state.btnDisable} onClick={this.addtestcostcheckValidation}>{
                             this.props.visible === true ? "Add" : "Update"
                           }</button>
                         </div>
