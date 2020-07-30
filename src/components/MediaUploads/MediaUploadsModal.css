@@ -104,6 +104,15 @@
     border-radius:2px !important;
 }
 
+.upload__container--err {
+    position: relative;
+    width: 100%;
+   
+    padding:3px;
+    border-radius:2px !important;
+    border: 1px solid red;
+}
+
 .html__input-box {
     border: 0;
     width: 93%;

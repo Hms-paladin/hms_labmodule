@@ -24,6 +24,7 @@ export default class MediaUploadsModal extends Component {
         super(props)
         this.state={
             open:false,
+            mediaError:false,
             imageurl: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
             mediaupload_lab: {
               'media_title': {
@@ -100,7 +101,10 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
       var filtererr = medicineKeys.filter((obj) =>
         mediaupload_lab[obj].error == true);
       // console.log(filtererr.length)
-      if (filtererr.length > 0) {
+      if(this.state.imageurl == "") {
+        this.setState({mediaError:true})
+      }
+      if (filtererr.length > 0 || this.state.mediaError) {
         this.setState({ error: true })
       } else {
         this.setState({ error: false })
@@ -219,7 +223,8 @@ componentDidMount(){
        this.setState({
         imageurl:e.target.files[0],
         filename:e.target.files[0].name,
-        type:e.target.files[0].type
+        type:e.target.files[0].type,
+        mediaError:false
        },() => this.checkType())
     }
 
@@ -274,12 +279,15 @@ componentDidMount(){
               
              </div>
             
-               <div className="upload__container">
+               <div className={`${this.state.mediaError ? 'upload__container--err' : "upload__container"}`}>
                  <input type="text" value={this.state.filename} className="html__input-box" placeholder="Browse file"  onClick={() => document.getElementById('getFile').click()} />
                   <div className="upload__container--img">
                     <img src={UploadPic} className="upload__pic"  onClick={() => document.getElementById('getFile').click()} />
                   </div>
+                    
                </div>
+
+               <div>{this.state.mediaError && <span className="validation__error">Field Required</span> }</div>
             
              <input  type="file" id="getFile" className="fileupload" onChange={this.uploadFile}/>
          </Grid>
