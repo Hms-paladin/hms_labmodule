@@ -8,6 +8,7 @@ import './ProfileModal.css';
 import axios from 'axios';
 import ValidationLibrary from "../../helpers/validationfunction";
 import { apiurl } from '../../App';
+import {notification} from 'antd';
 
 export default class BasicDetails extends React.Component {
   state = {
@@ -119,6 +120,11 @@ export default class BasicDetails extends React.Component {
     }).then((response) => {
       this.props.onClose()
       this.props.ProfileGetApi()
+      notification.info({
+        description:
+          "Profile Updated Successfully",
+        placement: "topRight",
+      });
       console.log(response, "responseCheckProfile")
     }).catch((error) => {
       console.log(error)

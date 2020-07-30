@@ -39,9 +39,9 @@ export default class Labelbox extends Component {
 		}
 
 	}
-	timepickerChange = (time) => {
+	timepickerChange = (time,changeFormat) => {
 		console.log("time", time);
-		var timeformat = dateFormat(time, "hh:MM:ss");
+		var timeformat = dateFormat(time, changeFormat ? changeFormat :"hh:MM:ss");
 		console.log("timeformat", timeformat)
 		this.setState({ selectedtime: time });
 		this.props.changeData && this.props.changeData(timeformat,time);
@@ -197,8 +197,11 @@ export default class Labelbox extends Component {
 							<KeyboardTimePicker
 								margin="normal"
 								id="time-picker"
-								value={this.props.value}
-								onChange={(time) => this.timepickerChange(time)}
+								// value={this.props.value}
+								// onChange={(time) => this.timepickerChange(time)}
+								value={this.state.selectedtime}
+								onChange={(time) => this.timepickerChange(time,this.props.changeFormat)}
+
 								KeyboardButtonProps={{
 									'aria-label': 'change time',
 								}}
