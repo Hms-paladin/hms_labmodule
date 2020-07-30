@@ -302,7 +302,7 @@ componentDidMount(){
              errmsg={this.state.mediaupload_lab.media_description.errmsg}/>
              </div>
          <div className="media_checkbox_container"><Checkbox checked={this.state.mediaupload_active}  onChange={(e) => this.dealActiveCheck(e)}/><span className="lab_active">Active</span></div>
-        <div className="labmediabutton-container"><Button className="lab_Upload">Cancel</Button><Button className="labcancel-form"  onClick={this.checkValidation}>
+        <div className="labmediabutton-container"><Button className="lab_Upload" onClick={this.props.closemodal}>Cancel</Button><Button className="labcancel-form"  onClick={this.checkValidation}>
           {this.props.editopenModal === true ? "update" : "upload"}
           </Button>
           </div>
