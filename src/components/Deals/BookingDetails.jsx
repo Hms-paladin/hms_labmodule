@@ -397,6 +397,7 @@ export default class BookingDetails extends React.Component {
                                             labelname="Valid From"
                                             value={this.state.deal_valid_from}
                                             changeData={(data) => this.changedateFun(data, 'deal_valid_from')}
+                                            disablePast={true}
                                         />
                                     </Grid>
 
@@ -406,6 +407,7 @@ export default class BookingDetails extends React.Component {
                                     labelname="Valid To"
                                     value={this.state.deal_valid_to}
                                     changeData={(data) => this.changedateFun(data, 'deal_valid_to')}
+                                    disablePast={true}
                                     />
                                    <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
                                     </Grid>

@@ -10,6 +10,7 @@ body *::-webkit-scrollbar {
   width: 6px;
   height: 4px;
   transition: 0.3s ;
+ 
 }
 body *::-webkit-scrollbar-thumb {
   background: #ADAAA8;
