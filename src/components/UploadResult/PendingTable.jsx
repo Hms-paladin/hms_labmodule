@@ -214,7 +214,7 @@ duplicaterecall=(notifymsg)=>{
           <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} getrecall={this.duplicaterecall} />
         </Modalcomp>
 
-        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
+        <UploadView tab={"pending"} onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
 
       </div>
     );

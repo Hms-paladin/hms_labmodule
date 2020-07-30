@@ -131,7 +131,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           props_loading={this.state.props_loading}
         />
 
-        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
+        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata} tab={"upload"}/>
 
       </div>
     );

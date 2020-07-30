@@ -42,12 +42,12 @@ export default class UploadView extends React.Component {
            <p className="patientappointment_details">Appointment Details</p>
            <div className="head_text_edit">
            <div className="date_uploadetext_edit">
-             <p className="uploadeddate_text_date">Uploaded Date</p>
-             <p className="date_text_date" >{viewdata.uploaded_date?viewdata.uploaded_date:"---"}</p>
+             <p className="uploadeddate_text_date">{this.props.tab==="upload" ?  "Uploaded Date" : "Test Date"}</p>
+    <p className="date_text_date" >{this.props.tab==="upload" ? (viewdata.uploaded_date && viewdata.uploaded_date) : (viewdata.test_date && viewdata.test_date)}</p>
            </div>
            <div className="date_uploadetext_edit">
              <p className="uploadeddate_text_date">Time</p>
-             <p className="date_text_date">{viewdata.uploaded_time?this.formatTimeShow(viewdata.uploaded_time):"---"}</p>
+             <p className="date_text_date">{ this.props.tab==="upload" ?  (viewdata.uploaded_time && this.formatTimeShow(viewdata.uploaded_time)):(viewdata.test_time && this.formatTimeShow(viewdata.test_time))}</p>
            </div>
            </div>
           
