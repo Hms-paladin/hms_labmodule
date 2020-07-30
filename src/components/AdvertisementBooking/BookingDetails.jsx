@@ -716,7 +716,7 @@ export default class AdBooking extends React.Component {
                                 <Grid container>
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
-                                            <Labelbox type="datepicker" labelname="Start Date" value={this.state.startdate}
+                                            <Labelbox disablePast={true} type="datepicker" labelname="Start Date" value={this.state.startdate}
                                             changeData={(date) => this.datepickerChange(date,'startdate')}
                                             /></div>
                                         <div className="validation__error">{this.state.startdateError && this.state.startdateError}</div>
@@ -752,7 +752,7 @@ export default class AdBooking extends React.Component {
 
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
-                                            <Labelbox type="datepicker" labelname="End Date"
+                                            <Labelbox type="datepicker" labelname="End Date" disablePast={true}
                                                 value={this.state.endDate} 
                                                 changeData={(data) => this.datepickerChange(data,'enddate')}/>
                                         </div>
