@@ -24,7 +24,7 @@ export default class Labelbox extends Component {
 	constructor(props) {
 		super(props);
 		console.log("valid date", props.value)
-		this.state = { gender: 'M', open: false, value: null, selectedtime: props.value, selecteddate: props.value ? props.value : new Date() };
+		this.state = { gender: 'M', open: false, value: null, selectedtime: props.value ? props.value : new Date(), selecteddate: props.value ? props.value : new Date() };
 	}
 	changeGender = (data) => {
 		this.setState({ gender: data });
@@ -39,12 +39,12 @@ export default class Labelbox extends Component {
 		}
 
 	}
-	timepickerChange = (time,changeFormat) => {
+	timepickerChange = (time, changeFormat) => {
 		console.log("time", time);
-		var timeformat = dateFormat(time, changeFormat ? changeFormat :"hh:MM:ss");
+		var timeformat = dateFormat(time, changeFormat ? changeFormat : "hh:MM:ss");
 		console.log("timeformat", timeformat)
 		this.setState({ selectedtime: time });
-		this.props.changeData && this.props.changeData(timeformat,time);
+		this.props.changeData && this.props.changeData(timeformat);
 	};
 
 	componentWillReceiveProps(props) {
@@ -124,7 +124,7 @@ export default class Labelbox extends Component {
 
 			)
 		} else if (data.type == 'radio') {
-			console.log(this.props.checked,"checked")
+			console.log(this.props.checked, "checked")
 			return (
 				<div className="formdiv">
 					<label className="labeltxt">{data.labelname}</label>
@@ -197,19 +197,17 @@ export default class Labelbox extends Component {
 							<KeyboardTimePicker
 								margin="normal"
 								id="time-picker"
-								// value={this.props.value}
-								// onChange={(time) => this.timepickerChange(time)}
 								value={this.state.selectedtime}
-								onChange={(time) => this.timepickerChange(time,this.props.changeFormat)}
-
+								onChange={(time) => this.timepickerChange(time, this.props.changeFormat)}
 								KeyboardButtonProps={{
 									'aria-label': 'change time',
 								}}
 							/>
 						</MuiPickersUtilsProvider>
 						{
+							data.error &&
 							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
+								<span>{data.errmsg}</span>
 							</div>
 						}
 					</div>
@@ -249,10 +247,10 @@ export default class Labelbox extends Component {
 
 
 					</Select>{
-							<div className="Errormsg">
-								<div>{data.error && data.errmsg}</div>
-							</div>
-						}
+						<div className="Errormsg">
+							<div>{data.error && data.errmsg}</div>
+						</div>
+					}
 
 
 				</div>

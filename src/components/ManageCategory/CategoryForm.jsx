@@ -99,7 +99,7 @@ export default class CategoryForm extends Component {
                 "lab_test_category": this.state.manageCategory.lab_test_category.value,
                 // "lab_instruction": this.state.manageCategory.lab_test_category_instruction.value,
                 "lab_instruction":"",
-                "lab_vendor_id": "1",
+                "lab_vendor_id": "2",
                 "lab_created_by": "1",
                 "lab_created_on": dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss"),
                 "lab_modified_by": "1",

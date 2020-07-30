@@ -451,6 +451,15 @@ class Drawerpage extends React.Component {
                 <ListItemText primary="Revenue" />
               </MenuItem>
 
+              <MenuItem component={Link} to="/Home/Category"  className={`${this.state.current_location.includes("/Category") && "active_text_heading"}`}>
+                <ListItemIcon>
+                  <div className="icon-container">
+                    <ReactSVG src={managetest} />
+                  </div>
+                </ListItemIcon>
+                <ListItemText primary="Manage Category" />
+              </MenuItem>
+
               <MenuItem component={Link} to="/Home/Test"  className={`${this.state.current_location.includes("/Test") && "active_text_heading"}`}>
                 <ListItemIcon>
                   <div className="icon-container">
@@ -537,6 +546,7 @@ class Drawerpage extends React.Component {
               component={ManageCategory}
               exact
             />
+
             <Route
               path={`${this.props.match.path}/Test`}
               component={LabTestMaster}
