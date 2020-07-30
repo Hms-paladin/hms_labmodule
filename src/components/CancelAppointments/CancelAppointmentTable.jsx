@@ -111,7 +111,7 @@ formatTimeShow=(h_24)=> {
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
-            { id: "test", label: "Test" },
+            { id: "test", label: "Test Name" },
             { id: "Bookdate", label: "Booked Date" },
             { id: "Canceldate", label: "Cancelled Date" },
             { id: "time", label: "Time" },

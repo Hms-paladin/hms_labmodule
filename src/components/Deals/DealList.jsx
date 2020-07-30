@@ -352,7 +352,7 @@ export default class DealList extends React.Component {
         <Modalcomp
           xswidth={"xs"}
           clrchange="textclr"
-          title="Delete Media"
+          title="Delete Deals"
           visible={this.state.open}
           closemodal={this.handleClose}
         >
