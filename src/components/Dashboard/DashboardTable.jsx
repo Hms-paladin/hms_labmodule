@@ -148,7 +148,7 @@ export default class DashboardTable extends Component {
                 <div className="divider_1px"></div>
               </div>
               <div className="lab_dash_numeric_wrap">
-                <p className="lab_dash_numeric_value">{this.state.totalrevenue && this.state.totalrevenue.length !== 0 ? this.state.totalrevenue[0] : 0}</p>
+                <p className="lab_dash_numeric_value">{ this.state.totalrevenue && this.state.totalrevenue[0] !== null ?this.state.totalrevenue[0] : 0}</p>
               </div>
             </Card>
           </div>

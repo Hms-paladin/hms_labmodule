@@ -114,7 +114,7 @@ class LabTestTable extends React.Component {
     })
       .then(function (response) {
         if (response.data.msg === "Success") {
-          self.getTableData("Deleted")
+          self.getTableData("Test Deleted Successfully",true)
         } else {
           self.getTableData("This test is already booked by the patient and could not be deleted", true)
         }

@@ -57,7 +57,7 @@ export default class ProfileView extends React.Component {
          <div className="lab_details_container">
             <div className="lab_detailsdiv">
     <h3 className="lab_name">{viewdata && viewdata.customer}</h3>
-           <p className="lab_age">{viewdata && viewdata.age + " " + "Years"}</p>
+           <p className="lab_age">{viewdata && viewdata.age ? viewdata.age + " " + "Years" : 0 + " " + "Years" }</p>
            <p className="labappointment_details">Appointment Details</p>
            
            <div className="labappointment_details"><p className="labappointment_details">Date<span className="lab_date">{viewdata && moment(viewdata.test_date).format('DD MMM YYYY')}</span></p></div>

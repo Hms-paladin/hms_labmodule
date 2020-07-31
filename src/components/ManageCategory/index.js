@@ -54,7 +54,8 @@ class ManageCategory extends React.Component {
                     <Modalcomp
                         visible={this.state.open}
                         closemodal={this.handleClickclose}
-                        title={"MANAGE CATEGORY"}
+                        title={"ADD CATEGORY"}
+                    // xswidth={"xs"}
                     >
                         <CategoryForm visible={this.state.open}
                             closemodal={this.handleClickclose}

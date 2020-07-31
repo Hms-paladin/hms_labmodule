@@ -49,13 +49,16 @@ class UploadDetails extends React.Component {
   }
 
     UNSAFE_componentWillReceiveProps(newProps){
-      console.log(newProps.weekMonthYearData,"rowDetails")
+      console.log(newProps.searchData,"rowDetails")
+      this.setState({
+        searchData:newProps.searchData
+      })
       if(newProps.propsopen){
       if(this.state.value){
         this.setState({
           weekMonthYearDatapending:newProps.weekMonthYearData,
           wk_Mn_Yr_Full_DataPending:newProps.wk_Mn_Yr_Full_Data,
-          searchDataPending:newProps.searchData,
+          // searchDataPending:newProps.searchData,
           propsopen:newProps.propsopen,
           selectedDatepen:newProps.selectedDatepen
         })
@@ -63,7 +66,7 @@ class UploadDetails extends React.Component {
       this.setState({
         weekMonthYearData:newProps.weekMonthYearData,
         wk_Mn_Yr_Full_DataUpload:newProps.wk_Mn_Yr_Full_Data,
-        searchDataUpload:newProps.searchData,
+        // searchDataUpload:newProps.searchData,
         propsopen:newProps.propsopen
       })
     }
@@ -73,6 +76,8 @@ class UploadDetails extends React.Component {
   render() {
     const { classes } = this.props;
     const { value } = this.state;
+    console.log(this.state.searchData,"rowDetails")
+
 
     return (
       <div className={`${classes.root} tabfontUploadResult`}>
@@ -84,11 +89,11 @@ class UploadDetails extends React.Component {
         </AppBar>
         {value === 0 && 
           <TabContainer>
-          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchDataUpload} propsopen={this.state.propsopen}/>
+          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchData} propsopen={this.state.propsopen}/>
           </TabContainer>}
         {value === 1 && 
           <TabContainer>
-          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchDataPending} propsopen={this.state.propsopen} selectedDatepen={this.state.selectedDatepen} />
+          <PendingTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearDatapending={this.state.weekMonthYearDatapending} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataPending} searchData={this.state.searchData} propsopen={this.state.propsopen} selectedDatepen={this.state.selectedDatepen} />
           </TabContainer>}
       </div>
     );

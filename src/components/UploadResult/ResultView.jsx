@@ -79,9 +79,10 @@ export default class ResultView extends React.Component {
 
   render() {
     const props = {
+      name:"file",
       action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
       onChange: this.handleChange,
-      multiple: true,
+      // multiple: true,
     };
     const styles = "";
     const { classes, onClose, cancel, selectedValue, uploaddata, ...other } = this.props;
@@ -115,7 +116,9 @@ export default class ResultView extends React.Component {
 
 
             <div className="labdate-div">
-              <Upload {...props} style={{ width: "100%" }} fileList={this.state.fileList}>
+              <Upload {...props} style={{ width: "100%" }} fileList={this.state.fileList}
+              //  showUploadList={false}
+              >
                 <p className="myimage_upload">{this.state.fileList[this.state.fileList.length - 1] && this.state.fileList[this.state.fileList.length - 1].name}</p>
                 <Button type="primary" className="pending_browse_btn">Browse</Button>
               </Upload></div>

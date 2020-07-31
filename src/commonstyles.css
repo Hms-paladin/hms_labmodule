@@ -106,6 +106,7 @@
 .ant-notification-notice-description{
     position: relative;
     bottom: 16px;
+    margin-right: 40px;
 }
 .lab_dashboard_buttons_wrap a{
   text-decoration: none;
