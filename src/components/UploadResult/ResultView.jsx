@@ -47,14 +47,23 @@ export default class ResultView extends React.Component {
   // }
 
   uploadFile = () => {
+    if(this.state.fileList.length===0){
+    const key = 'updatable';
+
+    notification.info({
+      key,
+      description:"Test Name Required",
+      placement: "topRight",
+    });
+    }else{
     var self = this
     for (let i = 0; i < this.state.fileList.length; i++) {
       var formData = new FormData();
       formData.append('test_result', this.state.fileList[i].originFileObj)
       formData.set("test_id", this.state.resultdata && this.state.resultdata[0].test_id);
       formData.set("booking_id", this.state.resultdata && this.state.resultdata[0].booking_id)
-      formData.set("upload_date",moment(new Date()).format("YYYY-MM-DD hh:mm:ss"))
-      formData.set("upload_time",moment(new Date()).format("hh:mm:ss"))
+      formData.set("upload_date",moment(new Date()).format("YYYY-MM-DD HH:mm:ss"))
+      formData.set("upload_time",moment(new Date()).format("HH:mm:ss"))
 
       axios({
         method: 'POST', //get method 
@@ -67,6 +76,7 @@ export default class ResultView extends React.Component {
           self.props.getrecall("uploaded")
         })
     }
+  }
 
   }
 
@@ -87,7 +97,7 @@ export default class ResultView extends React.Component {
     const styles = "";
     const { classes, onClose, cancel, selectedValue, uploaddata, ...other } = this.props;
     console.log(this.props.uploaddata, "openresultView")
-
+    console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),"time")
 
     return (
 

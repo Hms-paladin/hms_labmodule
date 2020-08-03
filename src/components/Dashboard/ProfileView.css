@@ -42,16 +42,16 @@
 .lab_date {
   color: grey;
   font-size: 1.5rem;
-  margin-left: 20px;
+  margin-left: 140px;
 }
 
-.labappointment_details-div {
+/* .labappointment_details-div {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   margin-right: 12px;
-}
+} */
 
 .view_detailsbutton {
   color: #fff !important;
@@ -105,4 +105,22 @@
   .lab_profile_modal .MuiDialog-paperWidthSm {
     width: 60% !important;
   }
+}
+
+.profileContainer_Dash{
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 95px;
+}
+
+.profileMaster_Dash{
+  font-size: 15.6px;
+}
+
+.profileContainer_Dash div:first-child{
+  color:rgba(0, 0, 0, 0.87);
+}
+
+.profileMaster_Dash div:nth-child(2){
+  color: gray;
 }

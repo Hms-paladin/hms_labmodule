@@ -54,6 +54,7 @@ class LabTestCategory extends React.Component {
                         test: val.lab_test_category, active: val.is_active === 1 ? "Active":"Inactive",
                         id: val.test_category_id
                     })
+                    responseAllData.push(val)
                 })
                 self.setState({
                     tableData: tableData,
@@ -71,13 +72,17 @@ class LabTestCategory extends React.Component {
     }
 
     modelopen = (data, id) => {
+        var editdataval = []
         if (data === "edit") {
-            var editdata = this.state.responseAllData.filter((editdata) => {
-                return editdata.test_category_id === id
+             this.state.responseAllData.filter((editdata) => {
+            console.log(editdata, "editdata")
+
+                if(editdata.id === id){
+                    editdataval.push(editdata)
+                }
             })
 
-            console.log(editdata, "editdata")
-            this.setState({ editopen: true, editdata: editdata });
+            this.setState({ editopen: true, editdata: editdataval });
         }
     };
 

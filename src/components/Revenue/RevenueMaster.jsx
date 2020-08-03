@@ -151,7 +151,7 @@ class RevenueMaster extends Component {
       if (this.state.search === null)
         return data
       else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase())
-        || (data.test != null && data.test.toLowerCase().includes(this.state.search.toLowerCase()))
+        || (data.test != null && data.test.props.children.toLowerCase().includes(this.state.search.toLowerCase()))
         || (data.book_date != null && data.book_date.toString().includes(this.state.search.toString()))
         || (data.totalcharge != null && data.totalcharge.toString().includes(this.state.search.toString()))
       ) {

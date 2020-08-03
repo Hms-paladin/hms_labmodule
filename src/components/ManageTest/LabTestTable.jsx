@@ -171,7 +171,7 @@ class LabTestTable extends React.Component {
         />
         <Modalcomp
           visible={this.state.openview}
-          title={"PACKAGE DETAILS"}
+          title={"TEST DETAILS"}
           closemodal={(e) => this.closemodal(e)}
           modelwidthClass={"managetestView"}
         >

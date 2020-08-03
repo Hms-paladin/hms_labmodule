@@ -34,8 +34,8 @@ export default class CategoryForm extends Component {
     componentDidMount() {
         console.log(this.props, "checing")
         if (this.props.edithide) {
-            this.state.manageCategory.lab_test_category.value = this.props.editdata[0].lab_test_category
-            this.state.testCategoryActive=this.props.editdata[0].is_active
+            this.state.manageCategory.lab_test_category.value = this.props.editdata[0].test
+            this.state.testCategoryActive=this.props.editdata[0].active==="Active"?true:false
             this.setState({})
         }
     }
@@ -122,7 +122,7 @@ export default class CategoryForm extends Component {
             method: 'PUT',
             url: apiurl + '/edit_mas_lab_test_category',
             data: {
-                "test_category_id": this.props.editdata[0].test_category_id,
+                "test_category_id": this.props.editdata[0].id,
                 "lab_test_category": this.state.manageCategory.lab_test_category.value,
                 // "lab_instruction": this.state.manageCategory.lab_test_category_instruction.value,
                 "lab_instruction":'',
