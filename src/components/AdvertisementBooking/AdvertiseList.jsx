@@ -64,7 +64,7 @@ getAdBooking = () => {
             ad_details: response.data.data[0].details,
             total_count:response.data.data[0].total_count,
             dataOnload: false
-        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.ad_details))
+        },() => console.log("sfdshfjsdhfjsdhfsdf",this.state.total_count))
     }).catch((error) => {
         alert(JSON.stringify(error))
     })
@@ -230,7 +230,7 @@ getAdDetails = (data) => {
 
             </div>
         
-         {this.state.total_count !== "" &&
+         {this.state.total_count !== "" && this.state.total_count > 10 &&
          <div className="pagination__container">
             <div className="pagination__box">
                     <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getAdDetails} />
