@@ -107,8 +107,8 @@
 }
 
 .rangePicker_Calendericon:hover {
-    background-color: #e6dfdf;
-    border-radius: 10px;
+    /* background-color: #e6dfdf;
+    border-radius: 10px; */
     cursor: pointer;
 }
 

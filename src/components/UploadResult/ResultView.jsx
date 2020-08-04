@@ -47,14 +47,23 @@ export default class ResultView extends React.Component {
   // }
 
   uploadFile = () => {
+    if(this.state.fileList.length===0){
+    const key = 'updatable';
+
+    notification.info({
+      key,
+      description:"Test Name Required",
+      placement: "topRight",
+    });
+    }else{
     var self = this
     for (let i = 0; i < this.state.fileList.length; i++) {
       var formData = new FormData();
       formData.append('test_result', this.state.fileList[i].originFileObj)
       formData.set("test_id", this.state.resultdata && this.state.resultdata[0].test_id);
       formData.set("booking_id", this.state.resultdata && this.state.resultdata[0].booking_id)
-      formData.set("upload_date",moment(new Date()).format("YYYY-MM-DD hh:mm:ss"))
-      formData.set("upload_time",moment(new Date()).format("hh:mm:ss"))
+      formData.set("upload_date",moment(new Date()).format("YYYY-MM-DD HH:mm:ss"))
+      formData.set("upload_time",moment(new Date()).format("HH:mm:ss"))
 
       axios({
         method: 'POST', //get method 
@@ -67,6 +76,7 @@ export default class ResultView extends React.Component {
           self.props.getrecall("uploaded")
         })
     }
+  }
 
   }
 
@@ -79,14 +89,15 @@ export default class ResultView extends React.Component {
 
   render() {
     const props = {
+      name:"file",
       action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
       onChange: this.handleChange,
-      multiple: true,
+      // multiple: true,
     };
     const styles = "";
     const { classes, onClose, cancel, selectedValue, uploaddata, ...other } = this.props;
     console.log(this.props.uploaddata, "openresultView")
-
+    console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),"time")
 
     return (
 
@@ -115,7 +126,9 @@ export default class ResultView extends React.Component {
 
 
             <div className="labdate-div">
-              <Upload {...props} style={{ width: "100%" }} fileList={this.state.fileList}>
+              <Upload {...props} style={{ width: "100%" }} fileList={this.state.fileList}
+              //  showUploadList={false}
+              >
                 <p className="myimage_upload">{this.state.fileList[this.state.fileList.length - 1] && this.state.fileList[this.state.fileList.length - 1].name}</p>
                 <Button type="primary" className="pending_browse_btn">Browse</Button>
               </Upload></div>

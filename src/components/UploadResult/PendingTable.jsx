@@ -64,16 +64,17 @@ class PendingTable extends React.Component {
 
 UNSAFE_componentWillReceiveProps(newProps){
   console.log(newProps.weekMonthYearDatapending,"pendingdata")
+  this.setState({
+    search:newProps.searchData,
+  })
 
-  // if(newProps.weekMonthYearDatapending.length!==0){
     if(newProps.propsopen){
   this.setState({
     tableData:newProps.weekMonthYearDatapending,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
-    search:newProps.searchData,
+    // search:newProps.searchData,
     selectedDatepen:newProps.selectedDatepen
   })
-// }
 }
 }
 
@@ -110,11 +111,17 @@ openuploadForpending=(id)=>{
 
 duplicaterecall=(notifymsg)=>{
   this.setState({props_loading:true})
+  console.log()
   const key = 'updatable';
 
   var self = this
+  if(this.state.selectedDatepen){
   var startdate = dateformat(this.state.selectedDatepen[0].startDate, "yyyy-mm-dd")
   var enddate = dateformat(this.state.selectedDatepen[0].endDate, "yyyy-mm-dd")
+  }else{
+    var startdate = dateformat(new Date(), "yyyy-mm-dd")
+    var enddate = dateformat(new Date(), "yyyy-mm-dd")
+  }
     axios({
         method: 'POST', //get method 
         url: apiurl + '/getTestPendingResult',

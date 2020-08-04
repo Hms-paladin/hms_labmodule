@@ -159,15 +159,15 @@
 }
 
 .manageCard {
-  height: 80px;
+  height: 90px;
 }
 
 .left_content {
   background: #86b149;
-  height: 80px;
+  height: 100px;
   color: white;
   padding: 0px;
-  padding-top: 15px;
+  padding-top: 22px;
 }
 
 .left_header {
@@ -176,9 +176,17 @@
   justify-content: center;
 }
 
+.left_headeractive{
+  font-size: 12px;
+  color: white !important;
+  display: flex;
+  justify-content: center;
+}
+
 .right_content {
   height: 80px;
   padding: 6px;
+  padding-right: 15px;
 }
 
 .closeIconRightContent {
@@ -209,4 +217,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.testInstruction{
+  display: block;
+  height: 80px;
+  overflow-y: scroll;
+}
+
+.testStatus{
+  color: #86b149;
+  font-weight: bold;
+  float: right;
+}
+
+.Deal_active_check ~ span{
+  font-size: 14px;
+  position: relative;
+  top: 3px;
 }

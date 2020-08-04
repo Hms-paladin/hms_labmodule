@@ -56,12 +56,14 @@ class UploadTable extends React.Component {
 }
 
 UNSAFE_componentWillReceiveProps(newProps){
-  console.log(newProps.weekMonthYearData,"inside")
+  console.log(newProps.searchData,"inside")
+  this.setState({
+    search:newProps.searchData,
+  })
   if(newProps.propsopen){
   this.setState({
     tableData:newProps.weekMonthYearData,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
-    search:newProps.searchData,
   })
 }
 }

@@ -212,6 +212,11 @@ export default class AdBooking extends React.Component {
         },() => this.storeadSize(this.state.editData.ad_size))
 
         // For Edit Data form filling
+        var imgarr = data.ad_filename.split('/');
+        var s = imgarr[imgarr.length - 1];
+        var splitted = s.split('ad_filename');
+        console.log(splitted[1].slice(4),"editurl")
+
         this.state.id = data.id
         this.state.startdate = dateformat(data.ad_start_date, "yyyy-mm-dd")
         this.state.endDate = dateformat(data.ad_end_date, "yyyy-mm-dd")
@@ -220,7 +225,7 @@ export default class AdBooking extends React.Component {
         this.state.location = data.ad_location_id
         this.state.adfeeperday = data.ad_fee_per_day
         this.state.adtotalcost = data.ad_total_cost
-        this.state.imagedata = [{name:data.ad_filename}]
+        this.state.imagedata = [{name:splitted[1].slice(4)}]
         this.state.imageName = data.ad_filename
 
         this.setState({})
