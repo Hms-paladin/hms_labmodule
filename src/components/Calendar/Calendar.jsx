@@ -468,14 +468,14 @@ export default class Calendar extends React.Component {
             </div>
           </div>
 
-          {
+          {/* {
               this.state.TotalslotsAvailable[d - 1] && this.state.TotalslotsAvailable[d - 1].day !==5 &&
               <div className="inner_totalslots">
             {
               this.state.TotalslotsAvailable[d - 1] && this.state.TotalslotsAvailable[d - 1].total
             }
            </div>
-      }
+      } */}
 
           {/* <div className="inner_availslots">
             {this.props.slots ? this.props.slots.map((val) => {
@@ -553,10 +553,10 @@ export default class Calendar extends React.Component {
               </table>
             </Spin>
 
-            <div className="calslots_container">
+            {/* <div className="calslots_container">
               <div className="total_slots_div"><p className="total_slots"></p><span className="total_slots_text">Total Slots</span></div>
               <div className="total_slots_div"><p className="avail_slots"></p><span className="total_slots_text">Available Slots</span></div>
-            </div>
+            </div> */}
 
           </div>
         )}
