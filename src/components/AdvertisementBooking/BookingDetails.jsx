@@ -246,7 +246,7 @@ export default class AdBooking extends React.Component {
         this.handleChangeSize()
         this.handlePlacement()
         this.getAdBooking()
-        this.getRate(1)
+        // this.getRate(1)
 
     }
 
@@ -373,7 +373,7 @@ export default class AdBooking extends React.Component {
 
     getRate = (data) => {
         var ratedata = {
-            "vendor_type_id": 1,
+            "vendor_type_id": 2,
             "placement_location_id": data,
             "size_id": 1
         }
@@ -629,19 +629,63 @@ export default class AdBooking extends React.Component {
     
     
     
-        console.log("sfsdfsdfjshdfjksdf",this.state.adsize)
+        
+
+
+       
+
+        // if(this.state.adsize == "" || this.state.adsize == 2) {
+        //     this.setState({adtotalcost:500})   
+        // }
+
+
+        // AppHome________________________________
+        
+        if(this.state.adsize == 1 && this.state.location == 1) {
+          
+            this.state.adfeeperday = 300;
+            this.setState({})
+            
+        }
+
+
+        if(this.state.adsize == 2 && this.state.location == 1) {
+           
+
+            this.state.adfeeperday = 500;
+            this.setState({})
+        }
+
+        //  _________________________________
+
+
+        // Category ___________________________________
+
+        if(this.state.adsize == 1 && this.state.location == 2) {
+         
+            this.state.adfeeperday = 250;
+            this.setState({})
+            
+        }
+
+
+        if(this.state.adsize == 2 && this.state.location == 2) {
+        
+
+            this.state.adfeeperday = 400;
+            this.setState({})
+        }
+
+
+    // _______________________________________________
 
 
         var totalcost = totalDays * this.state.adfeeperday;
+        console.log("asfkhsfksgdfhgdshgsdf",totalcost)
 
-        if(this.state.adsize == "" || this.state.adsize == 2) {
-            this.setState({adtotalcost:totalcost})   
-        }
-
-        if(this.state.adsize == 1) {
-            this.setState({adtotalcost:totalcost/2}) 
-        }
-
+  
+        this.setState({adtotalcost:totalcost})
+       
          
 
     
@@ -689,7 +733,7 @@ export default class AdBooking extends React.Component {
 
     storeadSize = (data) => {
         
-        console.log("sdfjdshfjksdhfkjsdhf",this.state.adsize)
+        console.log("sdfjdshfjksdhfkjsdhf",data)
         this.setState({ adsize: data }, () =>  this.checkHours() )
        
     }

@@ -110,7 +110,7 @@ export default class CategoryForm extends Component {
         })
             .then((response) => {
                 console.log(response, "response_checkingg")
-                this.props.callget("Added")
+                self.props.callget("Added")
             })
     }
 
@@ -148,8 +148,8 @@ export default class CategoryForm extends Component {
         return (
             <div className="tabControlTest">
                 <div className="testentry_container mt-4">
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                    <Grid  spacing={2}>
+                        <Grid item xs={12}>
                             <Labelbox
                                 type="text"
                                 labelname="Test Category"
@@ -163,6 +163,14 @@ export default class CategoryForm extends Component {
                                 onChange={(e) => this.testCategoryActiveCheck(e)}
                             />
                             <span>Active</span>
+                            <div className={`${this.props.visible === true ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
+                            <Button className="manage_test_Cancel" onClick={() => this.props.closemodal(false)}>Cancel</Button>
+                            <Button className="manage_test_Submit" onClick={this.checkValidation} >
+                                {
+                                    this.props.visible === true ? "Submit" : "Update"
+                                }
+                            </Button>
+                        </div>
                         </Grid>
                         {/* <Grid item xs={12} md={6}>
                             <Labelbox
@@ -173,14 +181,7 @@ export default class CategoryForm extends Component {
                                 error={this.state.manageCategory.lab_test_category_instruction.error}
                                 errmsg={this.state.manageCategory.lab_test_category_instruction.errmsg} />
                         </Grid> */}
-                        <div className={`${this.props.visible === true ? "manage_test_button-containeredit" : "manage_test_button-container"}`}>
-                            <Button className="manage_test_Cancel" onClick={() => this.props.closemodal(false)}>Cancel</Button>
-                            <Button className="manage_test_Submit" onClick={this.checkValidation} >
-                                {
-                                    this.props.visible === true ? "Submit" : "Update"
-                                }
-                            </Button>
-                        </div>
+                        
                     </Grid>
                 </div>
             </div>
