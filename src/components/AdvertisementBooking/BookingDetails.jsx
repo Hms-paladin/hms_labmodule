@@ -60,9 +60,15 @@ const openNotification = () => {
     });
 }
 
-var startdate = dateformat(new Date(), "yyyy-mm-dd")
 
-var enddate = dateformat(new Date(), "yyyy-mm-dd")
+
+var startDate = moment()
+
+
+var startDate = moment();
+var startdate = moment(startDate).add(2, 'days').format('YYYY-MM-DD');
+
+var enddate = moment(startdate);
 export default class AdBooking extends React.Component {
     constructor(props) {
         super(props)
@@ -87,7 +93,7 @@ export default class AdBooking extends React.Component {
             startdate: startdate,
             endDate:  enddate,
             checked:false,
-
+            minDate:startdate,
 
 
             startdateError: "",
@@ -765,8 +771,8 @@ export default class AdBooking extends React.Component {
                                 <Grid container>
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
-                                            <Labelbox disablePast={true} type="datepicker" labelname="Start Date" value={this.state.startdate}
-                                            changeData={(date) => this.datepickerChange(date,'startdate')}
+                                            <Labelbox  type="datepicker" labelname="Start Date" value={this.state.startdate}
+                                            changeData={(date) => this.datepickerChange(date,'startdate')} minDate={this.state.minDate}
                                             /></div>
                                         <div className="validation__error">{this.state.startdateError && this.state.startdateError}</div>
 
@@ -801,8 +807,8 @@ export default class AdBooking extends React.Component {
 
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
-                                            <Labelbox type="datepicker" labelname="End Date" disablePast={true}
-                                                value={this.state.endDate} 
+                                            <Labelbox type="datepicker" labelname="End Date" 
+                                                value={this.state.endDate} minDate={this.state.minDate}
                                                 changeData={(data) => this.datepickerChange(data,'enddate')}/>
                                         </div>
                                         <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
