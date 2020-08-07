@@ -109,5 +109,5 @@
     margin-right: 40px;
 }
 .lab_dashboard_buttons_wrap a{
-  text-decoration: none;
+  text-decoration: none !important;
 }
