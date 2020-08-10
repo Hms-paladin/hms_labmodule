@@ -159,6 +159,7 @@ export default class Labelbox extends Component {
 								disableUnderline={true}
 								disableFuture={this.props.disableFuture ? this.props.disableFuture : false}
 								disablePast={this.props.disablePast ? this.props.disablePast : false}
+								minDate={this.props.minDate ? this.props.minDate : null}
 
 								variant="variant"
 								format="dd/MM/yyyy"
