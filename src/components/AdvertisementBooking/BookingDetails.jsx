@@ -762,6 +762,7 @@ export default class AdBooking extends React.Component {
 
                         <Calendar
                             getDate={(data) => this.getRangeData(data)}
+                            aftertwodays={true}
                         />
 
                     </Grid>

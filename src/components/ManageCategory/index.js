@@ -22,7 +22,6 @@ class ManageCategory extends React.Component {
         this.setState({ open: false });
     };
     callget = (data) => {
-        alert(data)
         this.setState({
             callgetapi: data
         })
