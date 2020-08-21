@@ -138,6 +138,8 @@
 .trainee_text {
   padding-left: 3%;
   width: 100%;
+  display: flex;
+  align-items: flex-end;
 }
 .group_icons{
   font-size: 2rem !important;

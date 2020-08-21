@@ -188,7 +188,7 @@ class AppointmentsList extends Component {
       body: bodydata,
     })
 
-    doc.save('AppoinmentDetails.pdf')
+    doc.save('AppointmentDetails.pdf')
   }
 
   }
