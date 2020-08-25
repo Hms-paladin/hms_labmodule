@@ -182,7 +182,7 @@ export default class BookingDetails extends React.Component {
     }
 
     changeDealOption = (data) => {
-        alert("ios")
+      
         console.log(data,"dataradio")
         this.setState({ dealOption: data });
     }
@@ -317,8 +317,8 @@ export default class BookingDetails extends React.Component {
     getDealsList = () => {
         var data = {
           vendor_id:2,
-          limit: 10,
-          pageno: 2,
+          limit: 100,
+          pageno: 1,
         };
         Axios({
           method: "POST",
