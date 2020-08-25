@@ -24,11 +24,13 @@ class LabTestCategory extends React.Component {
         this.getTableData()
     }
 
-    UNSAFE_componentWillReceiveProps(newProps) {
-        if (newProps.getdatacall) {
-            this.props.falsegetmethod()
-        }
-    }
+    // UNSAFE_componentWillReceiveProps(newProps) {
+    //     alert("gotfinal")
+    //     if (newProps.getdatacall) {
+    //         this.props.falsegetmethod()
+    //     }
+    // }
+    
 
     handleClickclose = () => {
         this.setState({ open: false });
@@ -119,6 +121,10 @@ class LabTestCategory extends React.Component {
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
+        if (newProps.getdatacall) {
+            this.getTableData(newProps.getdatacall)
+            this.props.falsegetmethod()
+        }
         this.setState({
             search: newProps.searchData,
         })
@@ -168,6 +174,7 @@ class LabTestCategory extends React.Component {
                     title={"MANAGE CATEGORY"}
                     closemodal={(e) => this.closemodal(e)}
                     xswidth={"xs"}
+                    modelwidthClass={"managecat_width"}
                 >
                     <CategoryForm
                         visible={this.state.open}

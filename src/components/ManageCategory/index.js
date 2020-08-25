@@ -4,6 +4,8 @@ import Modalcomp from "../../helpers/ModalComp/Modalcomp";
 import { Input} from 'antd';
 import LabTestCategory from './LabTestCategory';
 import CategoryForm from './CategoryForm';
+import "../ManageTest/LabTestTable.css";
+
 
 class ManageCategory extends React.Component {
     constructor(props) {
@@ -19,13 +21,14 @@ class ManageCategory extends React.Component {
     handleClickclose = () => {
         this.setState({ open: false });
     };
-    callget = () => {
+    callget = (data) => {
         this.setState({
-            callgetapi: true
+            callgetapi: data
         })
     }
     render() {
         const { Search } = Input;
+        console.log(this.state.callgetapi,"callgetcallget")
         return (
             <div>
                 <div className="dashboard_header">
@@ -55,11 +58,12 @@ class ManageCategory extends React.Component {
                         visible={this.state.open}
                         closemodal={this.handleClickclose}
                         title={"ADD CATEGORY"}
-                    // xswidth={"xs"}
+                    xswidth={"xs"}
+                    modelwidthClass={"managecat_width"}
                     >
                         <CategoryForm visible={this.state.open}
                             closemodal={this.handleClickclose}
-                            callget={this.callget}
+                            callget={(data)=>this.callget(data)}
                         />
                     </Modalcomp>
                 </div>

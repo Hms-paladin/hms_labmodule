@@ -23,9 +23,9 @@ export default class LabTestMaster extends Component {
   handleClickclose = () => {
     this.setState({ open: false });
   };
-  callget=()=>{
+  callget=(data)=>{
     this.setState({
-      callgetapi:true
+      callgetapi:data
     })
   }
 
@@ -68,7 +68,7 @@ export default class LabTestMaster extends Component {
             
           <TestView visible={this.state.open}
             closemodal={this.handleClickclose}
-            callget={this.callget}
+            callget={(data)=>this.callget(data)}
             />
           </Modalcomp>
         </div>

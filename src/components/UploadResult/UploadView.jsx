@@ -55,10 +55,8 @@ export default class UploadView extends React.Component {
            <Divider className="dividerlist_root"/>
            <div className="test_details_head">Test Details</div>
            <div className="test_report_container">
-           <p>{viewdata.test}<span><DescriptionIcon className="file_attach"/></span></p>
-              {/* <p>Galactosemia Test<span><DescriptionIcon className="file_attach"/><span className="line_edit">|</span></span></p>
-              <p>Electrocardiogram<span><DescriptionIcon className="file_attach"/><span className="line_edit">|</span></span></p>
-              <p className="blood_test_edit">Blood Test<span><DescriptionIcon className="file_attach" className="no_border"/></span></p> */}
+           {/* <p>{viewdata.test}<span><DescriptionIcon className="file_attach" onClick={()=>this.opentest(viewdata.test_result)}/></span></p> */}
+           <p>{viewdata.test}<span><a href={viewdata.test_result} target="blank"><DescriptionIcon className="file_attach" /></a></span></p>
            </div>
          </div>
          </div>

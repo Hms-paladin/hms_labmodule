@@ -43,6 +43,12 @@ export default class BasicDetails extends React.Component {
         validation: [{ 'name': 'required' }, { 'name': 'email' }],
         error: null,
         errmsg: null
+      },
+      "ContactNumber":{
+        'value': '',
+        validation: [{ 'name': 'required' }],
+        error: null,
+        errmsg: null
       }
     }
   }
@@ -58,7 +64,8 @@ export default class BasicDetails extends React.Component {
     this.state.basicDetails.contactPerson.value = this.props.ProfileData[0].vendor_contact
     this.state.basicDetails.website.value = this.props.ProfileData[0].vendor_website
     this.state.basicDetails.mobileNumber.value = this.props.ProfileData[0].vendor_phone
-    this.state.basicDetails.email.value = this.props.ProfileData[0].vendor_email
+    this.state.basicDetails.email.value = this.props.ProfileData[0].vendor_contact_email
+    this.state.basicDetails.ContactNumber.value = this.props.ProfileData[0].vendor_contact_mobile
     this.setState({})
   }
 
@@ -107,10 +114,12 @@ export default class BasicDetails extends React.Component {
       formData.append('uploadFile', '')
     }
     formData.set('address', this.state.basicDetails.address.value)
-    formData.set('mobile', this.state.basicDetails.mobileNumber.value)
+    formData.set('mobile', this.state.basicDetails.ContactNumber.value)
     formData.set('email', this.state.basicDetails.email.value)
     formData.set('website', this.state.basicDetails.website.value)
     formData.set('contact', this.state.basicDetails.contactPerson.value)
+    formData.set('phone', this.state.basicDetails.mobileNumber.value)
+
     formData.set('labId', 2)
     formData.set('modifiedby', 1)
     axios({
@@ -146,7 +155,7 @@ export default class BasicDetails extends React.Component {
             />
           </div>
           <div className="col-md-6 basicdetails_child">
-            <Labelbox type="text" labelname="Mobile Number"
+            <Labelbox type="text" labelname="Vendor Mobile Number"
               changeData={(data) => this.changeDynamic(data, 'mobileNumber')}
               value={this.state.basicDetails.mobileNumber.value}
               error={this.state.basicDetails.mobileNumber.error}
@@ -175,6 +184,14 @@ export default class BasicDetails extends React.Component {
               value={this.state.basicDetails.website.value}
               error={this.state.basicDetails.website.error}
               errmsg={this.state.basicDetails.website.errmsg}
+            />
+          </div>
+          <div className="col-md-6 basicdetails_child">
+            <Labelbox type="text" labelname="Contact Person Mobile Number"
+              changeData={(data) => this.changeDynamic(data, 'ContactNumber')}
+              value={this.state.basicDetails.ContactNumber.value}
+              error={this.state.basicDetails.ContactNumber.error}
+              errmsg={this.state.basicDetails.ContactNumber.errmsg}
             />
           </div>
         </div>

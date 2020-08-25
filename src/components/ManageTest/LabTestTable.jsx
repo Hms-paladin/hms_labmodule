@@ -62,10 +62,10 @@ class LabTestTable extends React.Component {
           responseAllData: responseAllData,
           props_loading: false
         })
-        if (notifyMsg && deleteData) {
+        if (notifyMsg) {
           notification.info({
             description:
-              deleteData === true ? notifyMsg : 'Record ' + notifyMsg + ' Successfully',
+              deleteData === true ? notifyMsg : 'Test ' + notifyMsg + ' Successfully',
             placement: "topRight",
           });
         }
@@ -126,6 +126,10 @@ class LabTestTable extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(newProps) {
+    if (newProps.getdatacall) {
+      this.getTableData(newProps.getdatacall)
+      this.props.falsegetmethod()
+  }
     this.setState({
       search: newProps.searchData,
     })

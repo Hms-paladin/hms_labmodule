@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select } from "antd";
+import { notification } from "antd";
 import Moment from "react-moment";
 import "./RevenueTable.css";
 import './RevenueMaster.css';
@@ -51,10 +51,18 @@ class RevenueMaster extends Component {
 
   // PDF FUNCTION
   generatepdf = () => {
+    if(this.state.tableData.length===0){
+      notification.info({
+        description:
+          'No Data Found',
+          placement:"topRight",
+      });
+    }
+    else{
     const doc = new jsPDF("a3")
     var bodydata = []
     this.state.tableData.map((data, index) => {
-      bodydata.push([index + 1, data.customer, data.date, data.cash, data.card, data.insurance, data.wallet, data.totalcharge])
+      bodydata.push([index + 1, data.customer, data.test.props.children, data.book_date, data.totalcharge])
     })
     doc.autoTable({
       beforePageContent: function (data) {
@@ -63,12 +71,12 @@ class RevenueMaster extends Component {
       margin: { top: 30 },
       showHead: "everyPage",
       theme: "grid",
-      head: [['S.No', 'Customer', 'Doctor Name', 'Clinic Name', 'Date', 'Cash', 'Card', 'Insurance', 'Wallet', 'Total Charge']],
+      head: [['S.No', 'Customer', 'Test', 'Book Date','Total Charge']],
       body: bodydata,
     })
 
-    doc.save('UploadDeatails.pdf')
-
+    doc.save('UploadDetails.pdf')
+  }
   }
 
   getTestDetails = (booking_id) => {
@@ -100,6 +108,7 @@ class RevenueMaster extends Component {
   }
 
   getRevenueData = () => {
+
     this.setState({
       props_loading:true,
     })
@@ -143,6 +152,14 @@ class RevenueMaster extends Component {
     })
   }
 
+  Notification=()=>{
+    notification.info({
+      description:
+        'No Data Found',
+        placement:"topRight",
+    });
+  }
+
   render() {
     console.log(dateFormat(new Date(), "dd mmm yyyy"))
     const { Search } = Input;
@@ -161,20 +178,21 @@ class RevenueMaster extends Component {
     // EXCEL FUNCTION
     var multiDataSetbody = []
     this.state.tableData.map((xldata, index) => {
+      console.log(xldata.test.props.children,"xldata")
       if (index % 2 !== 0) {
         multiDataSetbody.push([{ value: index + 1, style: { alignment: { horizontal: "center" } } },
         { value: xldata.customer },
-        { value: xldata.test },
+        { value: xldata.test.props.children },
         { value: xldata.book_date },
-        { value: xldata.totalcharge },])
+        { value: xldata.totalcharge,style: { alignment: { horizontal: "center" } }}])
       } else {
         multiDataSetbody.push([
           { value: index + 1, style: { alignment: { horizontal: "center" }, fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
           { value: xldata.customer, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
-          { value: xldata.test, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
+          { value: xldata.test.props.children, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
           { value: xldata.book_date, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
-          { value: xldata.card, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
-          { value: xldata.totalcharge, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },])
+          // { value: xldata.card, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
+          { value: xldata.totalcharge, style: { alignment: { horizontal: "center" }, fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },])
       }
     })
     const multiDataSet = [
@@ -201,7 +219,7 @@ class RevenueMaster extends Component {
               style={{ width: 150 }}
               className="mr-2 ml-2"
             />
-            <div className="icon_head">
+            {/* <div className="icon_head">
               <ReactSVG src={pdf} style={{ marginRight: "15px", marginLeft: "15px" }} onClick={this.generatepdf}
                 style={{ marginRight: "15px", marginLeft: "15px" }} />
               <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
@@ -215,7 +233,27 @@ class RevenueMaster extends Component {
             <div style={{ display: "none" }}>
               <PrintData printtableData={this.state.tableData}
                 ref={el => (this.componentRef = el)} />
-            </div>
+            </div> */}
+
+            <div className="icon_head">
+                  <ReactSVG
+                    onClick={this.generatepdf}
+                    src={pdf}
+                    style={{ marginRight: "15px", marginLeft: "15px" }}
+                  />
+                {this.state.tableData.length===0?<ReactSVG  onClick={this.Notification} src={excel} style={{ marginRight: "15px" }} />:
+                  <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
+                    <ExcelSheet dataSet={multiDataSet} name="Uploaded Details" />
+                  </ExcelFile>}
+
+                  {this.state.tableData.length===0?
+                <ReactSVG src={print} onClick={this.Notification} />:
+                  <ReactToPrint
+                    trigger={() => <ReactSVG src={print} />}
+                    content={() => this.componentRef}
+                  />}
+                  <div style={{ display: "none" }}><PrintData printTableData={this.state.tableData} ref={el => (this.componentRef = el)} /></div>
+                </div>
           </div>
         </div>
         <div>
