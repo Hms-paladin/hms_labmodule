@@ -31,7 +31,7 @@ class Approvalmanagement extends React.Component {
     var self = this
     axios({
         method: 'POST', //get method 
-        url: apiurl + '/getTestPendingResult',
+        url: apiurl + '/getTestAppointmentList',
         data:{
           "lab_id": "2",
           "date": dateformat(new Date(), "yyyy-mm-dd"),
@@ -47,7 +47,7 @@ class Approvalmanagement extends React.Component {
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.uploaded_time ? val.uploaded_time : '-',
               id:index
@@ -86,16 +86,16 @@ formatTimeShow=(h_24)=> {
       if (this.state.search === undefined || this.state.search === null){
         searchdata.push({
             name: data.customer,
-            test: data.test,
+            // test: data.test,
             date: dateformat(data.test_date, "dd mmm yyyy"),
             time: data.test_time ? this.formatTimeShow(data.test_time) : '-',
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && data.test_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
           time: data.test_time ? this.formatTimeShow(data.test_time) : '-',
         id:index
@@ -108,7 +108,7 @@ formatTimeShow=(h_24)=> {
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: " Customer Name" },
-            { id: "test", label: "Test Name" },
+            // { id: "test", label: "Test Name" },
             { id: "date", label: "Date" },
             { id: "time", label: "Time" },
             { id: "", label: "Action" },

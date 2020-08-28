@@ -67,7 +67,8 @@ class UploadDetails extends React.Component {
         weekMonthYearData:newProps.weekMonthYearData,
         wk_Mn_Yr_Full_DataUpload:newProps.wk_Mn_Yr_Full_Data,
         // searchDataUpload:newProps.searchData,
-        propsopen:newProps.propsopen
+        propsopen:newProps.propsopen,
+        selectedDatepen:newProps.selectedDatepen
       })
     }
   }
@@ -89,7 +90,7 @@ class UploadDetails extends React.Component {
         </AppBar>
         {value === 0 && 
           <TabContainer>
-          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchData} propsopen={this.state.propsopen}/>
+          <UploadTable tabledataFun={(data)=>this.callmaster(data)} weekMonthYearData={this.state.weekMonthYearData} wk_Mn_Yr_Full_Data={this.state.wk_Mn_Yr_Full_DataUpload} searchData={this.state.searchData} propsopen={this.state.propsopen} selectedDatepen={this.state.selectedDatepen} />
           </TabContainer>}
         {value === 1 && 
           <TabContainer>
