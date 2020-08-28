@@ -93,7 +93,7 @@ export default class DealList extends React.Component {
                     <div>{moment(listdata.deal_valid_to).format('DD-MM-YYYY')}</div>
                   </div>
                   <div>
-                    <span>Amount</span>
+                    <span>{listdata.deal_options==="Amount"?"Amount":"Percentage"}</span>
         <div>{listdata.deal_amount}{" "}{listdata.deal_options==="Amount"?"KWD":"%"}</div>
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export default class DealList extends React.Component {
                     <div>{moment(listdata.deal_valid_to).format('DD-MM-YYYY')}</div>
                   </div>
                   <div>
-                    <span>Amount</span>
+                    <span>{listdata.deal_options==="Amount"?"Amount":"Percentage"}</span>
         <div>{listdata.deal_amount}{" "}{listdata.deal_options==="Amount"?"KWD":"%"}</div>
                   </div>
                 </div>

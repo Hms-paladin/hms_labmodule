@@ -233,6 +233,6 @@
 
 .Deal_active_check ~ span{
   font-size: 14px;
-  position: relative;
-  top: 3px;
+  /* position: relative;
+  top: 3px; */
 }

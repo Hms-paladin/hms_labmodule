@@ -197,7 +197,7 @@ font-size: 1.25rem;
 .location_add_container {
     height: 370px;
     overflow: scroll;
-    width: 98%;
+    margin: 0px 0px 0px 25px;
 }
 
 .advertise_contentSpace{

@@ -67,6 +67,20 @@ export default class BookingDetails extends React.Component {
         })
     }
     changeTabFun = (data) => {
+        console.log("asfshdfsdfksd",data)
+        if(new Date (data.deal_valid_from) < new Date() && new Date (data.deal_valid_to) < new Date() ){
+            notification.info({
+                description:
+                  'Deals expired',
+                  placement:"topRight",
+              });
+        }else if(new Date (data.deal_valid_from) < new Date() && new Date (data.deal_valid_to) > new Date() ){
+            notification.info({
+                description:
+                  "Deals already posted",
+                  placement:"topRight",
+              });
+        }else{
         console.log(data, "editdata")
         this.setState({
             edit: true,
@@ -86,6 +100,7 @@ export default class BookingDetails extends React.Component {
         this.state.deal_valid_to = dateformat(data.deal_valid_to, "yyyy-mm-dd")
         
         this.setState({})
+    }
 
     }
 

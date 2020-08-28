@@ -56,8 +56,8 @@ button:focus {
   border-bottom: 0px !important;
 }
 
-.label {
-  font-weight: none !important;
+label {
+  font-weight: 100 !important;
 }
 
 .MuiButton-root {

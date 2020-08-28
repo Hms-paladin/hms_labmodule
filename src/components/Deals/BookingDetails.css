@@ -29,7 +29,7 @@
 }
 
 .booking_createlist .ant-tabs-nav-container {
-    margin: 15px 20px 0px 0px;
+    margin: 15px 0px 0px 0px;
     border-radius: 4px;
 }
 
@@ -110,10 +110,10 @@
     justify-content: space-between;
 }
 
-.Deal_activecheck div:first-child{
+/* .Deal_activecheck div:first-child{
     position: relative;
     right: 12px;
-}
+} */
 
 .datepicker_active .formdiv {
     width: 100%;
@@ -186,4 +186,17 @@
     height: 15px;
     position: relative;
     bottom: 15px;
+}
+
+.deal_radiopercent{
+    display: flex;
+}
+
+.deal_radiopercent div:first-child{
+    width: 90%;
+}
+
+.deal_kwdalign{
+    margin-top: 30px;
+    font-size: 13px;
 }
