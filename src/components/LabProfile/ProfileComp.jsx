@@ -16,7 +16,6 @@ import moment from 'moment';
 import { apiurl } from "../../App";
 
 const styles = {};
-// import Calendar from './Calendar';
 class ProfileComp extends Component {
   constructor(props) {
     super(props);
