@@ -192,6 +192,11 @@
   cursor: pointer;
 }
 
+.list_class_browsenotallow {
+  color: grey;
+  cursor: not-allowed;
+}
+
 .list_class_delete{
   color:#dc0808;
   cursor: pointer;
@@ -219,6 +224,7 @@
   flex-wrap: wrap;
   margin-top: 5px;
   height: 87%;
+  overflow-y: scroll;
 }
 
 .Testnameupload {

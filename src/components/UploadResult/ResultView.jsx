@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { Spin } from 'antd';
 
 var moment = require('moment');
+let timer = null;
 
 
 
@@ -18,7 +19,8 @@ export default class ResultView extends React.Component {
     fileList: [],
     resultdata: this.props.uploaddata,
     uploaddata:this.props.uploaddata,
-    // loader:false,
+    loader:false,
+    enablecurrentTime:false
   }
 
 
@@ -37,7 +39,6 @@ export default class ResultView extends React.Component {
 
 
   handleChange = (info, data) => {
-    this.setState({loader:true})
 
     let fileList = [...info.fileList];
 
@@ -58,6 +59,7 @@ export default class ResultView extends React.Component {
         // self.props.onClose()
         this.props.getrecall("uploaded")
         this.recallget()
+        this.setState({loader:true})
       })
       
 
@@ -144,12 +146,33 @@ export default class ResultView extends React.Component {
       }
     })
       .then((response) => {
-        this.props.getrecall("uploaded")
+        this.props.getrecall("deleted")
         this.recallget()
       })
   }
 
+  
+componentDidMount() {
+  var current_date_time_check = new Date(dateformat(this.props.uploaddata[0].test_date +" "+ this.props.uploaddata[0].test_time, "ddd mmm dd yyyy HH:MM:ss")) <= new Date()
+
+  this.timer = setInterval(() => {
+        if (current_date_time_check){
+        this.setState({
+          enablecurrentTime:true
+        })
+        }
+      },
+      1000,
+  );
+}
+
+componentWillUnmount() {
+  clearInterval(this.timer);
+}
   render() {
+
+
+
     const props = {
       name: "file",
       action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -209,10 +232,13 @@ export default class ResultView extends React.Component {
                     <div className="list_class_svg">{val.test_result ?
                     <DeleteIcon className="list_class_delete" onClick={()=>this.deleteuploadtest(val)} />:
                     <>
+                    {this.state.enablecurrentTime ?
                       <Upload {...props} onChange={(info) => this.handleChange(info, val)}>
                         <OpenInBrowserIcon className="list_class_browse" />
-                      </Upload>
-                      <DeleteIcon className="list_class_delete" />
+                      </Upload>:
+                    <OpenInBrowserIcon className="list_class_browsenotallow" />
+                      }
+                      {/* <DeleteIcon className="list_class_delete" /> */}
                       </>}
                     </div>
                   </div>

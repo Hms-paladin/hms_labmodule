@@ -120,7 +120,7 @@ duplicaterecall=(notifymsg)=>{
           notification.info({
             key,
             description:
-              'Test Record Deleted Succesfully',
+              'Test Record Deleted Successfully',
             placement: "topRight",
           });
         }

@@ -186,12 +186,19 @@ duplicaterecall=(notifymsg)=>{
           tableDatafull:tableDatafull,
           props_loading:false
         })
-        if(notifymsg){
+        if(notifymsg==="uploaded"){
 
           notification.info({
             key,
             description:
-              'Uploaded Succesfully',
+              'Uploaded Successfully',
+            placement: "topRight",
+          });
+        }else if(notifymsg === "getrecall"){
+          notification.info({
+            key,
+            description:
+              'Test Record Deleted Successfully',
             placement: "topRight",
           });
         }
