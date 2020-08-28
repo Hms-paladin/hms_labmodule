@@ -27,7 +27,8 @@ export default class DealList extends React.Component {
      openstepper:[],
      dyndeallist:[],
      dyndealAlllist:[], 
-     total_count:""
+     total_count:"",
+     limit:10,
     };
   }
 
@@ -58,7 +59,7 @@ export default class DealList extends React.Component {
         url: apiurl + "/Common/getsingle_deals",
         data:{
           "vendor_id":"2", 
-          "limit":10, 
+          "limit": this.state.limit, 
           "pageno":data+1
           
         } 
@@ -160,7 +161,7 @@ export default class DealList extends React.Component {
         url: apiurl + "/Common/getsingle_deals",
         data:{
           "vendor_id":"2", 
-          "limit":10, 
+          "limit": this.state.limit, 
           "pageno":1
           
         } 

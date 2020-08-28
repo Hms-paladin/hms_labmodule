@@ -38,6 +38,7 @@ export default class AppointmentView extends React.Component {
     const { classes, onClose, cancel, selectedValue, ...other } = this.props;
     console.log(this.props.viewdata, "viewdata")
     const { viewdata } = this.props
+    console.log("asfkjhdsfkjhdsfkjhds",viewdata)
 
     return (
       // <div className="doctor_popup_details">

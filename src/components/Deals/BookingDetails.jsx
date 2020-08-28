@@ -57,6 +57,11 @@ export default class BookingDetails extends React.Component {
         console.log("consptops",this.props)
     }
     callback = (key) => {
+
+        if(key == 2 && this.state.edit) {
+            this.resetFormValue()
+        }
+
         this.setState({
             activeKey: key
         })
@@ -85,9 +90,14 @@ export default class BookingDetails extends React.Component {
     }
 
     svalue = (data) => {
-       let wtf = data.deal_service_type == "" ? "All" : data.deal_service_type;
+      
+
+        let wtf = data.deal_service_type == "" ? "All" : data.deal_service_type;
         wtf == "All" ? this.setState({serviceTypeAll:false}) : this.setState({serviceTypeAll:true})
+        console.log("arjundsfsdfdsf",wtf)
         this.setState({serviceTypeValue:wtf,edit:true,servicetype:this.state.editData.deal_service_type_id})
+    
+        this.setState({})
     }
 
     compareDate = () => {
@@ -182,7 +192,7 @@ export default class BookingDetails extends React.Component {
     }
 
     changeDealOption = (data) => {
-        alert("ios")
+      
         console.log(data,"dataradio")
         this.setState({ dealOption: data });
     }
@@ -221,10 +231,12 @@ export default class BookingDetails extends React.Component {
 
     onSubmitData = () => {
         var serviceId = !this.state.edit && !this.state.serviceTypeAll 
+
         var data = [];
         if(!this.state.serviceTypeAll) {
             this.state.serviceType.map(val => val.id > 1 && data.push(val.id))    
         }
+
         console.log("sajkdfhjskdfhkdsjh",this.state.servicetype)
         var bookingDetails = {
             userId: 1,
@@ -259,12 +271,15 @@ export default class BookingDetails extends React.Component {
             this.state.deal_valid_to = dateformat(new Date(), "yyyy-mm-dd"),
             this.state.dealOption = "M",
             this.state.bookingDetails.deal_amt.value = "",
+            this.state.serviceTypeValue = "All",
             this.state.dealActive = false,
             this.setState({})
         )
     }
 
     bookingDetailsInsertApi = (bookingDetails) => {
+
+        this.setState({clickControl:true})
         Axios({
             method: 'POST',
             url: apiurl + '/insertDeals',
@@ -275,7 +290,7 @@ export default class BookingDetails extends React.Component {
             console.log(response)
             this.resetFormValue()
             this.getDealsList()
-            this.setState({afteredit: true})
+            this.setState({afteredit: true,clickControl:false})
             notification.info({
                 description:
                   'Record Added Successfully',
@@ -289,6 +304,7 @@ export default class BookingDetails extends React.Component {
 
 
     bookingDetailsEditApi = (bookingDetails) => {
+        this.setState({clickControl:true})
         Axios({
             method: "PUT",
             url: apiurl + "/editDeals",
@@ -299,7 +315,7 @@ export default class BookingDetails extends React.Component {
         }).then((response) => {
             this.resetFormValue()
             this.getDealsList()
-            this.setState({ afteredit: true, activeKey: "2",edit:false })
+            this.setState({ afteredit: true, activeKey: "2",edit:false,clickControl:false})
            
             
             notification.info({
@@ -317,8 +333,8 @@ export default class BookingDetails extends React.Component {
     getDealsList = () => {
         var data = {
           vendor_id:2,
-          limit: 10,
-          pageno: 2,
+          limit: 100,
+          pageno: 1,
         };
         Axios({
           method: "POST",
@@ -347,7 +363,7 @@ export default class BookingDetails extends React.Component {
         if(data == 1) {
             this.setState({serviceTypeAll:false})
         }else{
-        this.setState({servicetype:data,serviceTypeAll:true})
+        this.setState({servicetype:data,serviceTypeAll:true,serviceTypeValue:data})
         }
     }
 
@@ -375,7 +391,7 @@ export default class BookingDetails extends React.Component {
                                   
                                                 <div>
                                                     <label className="label_txt">Test Name</label>
-                                                <Select defaultValue={this.state.edit ? this.state.editData.deal_service_type : "All"}  style={{width:"100%"}} onChange={this.storeService}>
+                                                <Select value={this.state.serviceTypeValue}   style={{width:"100%"}} onChange={this.storeService}>
                                                     {this.services()}
                                                 </Select>
                                                 </div>
@@ -450,7 +466,7 @@ export default class BookingDetails extends React.Component {
 
                                     <div className="createbutton-container">
                                             <Button className="create_cancel" onClick={this.resetFormValue}>Cancel</Button>
-                                            <Button className="media_save" onClick={this.checkValidation}>
+                                            <Button className="media_save" onClick={!this.state.clickControl ? this.checkValidation : null}>
                                                 {
                                                     this.state.edit === true ? "Update" : "Save"
                                                 }

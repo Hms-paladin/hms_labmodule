@@ -12,11 +12,12 @@ export default class ReactPagination extends React.Component {
             perPage:5,
             currentPage:0,
             offset:5,
-            pageCount:this.props.total_count
+            pageCount:this.props.total_count,
+            limit:this.props.limit
         
         }
 
-      round = Math.ceil( (this.state.pageCount / 5) );
+      round = Math.ceil( (this.state.pageCount / this.state.limit) );
         
 
         console.log("senoriootss",round)
