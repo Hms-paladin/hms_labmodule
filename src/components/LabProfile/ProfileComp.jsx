@@ -6,7 +6,7 @@ import Trainee from "../../Images/11.jpg";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import "./Profilepage.css";
-import { TiLocation, MdLocationOn, MdLocalPhone } from "react-icons/md";
+import { TiLocation, MdLocationOn, MdLocalPhone,MdEmail } from "react-icons/md";
 import { IoIosGlobe } from "react-icons/io";
 import EditIcon from "@material-ui/icons/Edit";
 import ProfileModal from "./ProfileModal";
@@ -105,6 +105,13 @@ class ProfileComp extends Component {
                               <MdLocalPhone className="group_icons" />
                             </h5>
                             <p className="trainee_text">{val.vendor_phone}</p>
+                          </div>
+                          
+                          <div className="age_details">
+                            <h5>
+                              <MdEmail className="group_icons" />
+                            </h5>
+                            <p className="trainee_text">{val.vendor_contact_email}</p>
                           </div>
                           <div className="age_details">
                             <h5>
