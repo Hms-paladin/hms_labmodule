@@ -55,7 +55,7 @@ export default class DashboardTable extends Component {
     response.data.data && response.data.data[0] && response.data.data[0].today_appointments.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               time: this.formatTimeShow(val.test_time),
               charge: val.Charge,
               id:index
@@ -165,7 +165,7 @@ export default class DashboardTable extends Component {
             heading={[
               { id: "", label: "S.No" },
               { id: "name", label: " Customer" },
-              { id: "test", label: "Test Name" },
+              // { id: "test", label: "Test Name" },
               { id: "time", label: "Time" },
               { id: "charge", label: "Charge(KWD)" },
               { id: "", label: "Action" },

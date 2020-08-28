@@ -43,16 +43,16 @@ class UploadMaster extends Component {
       weekMonthYearData:[],
       wk_Mn_Yr_Full_Data:[],
       uploaddata:[],
-      spinner:false
+      spinner:false,
     };
   }
 
   generatepdf=()=>{
-
+    var tabindex = this.state.tabindex
     if(this.state.weekMonthYearData.length===0){
       notification.info({
         description:
-          'NO Data Found',
+          'No Data Found',
           placement:"topRight",
       });
     }
@@ -60,20 +60,20 @@ class UploadMaster extends Component {
     const doc = new jsPDF("a4")
     var bodydata  = []
     this.state.weekMonthYearData.map((data,index)=>{
-      bodydata.push([index+1,data.name,data.test,data.date,data.time,data.status.props.children])
+      bodydata.push([index+1,data.name,data.date,data.time,data.status.props.children])
     })
     doc.autoTable({
       beforePageContent: function(data) {
-        doc.text("Uploaded Details", 15, 23);
+        doc.text(`${tabindex?'Pending Details':'Upload Deatails'}`, 15, 23);
         },
       margin: { top: 30 },
       showHead:"everyPage",
       theme:"grid",
-      head: [['S.No', 'Customer', 'Test','Uploaded Date','Time','Status']],
+      head: [['S.No', 'Customer',`${tabindex?"Test Date":'Uploaded Date'}`,'Time','Status']],
       body:bodydata,
     })
      
-    doc.save('UploadDeatails.pdf')
+    doc.save(`${tabindex?'PendingDetails.pdf':'UploadDeatails.pdf'}`)
   }
   }
 
@@ -99,21 +99,21 @@ class UploadMaster extends Component {
           if(endpoint==='/getTestUploadResult'){
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
-              time: val.uploaded_time,
+              time: val.test_time,
             status: <span className="uploader_clrgreen">{val.status}</span>,
-            id:index
+            id:val.booking_id
             })
           }else{
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
-              time: val.uploaded_time ? val.uploaded_time : '-',
+              time: val.test_time ? this.formatTimeShow(val.test_time) :'-',
             status: <span className="pending_clrred">{val.status}</span>,
             action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-            id:index
+            id:val.booking_id
             })
           }
             tableDatafull.push(val)
@@ -124,6 +124,12 @@ class UploadMaster extends Component {
           wk_Mn_Yr_Full_Data:tableDatafull,
         })
     })
+}
+
+formatTimeShow=(h_24)=> {
+  var h = Number(h_24.substring(0, 2)) % 12;
+  if (h === 0) h = 12;
+  return (h < 10 ? '0' : '') + h + ':'+h_24.substring(3, 5) + (Number(h_24.substring(0, 2)) < 12 ? ' AM' : ' PM');
 }
 
 dayReport=(data)=>{
@@ -152,21 +158,21 @@ dayReport=(data)=>{
           if(endpoint==='/getTestUploadResult'){
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
-              time: val.uploaded_time,
+              time: val.test_time,
             status: <span className="uploader_clrgreen">{val.status}</span>,
-            id:index
+            id:val.booking_id
             })
           }else{
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
-              time: val.uploaded_time ? val.uploaded_time : '-',
+              time: val.test_time ? this.formatTimeShow(val.test_time) :'-',
             status: <span className="pending_clrred">{val.status}</span>,
             action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-            id:index
+            id:val.booking_id
             })
           }
             tableDatafull.push(val)
@@ -338,7 +344,7 @@ tabhandle=(data)=>{
 Notification=()=>{
   notification.info({
     description:
-      'NO Data Found',
+      'No Data Found',
       placement:"topRight",
   });
 }
@@ -353,11 +359,11 @@ Notification=()=>{
     var multiDataSetbody = []
     this.state.weekMonthYearData.map((xldata,index)=>{
       if(index%2!==0){
-        multiDataSetbody.push([{value:index+1,style:{alignment:{horizontal:"center"}}},{value:xldata.name},{value:xldata.test},{value:xldata.date},{value:xldata.time},{value:xldata.status.props.children}])
+        multiDataSetbody.push([{value:index+1,style:{alignment:{horizontal:"center"}}},{value:xldata.name},{value:xldata.date},{value:xldata.time},{value:xldata.status.props.children}])
       }else{
       multiDataSetbody.push([
         {value:index+1,style: {alignment:{horizontal:"center"},fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},
-        {value:xldata.name,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.test,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.date,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.time,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.status.props.children,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}}])
+        {value:xldata.name,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.date,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.time,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}},{value:xldata.status.props.children,style: {fill: {patternType: "solid", fgColor: {rgb: "e2e0e0"}}}}])
       }
     })
     const multiDataSet = [
@@ -365,8 +371,7 @@ Notification=()=>{
           columns: [
 {title: "S.No", width: {wpx: 35},style: {fill: {patternType: "solid", fgColor: {rgb: "86b149"}}}},
 {title: "Customer", width: {wch: 20},style: {fill: {patternType: "solid", fgColor: {rgb: "86b149"}}}}, 
-{title: "Test", width: {wpx: 90},style: {fill: {patternType: "solid", fgColor: {rgb: "86b149"}}}},
-{title: "Uploaded Date",width:{wpx: 100},style:{fill:{patternType: "solid", fgColor: {rgb: "86b149"}}}},
+{title: `${this.state.tabindex?'Test Date':"Uploaded Date"}`,width:{wpx: 100},style:{fill:{patternType: "solid", fgColor: {rgb: "86b149"}}}},
 {title: "Time", width: {wpx: 90},style: {fill: {patternType: "solid", fgColor: {rgb: "86b149"}}}},
 {title: "Status", width: {wpx: 90},style: {fill: {patternType: "solid", fgColor: {rgb: "86b149"}}}},
           ],

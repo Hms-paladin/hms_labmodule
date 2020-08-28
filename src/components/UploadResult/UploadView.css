@@ -134,8 +134,29 @@
   font-size: 1.3rem !important;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-top: 10px;
+}
+
+.test_report_container p {
+  padding: 2px 10px 2px 10px;
+  border: 1px solid #afabab;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin:0px !important;
+}
+
+.test_report_container svg:first-child {
+  width: 15px;
+  margin-top: 5px;
+}
+
+.test_report_container svg:nth-child(2) {
+  font-size: 18px;
+  margin-top: 4px;
+  color: #ff5656;
+  cursor: pointer;
 }
 
 .no_border {
@@ -193,4 +214,13 @@ align-items:flex-start; */
   .profile_modal .MuiDialog-paperWidthSm {
     width: 60% !important;
   }
+}
+
+
+.testdetails_upload {
+  display: flex;
+  border-right:1.3px solid #afabab;
+  height: 27px;
+  padding-right: 5px;
+  padding-left: 5px;
 }

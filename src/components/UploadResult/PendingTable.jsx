@@ -44,12 +44,12 @@ class PendingTable extends React.Component {
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
               time: val.uploaded_time ? val.uploaded_time : '-',
             status: <span className="pending_clrred">{val.status}</span>,
-            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-            id:index
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(val.booking_id)} /><VisibilityIcon onClick={()=>this.openuploadForpending(val.booking_id)}/></div>,
+            id:val.booking_id
             })
             tableDatafull.push(val)
         self.props.tabledataFun(tableData)
@@ -79,19 +79,50 @@ UNSAFE_componentWillReceiveProps(newProps){
 }
 
 openresultModel=(indexid)=>{
-  var uploadcurrentdata = [this.state.tableDatafull[indexid]]
-  this.setState({uploadview:true,uploaddata:uploadcurrentdata})
+  // var uploadcurrentdata = [this.state.tableDatafull[indexid]]
+  // this.setState({uploadview:true,uploaddata:uploadcurrentdata})
+  this.setState({props_loading:true})
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/viewTestPendingResult',
+        data:{
+          "booking_id":indexid
+        }
+    })
+    .then((response) => {
+      this.setState({uploaddata:response.data.data,reloadid:indexid,uploadview:true,props_loading:false})
+    })
 }
 
 openuploadForpending=(id)=>{
-  this.setState({openuploadview:true,viewdata:this.state.tableDatafull[id]  });
+  this.setState({props_loading:true})
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/viewTestPendingResult',
+        data:{
+          "booking_id":id
+        }
+    })
+    .then((response) => {
+      this.setState({viewdata:response.data.data[0],openuploadview:true,props_loading:false})
+    })
 
 }
 
 
   modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true,openuploadview:true,viewdata:this.state.tableDatafull[id]  });
+      this.setState({props_loading:true})
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/viewTestPendingResult',
+        data:{
+          "booking_id":id
+        }
+    })
+    .then((response) => {
+      this.setState({viewdata:response.data.data[0],openview: true,openuploadview:true,props_loading:false })
+    })
     } else if (data === "edit") {
       this.setState({ editopen: true });
     } else if (data === "upload") {
@@ -140,12 +171,12 @@ duplicaterecall=(notifymsg)=>{
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
               time: val.uploaded_time ? val.uploaded_time : '-',
             status: <span className="pending_clrred">{val.status}</span>,
-            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-            id:index
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(val.booking_id)} /><VisibilityIcon onClick={()=>this.openuploadForpending(val.booking_id)}/></div>,
+            id:val.booking_id
             })
             tableDatafull.push(val)
         self.props.tabledataFun(tableData)
@@ -174,23 +205,23 @@ duplicaterecall=(notifymsg)=>{
       if (this.state.search === undefined || this.state.search === null){
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
           time: data.test_time ? this.formatTimeShow(data.test_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
-        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-        id:index
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(data.booking_id)} /><VisibilityIcon onClick={()=>this.openuploadForpending(data.booking_id)}/></div>,
+        id:data.booking_id
         })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && dateformat(data.test_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test_date !== null && dateformat(data.test_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           date: dateformat(data.test_date, "dd mmm yyyy"),
           time: data.test_time ? this.formatTimeShow(data.test_time) :'-',
         status: <span className="pending_clrred">{data.status}</span>,
-        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
-        id:index
+        action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(data.booking_id)} /><VisibilityIcon onClick={()=>this.openuploadForpending(data.booking_id)}/></div>,
+        id:data.booking_id
         })
       }
   })
@@ -200,7 +231,7 @@ duplicaterecall=(notifymsg)=>{
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
-            { id: "test", label: "Test" },
+            // { id: "test", label: "Test" },
             { id: "date", label: "Test Date" },
             { id: "time", label: "Time" },
             { id: "status", label: "Status" },
@@ -218,10 +249,10 @@ duplicaterecall=(notifymsg)=>{
           closemodal={(e) => this.closemodal(e)}
           modelwidthClass={"resultviewModelWidth"}
         >
-          <ResultView onClose={this.closemodal} uploaddata={this.state.uploaddata} getrecall={this.duplicaterecall} />
+          <ResultView onClose={this.closemodal} reloadid={this.state.reloadid} uploaddata={this.state.uploaddata} getrecall={this.duplicaterecall} />
         </Modalcomp>
 
-        <UploadView tab={"pending"} onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata}/>
+        <UploadView tab={"pending"} onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata} getrecall={this.duplicaterecall}/>
 
       </div>
     );

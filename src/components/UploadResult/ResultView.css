@@ -150,20 +150,72 @@
 
 .list_class {
   border-radius: 25px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 4px 8px 0 rgba(0, 0, 0, 0.20) !important;
+  /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 4px 8px 0 rgba(0, 0, 0, 0.20) !important; */
   border-radius: 26px;
-  padding: 8px;
+  padding: 8px 0px 0px 10px;
   width: max-content;
   height: max-content;
   font-size: 12px;
-  margin: 15px 5px 0px 5px;
+  display: flex;
+  white-space: nowrap;
+  justify-content: space-between;
+    width: 92%;
 }
+
+.list_class p{
+  font-size: 14px;
+}
+
+.list_class_svg{
+  display: flex;
+}
+
+.list_class p {
+  font-size: 14px;
+}
+
+.list_class_svg svg{
+  font-size: 21px;
+}
+
+.list_class_svg .ant-upload-list-item{
+  display: none;
+}
+
+.uploadedfileclr{
+  color:#82AF3F;
+}
+
+.list_class_browse svg{
+  margin-right: 5px;
+  color:#82AF3F;
+  cursor: pointer;
+}
+
+.list_class_delete{
+  color:#dc0808;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 20px !important;
+}
+
+/* .list_class svg:nth-child(2){
+  font-size: 23px;
+  margin-left: 80%;
+}
+
+.list_class svg:nth-child(3){
+  font-size: 23px;
+  margin-left: 20%;
+} */
+
+
 
 .resultsecond_half {
   border: 1px solid #ccc;
   box-shadow: 0 0 1.5px 0px #ccc;
   border-radius: 2px !important;
-  display: flex;
+  /* display: flex; */
   flex-wrap: wrap;
   margin-top: 5px;
   height: 87%;
@@ -209,4 +261,8 @@
 .labdate-div div span {
   display: flex;
   justify-content: space-between;
+}
+
+.spinner_alignupload span i {
+  background-color: #82AE3F !important;
 }

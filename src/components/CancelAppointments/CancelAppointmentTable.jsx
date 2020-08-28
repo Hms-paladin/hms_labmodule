@@ -56,7 +56,7 @@ class CancelAppointmentTable extends React.Component {
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               Bookdate: moment(val.book_date).format('DD MMM YYYY'),
               Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
               time:"-",
@@ -86,17 +86,17 @@ formatTimeShow=(h_24)=> {
       if (this.state.search === undefined || this.state.search === null){
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
           time:data.cancel_date?dateformat(new Date(data.cancel_date), "hh:MM TT"):"-",
           id:index
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && dateformat(new Date(data.cancel_date), "hh:MM TT").toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.book_date !== null && data.book_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && data.cancel_date.toLowerCase().includes(this.state.search.toLowerCase()) || data.cancel_date !== null && dateformat(new Date(data.cancel_date), "hh:MM TT").toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           Bookdate: moment(data.book_date).format('DD MMM YYYY'),
           Canceldate: moment(data.cancel_date).format('DD MMM YYYY'),
           time:data.cancel_date?dateformat(new Date(data.cancel_date), "hh:MM TT"):"-",
@@ -111,7 +111,7 @@ formatTimeShow=(h_24)=> {
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
-            { id: "test", label: "Test Name" },
+            // { id: "test", label: "Test Name" },
             { id: "Bookdate", label: "Booked Date" },
             { id: "Canceldate", label: "Cancelled Date" },
             { id: "time", label: "Time" },

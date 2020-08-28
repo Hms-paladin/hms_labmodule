@@ -72,7 +72,7 @@ class CancelAppointmentMaster extends Component {
         response.data.data.map((val, index) => {
           tableData.push({
             name: val.customer,
-            test: val.test,
+            // test: val.test,
             Bookdate: moment(val.book_date).format('DD MMM YYYY'),
             Canceldate: moment(val.cancel_date).format('DD MMM YYYY'),
             time: dateformat(new Date(val.cancel_date), "hh:MM TT"),
@@ -135,7 +135,7 @@ class CancelAppointmentMaster extends Component {
     const doc = new jsPDF("a4")
     var bodydata = []
     this.state.weekMonthYearData.map((data, index) => {
-      bodydata.push([index + 1, data.name, data.test, data.Bookdate,dateformat(new Date(data.Canceldate), "hh:MM TT"),data.time])
+      bodydata.push([index + 1, data.name, data.Bookdate,dateformat(new Date(data.Canceldate), "hh:MM TT"),data.time])
     })
     doc.autoTable({
       beforePageContent: function (data) {
@@ -144,7 +144,7 @@ class CancelAppointmentMaster extends Component {
       margin: { top: 30 },
       showHead: "everyPage",
       theme: "grid",
-      head: [['S.No', 'Customer', 'Test', 'Booked Date', 'Cancelled Date', 'Time']],
+      head: [['S.No', 'Customer','Booked Date', 'Cancelled Date', 'Time']],
       body: bodydata,
     })
 
@@ -165,11 +165,11 @@ class CancelAppointmentMaster extends Component {
     var multiDataSetbody = []
     this.state.weekMonthYearData.map((xldata, index) => {
       if (index % 2 !== 0) {
-        multiDataSetbody.push([{ value: index + 1, style: { alignment: { horizontal: "center" } } }, { value: xldata.name }, { value: xldata.test }, { value: xldata.Bookdate }, { value: xldata.Canceldate }, { value: xldata.time }])
+        multiDataSetbody.push([{ value: index + 1, style: { alignment: { horizontal: "center" } } }, { value: xldata.name }, { value: xldata.Bookdate }, { value: xldata.Canceldate }, { value: xldata.time }])
       } else {
         multiDataSetbody.push([
           { value: index + 1, style: { alignment: { horizontal: "center" }, fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
-          { value: xldata.name, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.test, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.Bookdate, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.Canceldate, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },{ value: xldata.time, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }])
+          { value: xldata.name, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.Bookdate, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.Canceldate, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },{ value: xldata.time, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }])
       }
     })
     const multiDataSet = [
@@ -177,7 +177,6 @@ class CancelAppointmentMaster extends Component {
         columns: [
           { title: "S.No", width: { wpx: 35 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Customer", width: { wch: 20 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
-          { title: "Test", width: { wpx: 90 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Booked Date", width: { wpx: 100 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Cancelled Date", width: { wpx: 100 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Time", width: { wpx: 90 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } }

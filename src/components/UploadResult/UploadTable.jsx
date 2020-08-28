@@ -4,6 +4,7 @@ import UploadView from "./UploadView";
 import axios from 'axios';
 import { apiurl } from "../../App";
 import dateformat from 'dateformat';
+import { notification } from 'antd';
 
 import "./UploadTable.css";
 
@@ -37,11 +38,11 @@ class UploadTable extends React.Component {
         response.data.data.map((val,index) => {
             tableData.push({
               name: val.customer,
-              test: val.test,
+              // test: val.test,
               date: val.test_date,
-              time: val.uploaded_time,
+              time: val.test_time,
             status: <span className="uploader_clrgreen">{val.status}</span>,
-            id:index
+            id:val.booking_id
             })
             tableDatafull.push(val)
         })
@@ -64,13 +65,82 @@ UNSAFE_componentWillReceiveProps(newProps){
   this.setState({
     tableData:newProps.weekMonthYearData,
     tableDatafull:newProps.wk_Mn_Yr_Full_Data,
+    selectedDatepen:newProps.selectedDatepen,
   })
 }
 }
 
+duplicaterecall=(notifymsg)=>{
+  this.setState({props_loading:true})
+  console.log()
+  const key = 'updatable';
+
+  var self = this
+  if(this.state.selectedDatepen){
+  var startdate = dateformat(this.state.selectedDatepen[0].startDate, "yyyy-mm-dd")
+  var enddate = dateformat(this.state.selectedDatepen[0].endDate, "yyyy-mm-dd")
+  }else{
+    var startdate = dateformat(new Date(), "yyyy-mm-dd")
+    var enddate = dateformat(new Date(), "yyyy-mm-dd")
+  }
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + '/getTestUploadResult',
+        data:{
+          "lab_id": "2",
+          "date":startdate,
+          "period": "Day",
+          "date_to":enddate
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
+
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+          tableData.push({
+            name: val.customer,
+            // test: val.test,
+            date: val.test_date,
+            time: val.test_time,
+          status: <span className="uploader_clrgreen">{val.status}</span>,
+          id:val.booking_id
+          })
+          tableDatafull.push(val)
+        self.props.tabledataFun(tableData)
+        })
+        self.setState({
+          tableData:tableData,
+          tableDatafull:tableDatafull,
+          props_loading:false
+        })
+        if(notifymsg){
+
+          notification.info({
+            key,
+            description:
+              'Test Record Deleted Succesfully',
+            placement: "topRight",
+          });
+        }
+    })
+}
+
   modelopen = (data,id) => {
     if (data === "view") {
-      this.setState({ openview: true,openuploadview:true,viewdata:this.state.tableDatafull[id] });
+      var self = this
+      axios({
+          method: 'POST', //get method 
+          url: apiurl + '/viewTestPendingResult',
+          data:{
+            "booking_id":id
+          }
+      })
+      .then((response) => {
+        this.setState({viewdata:response.data.data[0],openuploadview:true})
+      })
+      // this.setState({ openview: true,openuploadview:true,viewdata:this.state.tableDatafull[id] });
     }
   };
 
@@ -96,21 +166,21 @@ UNSAFE_componentWillReceiveProps(newProps){
       if (this.state.search === undefined || this.state.search === null){
         searchdata.push({
             name: data.customer,
-            test: data.test,
+            // test: data.test,
             date: dateformat(data.uploaded_date, "dd mmm yyyy"),
-            time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : "-",
+            time: data.test_time ? this.formatTimeShow(data.test_time) : "-",
           status: <span className="uploader_clrgreen">{data.status}</span>,
-          id:index
+          id:data.booking_id
           })
       }
-      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.test !== null && data.test.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_date !== null && dateformat(data.uploaded_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_time !== null && this.formatTimeShow(data.uploaded_time).toLowerCase().includes(this.state.search.toLowerCase())) {
+      else if (data.customer !== null && data.customer.toLowerCase().includes(this.state.search.toLowerCase()) || data.uploaded_date !== null && dateformat(data.uploaded_date, "dd mmm yyyy").toLowerCase().includes(this.state.search.toLowerCase()) || data.test_time !== null && this.formatTimeShow(data.test_time).toLowerCase().includes(this.state.search.toLowerCase())) {
         searchdata.push({
           name: data.customer,
-          test: data.test,
+          // test: data.test,
           date: dateformat(data.uploaded_date, "dd mmm yyyy"),
-          time: data.uploaded_time ? this.formatTimeShow(data.uploaded_time) : "-",
+          time: data.test_time ? this.formatTimeShow(data.test_time) : "-",
         status: <span className="uploader_clrgreen">{data.status}</span>,
-        id:index
+        id:data.booking_id
         })
       }
   })
@@ -120,7 +190,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           heading={[
             { id: "", label: "S.No" },
             { id: "name", label: "Customer" },
-            { id: "test", label: "Test" },
+            // { id: "test", label: "Test" },
             { id: "date", label: "Uploaded Date" },
             { id: "time", label: "Time" },
             { id: "status", label: "Status" },
@@ -133,7 +203,7 @@ UNSAFE_componentWillReceiveProps(newProps){
           props_loading={this.state.props_loading}
         />
 
-        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata} tab={"upload"}/>
+        <UploadView onClose={this.closemodal} openuploadview={this.state.openuploadview} viewdata={this.state.viewdata} tab={"upload"} getrecall={this.duplicaterecall}/>
 
       </div>
     );

@@ -9,7 +9,6 @@ export default class PrintData extends React.Component {
                 <tr>
               <td>{index+1}</td>
               <td>{printdata.name}</td>
-              <td>{printdata.test}</td>
               <td>{printdata.date}</td>
               <td>{printdata.time}</td>
             </tr>
@@ -23,7 +22,6 @@ export default class PrintData extends React.Component {
           <thead>
             <th>S.No</th>
             <th>Customer</th>
-            <th>Test</th>
             <th>Date</th>
             <th>Time</th>
           </thead>

@@ -102,7 +102,7 @@ class AppointmentsList extends Component {
     var self = this
     axios({
       method: 'POST', //get method 
-      url: apiurl + "/getTestPendingResult",
+      url: apiurl + "/getTestAppointmentList",
       data: {
         "lab_id": "2",
         "date": startdate,
@@ -119,7 +119,7 @@ class AppointmentsList extends Component {
           weekDatafull.push(val)
           weekData.push({
             name: val.customer,
-            test: val.test,
+            // test: val.test,
             date: dateformat(val.test_date, "dd mmm yyyy"),
             time: this.formatTimeShow(val.test_time),
             id: index
@@ -175,16 +175,16 @@ class AppointmentsList extends Component {
     const doc = new jsPDF("a4")
     var bodydata = []
     this.state.weekMonthYearData.map((data, index) => {
-      bodydata.push([index + 1, data.name, data.test, data.date, data.time])
+      bodydata.push([index + 1, data.name, data.date, data.time])
     })
     doc.autoTable({
       beforePageContent: function (data) {
-        doc.text("Appoinment Details", 15, 23);
+        doc.text("Appointment Details", 15, 23);
       },
       margin: { top: 30 },
       showHead: "everyPage",
       theme: "grid",
-      head: [['S.No', 'Customer', 'Test', 'Date', 'Time']],
+      head: [['S.No', 'Customer', 'Date', 'Time']],
       body: bodydata,
     })
 
@@ -216,11 +216,11 @@ class AppointmentsList extends Component {
     this.state.weekMonthYearData.map((xldata, index) => {
       console.log(xldata,"xldata")
       if (index % 2 !== 0) {
-        multiDataSetbody.push([{ value: index + 1, style: { alignment: { horizontal: "center" } } }, { value: xldata.name }, { value: xldata.test }, { value: xldata.date }, { value: xldata.time }])
+        multiDataSetbody.push([{ value: index + 1, style: { alignment: { horizontal: "center" } } }, { value: xldata.name }, { value: xldata.date }, { value: xldata.time }])
       } else {
         multiDataSetbody.push([
           { value: index + 1, style: { alignment: { horizontal: "center" }, fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } },
-          { value: xldata.name, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.test, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.date, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.time, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }])
+          { value: xldata.name, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.date, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }, { value: xldata.time, style: { fill: { patternType: "solid", fgColor: { rgb: "e2e0e0" } } } }])
       }
     })
     const multiDataSet = [
@@ -228,7 +228,6 @@ class AppointmentsList extends Component {
         columns: [
           { title: "S.No", width: { wpx: 35 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Customer", width: { wch: 20 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
-          { title: "Test", width: { wpx: 90 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Date", width: { wpx: 100 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Time", width: { wpx: 90 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
           { title: "Status", width: { wpx: 90 }, style: { fill: { patternType: "solid", fgColor: { rgb: "86b149" } } } },
