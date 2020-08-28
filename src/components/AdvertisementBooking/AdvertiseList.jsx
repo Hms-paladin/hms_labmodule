@@ -90,9 +90,9 @@ getAdDetails = (data) => {
     
     Axios({
         method: 'POST',
-        url: apiurl + '/getAdBooking',
+        url: apiurl + '/Common/getAd_Booking',
         data:{
-            "doctorid":"2",
+            "vendor_id":"2",
             "limit":this.state.limit,
             "pageno":data+1
         }
