@@ -3,55 +3,31 @@ import Grid from "@material-ui/core/Grid";
 import Labelbox from "../../helpers/labelbox/labelbox";
 import Button from "@material-ui/core/Button";
 import "./ViewMedia.css";
-import uploadimage from "../../Images/upload-button.png";
-// import View from "../../Images/view_media.png";
-// import Stepper from "../AdvertisementBooking/Stepper";
+// import uploadimage from "../../images/upload-button.png";
+// // import View from "../../Images/11.jpg";
+// import Stepper from "../StepperStatus/Stepper";
+// import { Player } from 'video-react';
 
-
-import Stepper from '../StepperStatus/Stepper';
-
-
-// var storeImage = [];
-var result = [];
 export default class ViewMedia extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      imageUrl:""
-    }
-  }
-  componentWillMount() {
-    
-    if(this.props.viewData.media_type === "Image") {
-   
-      let image = this.props.viewData.media_filename;
-      var storeImage = image.split("/");
-      result = storeImage[4].split("_");
-      // result.split("_");
-
-
-     
-
-      this.setState({imageUrl:result[2]},() =>  console.log("sdfkjsdfhjsdhfds",this.state.imageUrl) )
-    }
-   
+  state={
+    type:""
   }
   render() {
-    const{viewData,viewopenModal} = this.props
-    
-    return (
-      <div>
-      {/* {" "} */}
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-       <div style={{ fontSize: "14px" }}>{this.props.viewData.media_title}</div>
-       <p className="media_active">
-         {this.props.viewData.is_active == 1 ?"Active" : "Non Active"}
-         </p>
-      </div>
-      <Grid container>
-        <Grid item xs={12} md={6} className="media_title_container">
-
+    const {viewData,viewopenModal} = this.props
+    console.log(viewData,"viewwww_datattata")
+     return (
+      <div >
+        {/* {" "} */}
+        <div style={{ textAlign: "center"}}>
+         <div style={{ fontSize: "14px" }}>{this.props.viewData.media_title}</div>
+         <p className="media_upload_view_modal">
+           {this.props.viewData.is_active == 1 ?"Active" : "Non Active"}
+           </p>
+        </div>
+        <Grid container>
+          <Grid item xs={12} md={12} className="media_title_container">
+          
+            
           {viewData.media_type.toLowerCase() === "video" && 
           <div className="profile_media_div">
            
@@ -72,15 +48,14 @@ export default class ViewMedia extends Component {
           </div>
            
   }
-
+          </Grid>
+          {/* <Grid item xs={12} md={6} className="media_title_container">
+             <div className="stepper__container">
+            <Stepper />
+            </div>
+          </Grid> */}
         </Grid>
-        <Grid item xs={12} md={6} className="media_title_container">
-           <div className="stepper__container">
-          {/* <Stepper  /> */}
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+      </div>
     );
   }
 }

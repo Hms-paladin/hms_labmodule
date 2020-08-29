@@ -220,12 +220,16 @@ componentDidMount(){
   }
 
     uploadFile=(e)=>{
+      if(e.target.files[0].type == "image/png" || e.target.files[0].type == "image/jpeg" || e.target.files[0].type == "video/mp4"){
        this.setState({
         imageurl:e.target.files[0],
         filename:e.target.files[0].name,
         type:e.target.files[0].type,
         mediaError:false
        },() => this.checkType())
+      }else {
+        this.setState({open:true})
+     }
     }
 
     checkType = () => {
