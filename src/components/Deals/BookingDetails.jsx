@@ -91,9 +91,17 @@ export default class BookingDetails extends React.Component {
         // For Edit Data form filling
         // this.state.bookingDetails.service_type.value =   data.deal_service_type == "" ? "All" : data.deal_service_type;
         this.state.bookingDetails.deal_title.value = data.deal_title
+        this.state.bookingDetails.deal_title.error = null
+        this.state.bookingDetails.deal_title.errmsg = null
+
+
         // this.state.serviceTypeValue = data.deal_service_type
         // this.state.serviceTypeId = data.deal_service_type_id;
         this.state.bookingDetails.deal_amt.value = data.deal_amount
+        this.state.bookingDetails.deal_amt.error = null
+        this.state.bookingDetails.deal_amt.errmsg = null
+
+        
         this.state.dealActive = data.deal_active === 1 ? true : false
         this.state.dealOption = data.deal_options === "Amount" ? "M" : "F"
         this.state.deal_valid_from = dateformat(data.deal_valid_from, "yyyy-mm-dd")

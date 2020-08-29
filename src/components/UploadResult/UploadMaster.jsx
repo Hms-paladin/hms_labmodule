@@ -101,7 +101,7 @@ class UploadMaster extends Component {
               name: val.customer,
               // test: val.test,
               date: dateformat(val.test_date, "dd mmm yyyy"),
-              time: val.test_time,
+              time: this.formatTimeShow(val.test_time),
             status: <span className="uploader_clrgreen">{val.status}</span>,
             id:val.booking_id
             })
@@ -160,7 +160,7 @@ dayReport=(data)=>{
               name: val.customer,
               // test: val.test,
               date: dateformat(val.test_date, "dd mmm yyyy"),
-              time: val.test_time,
+              time: this.formatTimeShow(val.test_time),
             status: <span className="uploader_clrgreen">{val.status}</span>,
             id:val.booking_id
             })
@@ -339,6 +339,55 @@ closemodal = () => {
 
 tabhandle=(data)=>{
   this.setState({tabindex:data})
+
+  var startdate = dateformat(new Date(), "yyyy-mm-dd")
+  var enddate = dateformat(new Date(), "yyyy-mm-dd")
+  var endpoint = data?"/getTestPendingResult":'/getTestUploadResult'
+    var self = this
+    axios({
+        method: 'POST', //get method 
+        url: apiurl + endpoint,
+        data:{
+          "lab_id": "2",
+          "date": startdate,
+          "period": "Day",
+          "date_to":enddate
+        }
+    })
+    .then((response) => {
+      console.log(response,"response_data")
+
+      var tableData = [];
+      var tableDatafull = [];
+        response.data.data.map((val,index) => {
+          if(endpoint==='/getTestUploadResult'){
+            tableData.push({
+              name: val.customer,
+              // test: val.test,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
+              time: this.formatTimeShow(val.test_time),
+            status: <span className="uploader_clrgreen">{val.status}</span>,
+            id:val.booking_id
+            })
+          }else{
+            tableData.push({
+              name: val.customer,
+              // test: val.test,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
+              time: val.test_time ? this.formatTimeShow(val.test_time) :'-',
+            status: <span className="pending_clrred">{val.status}</span>,
+            action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
+            id:val.booking_id
+            })
+          }
+            tableDatafull.push(val)
+        })
+
+        self.setState({
+          weekMonthYearData:tableData,
+          wk_Mn_Yr_Full_Data:tableDatafull,
+        })
+    })
 }
 
 Notification=()=>{
@@ -354,7 +403,10 @@ Notification=()=>{
   render() {
     const { Option } = Select;
     const { Search } = Input;
-    console.log(this.state.tabindex,"tabindex")
+    console.log(this.state.weekMonthYearData,"weekMonthYearData")
+
+    var tabvalue = this.state.tabindex
+
     
     var multiDataSetbody = []
     this.state.weekMonthYearData.map((xldata,index)=>{
