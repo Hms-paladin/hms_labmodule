@@ -219,21 +219,6 @@ class RevenueMaster extends Component {
               style={{ width: 150 }}
               className="mr-2 ml-2"
             />
-            {/* <div className="icon_head">
-              <ReactSVG src={pdf} style={{ marginRight: "15px", marginLeft: "15px" }} onClick={this.generatepdf}
-                style={{ marginRight: "15px", marginLeft: "15px" }} />
-              <ExcelFile element={<ReactSVG src={excel} style={{ marginRight: "15px" }} />}>
-                <ExcelSheet dataSet={multiDataSet} name="Uploaded Details" />
-              </ExcelFile>
-              <ReactToPrint
-                trigger={() => <ReactSVG src={print} />}
-                content={() => this.componentRef}
-              />
-            </div>
-            <div style={{ display: "none" }}>
-              <PrintData printtableData={this.state.tableData}
-                ref={el => (this.componentRef = el)} />
-            </div> */}
 
             <div className="icon_head">
                   <ReactSVG
@@ -261,7 +246,7 @@ class RevenueMaster extends Component {
             heading={[
               { id: "", label: "S.no" },
               { id: "customer", label: "Customer" },
-              { id: "test", label: "Test" },
+              { id: "test", label: "Test Category" },
               { id: "book_date", label: "Book Date" },
               { id: "totalcharge", label: "Total Charge (KWD)" },
             ]}
