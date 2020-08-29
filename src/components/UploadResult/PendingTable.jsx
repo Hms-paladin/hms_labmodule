@@ -194,11 +194,11 @@ duplicaterecall=(notifymsg)=>{
               'Uploaded Successfully',
             placement: "topRight",
           });
-        }else if(notifymsg === "getrecall"){
+        }else if(notifymsg === "deleted"){
           notification.info({
             key,
             description:
-              'Test Record Deleted Successfully',
+              'Deleted Successfully',
             placement: "topRight",
           });
         }

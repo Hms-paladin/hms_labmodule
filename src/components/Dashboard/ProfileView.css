@@ -110,17 +110,22 @@
 .profileContainer_Dash{
   display: flex;
   justify-content: space-between;
-  padding: 5px 95px;
+  padding: 5px 50px;
 }
 
-.profileMaster_Dash{
+.profileMaster_Dashfont{
   font-size: 15.6px;
 }
 
 .profileContainer_Dash div:first-child{
   color:rgba(0, 0, 0, 0.87);
+  white-space: nowrap;
 }
 
 .profileMaster_Dash div:nth-child(2){
   color: gray;
+}
+
+.profileContainer_Dash div~div{
+  width: 50%;
 }

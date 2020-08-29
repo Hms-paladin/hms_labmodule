@@ -100,7 +100,7 @@ class UploadMaster extends Component {
             tableData.push({
               name: val.customer,
               // test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.test_time,
             status: <span className="uploader_clrgreen">{val.status}</span>,
             id:val.booking_id
@@ -109,7 +109,7 @@ class UploadMaster extends Component {
             tableData.push({
               name: val.customer,
               // test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.test_time ? this.formatTimeShow(val.test_time) :'-',
             status: <span className="pending_clrred">{val.status}</span>,
             action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,
@@ -159,7 +159,7 @@ dayReport=(data)=>{
             tableData.push({
               name: val.customer,
               // test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.test_time,
             status: <span className="uploader_clrgreen">{val.status}</span>,
             id:val.booking_id
@@ -168,7 +168,7 @@ dayReport=(data)=>{
             tableData.push({
               name: val.customer,
               // test: val.test,
-              date: val.test_date,
+              date: dateformat(val.test_date, "dd mmm yyyy"),
               time: val.test_time ? this.formatTimeShow(val.test_time) :'-',
             status: <span className="pending_clrred">{val.status}</span>,
             action:<div className="browseAndVisi"><OpenInBrowserIcon onClick={()=>this.openresultModel(index)} /><VisibilityIcon onClick={()=>this.openuploadForpending(index)}/></div>,

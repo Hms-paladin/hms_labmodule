@@ -135,6 +135,9 @@
   display: flex;
   align-items: center;
   margin-top: 10px;
+  white-space: nowrap;
+  padding-bottom: 10px;
+  overflow-y:scroll;
 }
 
 .test_report_container p {
