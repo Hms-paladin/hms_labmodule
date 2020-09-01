@@ -32,6 +32,7 @@ class RevenueMaster extends Component {
       tableData:[],
       testDetails:[],
       openTestDetails:false,
+      revenueTotal:0,
       search:null,
       fromDate: dateFormat(new Date(),"yyyy-mm-dd"),
       toDate: dateFormat(new Date(),"yyyy-mm-dd")
@@ -134,10 +135,15 @@ class RevenueMaster extends Component {
           id:val.booking_id
         })
       })
+      var totalAmount=0
+      for(var i in response.data.data.result){
+        totalAmount=response.data.data.result[i].total_charge+totalAmount
+      }
       this.setState({
         props_loading:false,
         tableData: tableData,
         enableSearch: false,
+        revenueTotal:totalAmount
       })
       this.setState({})
 
@@ -259,6 +265,10 @@ class RevenueMaster extends Component {
             VisibilityIcon="close"
             subheading="enable"
           />
+
+          <div className="revenueTotal">
+            <span>Grand Total : {`${this.state.revenueTotal}`} KWD</span>
+          </div>
 
           <Modalcomp visible={this.state.openTestDetails} title={"GENERAL TEST"} closemodal={(e) => this.closemodal(e)}
             xswidth={"xs"}

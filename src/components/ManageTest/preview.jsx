@@ -38,11 +38,13 @@ class Preview extends React.Component {
                                         <div className="col-md-3 left_content">
                                             <div className="left_header">{val.lab_test_name}</div>
                                             <div className="left_header">{val.lab_cost} KWD</div>
-                                            <div className="left_headeractive">{val.is_active === 1 ? "Active" : "Inactive"}</div>
                                         </div>
                                         <div className="col-md-9 right_content">
-                                            <div className="testInstruction">{val.test_instruction}</div>
-                                            
+                                            <div className="testInstruction">
+                                                {val.test_instruction}
+                                                <span className="activeText">{val.is_active === 1 ? "Active" : "Inactive"}</span>
+                                            </div>
+                                            {/* <div className="activeText"></div> */}
                                             <CloseIcon className="closeIconRightContent" onClick={() => this.deleterow(val.lab_test_category_id, index)} />
                                         </div>
                                     </div>

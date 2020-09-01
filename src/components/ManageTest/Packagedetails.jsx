@@ -17,7 +17,7 @@ class Packagedetails extends React.Component {
                 <div className="general_button">
                     <div className="textContent">{viewdata[0].lab_test_category}</div>
                 </div>
-                <div className="statusbtn">Active</div>
+                {/* <div className="statusbtn">Active</div>
                 <div className="row mainRow">
                     <div className="col-md-5 p-0">
                         <div className="instruction">
@@ -32,26 +32,29 @@ class Packagedetails extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="border_edit"></div>
-                    <div className="col-md-5 p-0">
-                        <span className="test">Test</span>
-                        <div className="card">
-                            <div className="row rowMinHeight">
-                                <div className="col-md-4 testContentLeft">
-                                    <div className="">
-                                        <div>{viewdata[0].lab_test_name}</div>
-                                        <div>{viewdata[0].cost + " KWD"}</div>
-                                    </div>
-                                </div>
-                                <div className="col-md-8 testContentRight">
-                                    {viewdata[0].test_instruction}
+                    <div className="border_edit"></div> */}
+                <div className="col-md-5 mt-5">
+                    {/* <span className="test">Test</span> */}
+                    <div className="card">
+                        <div className="row rowMinHeight">
+                            <div className="col-md-4 testContentLeft">
+                                <div className="">
+                                    <div>{viewdata[0].lab_test_name}</div>
+                                    <div>{viewdata[0].cost + " KWD"}</div>
                                 </div>
                             </div>
-
+                            <div className="col-md-8 testContentRight">
+                                {viewdata[0].test_instruction}
+                                <span className="activeText">
+                                    {viewdata[0].is_active === 1 ? "Active" : "InActive"}
+                                </span>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
+            // </div>
 
         )
     }

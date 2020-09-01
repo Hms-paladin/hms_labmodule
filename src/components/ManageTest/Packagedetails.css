@@ -114,7 +114,8 @@
 }
 
 .rowMinHeight {
-    min-height: 30px;
+    /* min-height: 30px; */
+    height: 70px;
     margin: 0px;
 }
 
@@ -126,10 +127,13 @@
     align-items: center;
     font-size: 11px;
     font-weight: 600;
+    height: 70px;
+    overflow-y: scroll;
 }
 
 .rowMinHeight {
-    min-height: 55px;
+    /* min-height: 55px; */
+    height: 70px;
     margin: 0px;
 }
 
@@ -138,7 +142,24 @@
     padding-left: 10px;
     padding-top: 4px;
     font-size: 10px;
+    height: 70px;
+    overflow-y: scroll;
 }
+
+.activeText{
+    float: right;
+    color: #82af3f;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: relative;
+    top: 60px;
+    right: 0px;
+    height: 15px;
+    padding-right: 10px;
+  }
 
 .mainRow {
     margin: 0px;
