@@ -198,7 +198,6 @@ export default class WorkingHours extends React.Component {
   }
 
   addHours = (days) => {
-    alert(days)
     var count = this.state.count++;
     // this.setState({
     //   [days]:[]

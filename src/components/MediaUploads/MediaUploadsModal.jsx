@@ -62,6 +62,7 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
     componentWillMount() {
 
       if(this.props.editData){
+      var imageurl = this.props.editData && this.props.editData.media_filename ?  this.props.editData.media_filename.split('/') : "";
        
       var imageurl = this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "";
       var imgarr = imageurl.split('/');
@@ -70,11 +71,8 @@ console.log("sdfjhsdfjkhdsfjkdfs",this.state.filename)
  
       var splitted = s.split('mediaDoc');
  
-      this.setState({filename : splitted[1].slice(5)})
-      }else{
-            
+      this.setState({filename : this.props.editData.uploaded_file})
       }
-      
     }
     changeDynamic = (data, key) => {
     //   if (key === 'profile_pic') {

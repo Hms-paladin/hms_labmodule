@@ -67,7 +67,6 @@ export default class Profilepage extends React.Component {
         console.log(ProfileGetdata, "profilr_datacheck")
       })
       .catch((error) => {
-        alert(JSON.stringify(error))
       })
   }
   render() {

@@ -559,7 +559,8 @@ class Drawerpage extends React.Component {
             />
             <Route
               path={`${this.props.match.path}/profile`}
-              component={ProfileComp}
+              // component={ProfileComp}
+              render={(props) => <ProfileComp {...props} ProfileGetApi={this.ProfileGetApi} />}
               exact
             />
             <Route

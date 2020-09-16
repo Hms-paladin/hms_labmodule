@@ -51,9 +51,9 @@ class ProfileComp extends Component {
           ProfileData: ProfileData
         })
         console.log(ProfileData, "profilr_datacheck")
+      this.props.ProfileGetApi()
       })
       .catch((error) => {
-        alert(JSON.stringify(error))
       })
   }
   componentDidMount() {
