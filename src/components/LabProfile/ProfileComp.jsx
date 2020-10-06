@@ -91,6 +91,8 @@ class ProfileComp extends Component {
                         </div>
                         <div>
                           <h1 className="trainee_detail">{val.vendor_name}</h1>
+
+                <h3>Started Since {val.vendor_since && val.vendor_since}</h3>
                           <div className="age_details">
                             <h5>
                               <MdLocationOn className="group_icons" />

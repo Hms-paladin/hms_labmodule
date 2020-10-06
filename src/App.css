@@ -65,7 +65,7 @@ label {
 }
 
 .validation__error {
-  margin-top: 14px;
+  margin-top: -13px;
   font-size: 12px;
   color: red;
 }
