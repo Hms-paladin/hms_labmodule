@@ -47,6 +47,8 @@ class AppointmentsList extends Component {
       endDate: new Date(),
       key: 'selection',
   }],true)
+
+  this.props.setLocation(window.location.href)
     
   }
 

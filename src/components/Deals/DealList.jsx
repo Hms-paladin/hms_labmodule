@@ -203,7 +203,7 @@ export default class DealList extends React.Component {
                   <div className={"titleDealFlex"}>
                   <div className={"listTitleWidth"}>
                     <span>Title</span>
-                <div>{listdata.deal_title}</div>
+                <div class="deal__title">{listdata.deal_title}</div>
                   </div>
                   <div>
                     <span>Deal</span>
@@ -224,9 +224,7 @@ export default class DealList extends React.Component {
                 {/* {this.state.openstepper.includes(listdata.id) && <Stepper /> } */}
                 </div>
 
-                                           
-      
-  
+ 
               </Paper>
   
             </Grid>

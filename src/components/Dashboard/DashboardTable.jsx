@@ -203,7 +203,7 @@ export default class DashboardTable extends Component {
             </Button>
             <Button
               component={NavLink}
-              to="/Home/advertisementbooking"
+              to="/Home/Advertisementbooking"
               className="lab_dash_bottom_buttons lab_dash_bottom3"
             >
               Advertisement Booking

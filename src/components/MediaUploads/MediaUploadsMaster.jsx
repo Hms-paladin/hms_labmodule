@@ -25,6 +25,10 @@ export default class MediaUploadsMaster extends Component {
     this.setState({ open: false });
   };
 
+  componentDidMount() {
+    this.props.setLocation(window.location.href)
+  }
+
   render() {
     const { Search } = Input;
     console.log(dateFormat(new Date(),"dd mmm yyyy"))

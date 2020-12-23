@@ -40,6 +40,7 @@ class RevenueMaster extends Component {
 
   componentDidMount() {
     this.getRevenueData()
+    this.props.setLocation(window.location.href)
   }
 
   searchChange = (e) => {
