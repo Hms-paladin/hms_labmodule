@@ -414,7 +414,7 @@ export default class DragdropTable extends Component {
       <Spin className="spinner_align" spinning={this.state.loader}>
         <div className={`dragMasterClass VendorDetailsDiv`}>
           <Paper className="paper">
-            <div className="tableWrapper">
+            <div className="tableWrapper draptablenosort">
               {/* <Table
               className="table"
               aria-labelledby="tableTitle"

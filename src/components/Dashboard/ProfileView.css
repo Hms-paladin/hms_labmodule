@@ -98,12 +98,12 @@
 }
 
 .lab_profile_modal .MuiDialog-paperWidthSm {
-  width: 40% !important;
+  width: 500px !important;
 }
 
 @media only screen and (max-width: 768px) {
   .lab_profile_modal .MuiDialog-paperWidthSm {
-    width: 60% !important;
+    width: 500px !important;
   }
 }
 
@@ -128,4 +128,5 @@
 
 .profileContainer_Dash div~div{
   width: 50%;
+  text-align: right;
 }
