@@ -101,14 +101,19 @@ function EnhancedTableHead(props) {
             padding={row.disablePadding ? "none" : "default"}
             sortDirection={orderBy === row.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === row.id}
-              direction={order}
-              hideSortIcon={row.id === "" || row.id === "status" || row.id === "action" ? true : false}
-              onClick={createSortHandler(row.id)}
-            >
-              {row.label}
-            </TableSortLabel>
+           {
+              row.id !== '' ?
+                <TableSortLabel
+                  active={orderBy === row.id}
+                  direction={order}
+                  onClick={createSortHandler(row.id)}
+                >
+                  {row.label}
+                </TableSortLabel>
+                :
+                row.label
+
+            }
           </TableCell>
         ))}
       </TableRow>
