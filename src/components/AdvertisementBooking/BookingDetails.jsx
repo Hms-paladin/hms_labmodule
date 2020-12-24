@@ -802,12 +802,14 @@ export default class AdBooking extends React.Component {
 
                                     <Grid item xs={12} md={6} className="create_container">
                                         <div className="date_box_sizing">
-                                            <Labelbox type="datepicker" labelname="End Date" minDate={this.state.minDate}
+                                            <Labelbox type="datepicker" labelname="End Date" minDate={this.state.startdate}
                                                 value={this.state.endDate} 
-                                                changeData={(data) => this.datepickerChange(data,'enddate')}/>
+                                                changeData={(data) => this.datepickerChange(data,'enddate')}
+                                                
+                                                />
                                         </div>
-                                        <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
-                                        <div className="validation__error">{this.state.enddateError && this.state.enddateError}</div>
+                                        {/* <div className="validation__error--minus">{this.state.dateError && "enddate should be greater than startdate"}</div>
+                                        <div className="validation__error">{this.state.enddateError && this.state.enddateError}</div> */}
 
 
                                         <div className="advertise_location">
