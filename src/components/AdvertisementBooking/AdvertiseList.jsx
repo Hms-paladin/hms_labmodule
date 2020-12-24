@@ -42,7 +42,7 @@ export default class AdvertiseList extends React.Component{
              ad_details:[],
              total_count:"",
              limit:5,
-             pageno:1,
+             pageno: props.pno ? props.pno : 1,
              dataOnload: true
     }
 
@@ -74,7 +74,9 @@ getAdBooking = () => {
 componentWillMount() {
     console.log("sdfjshadfkhlasdkfjhdsj",this.props)
     // this.props.getAdvertiseList()
-    this.getAdBooking()
+    if(!this.props.pno) {
+         this.getAdBooking()
+    }
 }
 
 componentWillReceiveProps(props){
@@ -82,12 +84,16 @@ componentWillReceiveProps(props){
 this.setState({
     ad_details:props.ad_details
 })
+
+if(props.pno) {
+    this.setState({pageno:props.pno},() => this.getAdBooking())
+}
 console.log("asdfkjsadhfkjsdsdprops",this.props)
 }
 
 
 getAdDetails = (data) => {
-    
+    this.setState({pageno:data+1})
     Axios({
         method: 'POST',
         url: apiurl + '/Common/getAd_Booking',
@@ -211,7 +217,7 @@ getAdDetails = (data) => {
                                         <div>
                                             <img src={Workflow} className="listdelete_icon" onClick={(id)=>this.workflowopen(bookingDetails.id)} />
                                             <EditIcon className="list_edit" 
-                                            onClick={() => this.props.changeTab(bookingDetails)}
+                                            onClick={() => this.props.changeTab(bookingDetails,this.state.pageno)}
                                             />
                                             <DeleteIcon className="listdelete_icon" 
                                             onClick={() => this.handleOpen(bookingDetails.id)} />
@@ -230,7 +236,7 @@ getAdDetails = (data) => {
 
             </div>
         
-         {this.state.total_count !== "" && this.state.total_count > 10 &&
+         {this.state.total_count !== "" && this.state.total_count > 5 &&
          <div className="pagination__container">
             <div className="pagination__box">
                     <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getAdDetails} />

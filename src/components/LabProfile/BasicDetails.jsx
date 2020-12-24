@@ -13,6 +13,9 @@ import {notification} from 'antd';
 export default class BasicDetails extends React.Component {
   state = {
     open: "",
+    invalidYear:false,
+    
+    startedSince : this.props.ProfileData && this.props.ProfileData[0].vendor_since  ? this.props.ProfileData[0].vendor_since :  "",
     basicDetails: {
       'address': {
         'value': '',
@@ -69,6 +72,31 @@ export default class BasicDetails extends React.Component {
     this.setState({})
   }
 
+  validateYear = (data) => {
+    const res = /^[0-9\b]+$/;
+    const year = new Date().getFullYear();
+    var checknum = /^([0-9][0-9]{3})$/;
+
+    if(res.test(data) && checknum.test(data) && data <= year) {
+      this.setState({invalidYear:false})
+   
+    } else {
+      this.setState({invalidYear:true})
+    
+    }
+  
+   
+  }
+
+  storeValues = (e,key) => { 
+    
+    if(key === "startedSince") {
+  
+      this.setState({startedSince:e},() => this.validateYear(e))
+       
+   }
+
+  }
   checkValidation = () => {
     var basicDetails = this.state.basicDetails;
     var basicDetailsKeys = Object.keys(basicDetails);
@@ -82,8 +110,8 @@ export default class BasicDetails extends React.Component {
     var filtererr = basicDetailsKeys.filter((obj) =>
       basicDetails[obj].error == true);
     console.log(filtererr.length)
-    if (filtererr.length > 0) {
-      this.setState({ error: true })
+    if (filtererr.length > 0 || this.state.startedSince == "") {
+      this.setState({ error: true,invalidYear:true})
     } else {
       this.setState({ error: false })
       this.onSubmitData()
@@ -119,6 +147,7 @@ export default class BasicDetails extends React.Component {
     formData.set('website', this.state.basicDetails.website.value)
     formData.set('contact', this.state.basicDetails.contactPerson.value)
     formData.set('phone', this.state.basicDetails.mobileNumber.value)
+    formData.set("vendor_since", this.state.startedSince);
 
     formData.set('labId', 2)
     formData.set('modifiedby', 1)
@@ -155,12 +184,14 @@ export default class BasicDetails extends React.Component {
             />
           </div>
           <div className="col-md-6 basicdetails_child">
-            <Labelbox type="text" labelname="Vendor Mobile Number"
-              changeData={(data) => this.changeDynamic(data, 'mobileNumber')}
-              value={this.state.basicDetails.mobileNumber.value}
-              error={this.state.basicDetails.mobileNumber.error}
-              errmsg={this.state.basicDetails.mobileNumber.errmsg}
-            />
+          <Labelbox
+                    type="text"
+                    labelname="Started Since"
+                    value={this.state.startedSince}
+                    changeData={(e) => this.storeValues(e,"startedSince")}
+                    maxlength="4"
+                  />
+                  <div className="validation__error">{this.state.invalidYear && <span>Invalid Year</span>}</div>
           </div>
           <div className="col-md-6 basicdetails_child">
             <Labelbox type="text" labelname="Contact Person"
@@ -171,11 +202,13 @@ export default class BasicDetails extends React.Component {
             />
           </div>
           <div className="col-md-6 basicdetails_child">
-            <Labelbox type="text" labelname="Email Id"
-              changeData={(data) => this.changeDynamic(data, 'email')}
-              value={this.state.basicDetails.email.value}
-              error={this.state.basicDetails.email.error}
-              errmsg={this.state.basicDetails.email.errmsg}
+          
+
+         <Labelbox type="text" labelname="Mobile Number"
+              changeData={(data) => this.changeDynamic(data, 'mobileNumber')}
+              value={this.state.basicDetails.mobileNumber.value}
+              error={this.state.basicDetails.mobileNumber.error}
+              errmsg={this.state.basicDetails.mobileNumber.errmsg}
             />
           </div>
           <div className="col-md-6 basicdetails_child">
@@ -186,14 +219,25 @@ export default class BasicDetails extends React.Component {
               errmsg={this.state.basicDetails.website.errmsg}
             />
           </div>
-          <div className="col-md-6 basicdetails_child">
+          {/* <div className="col-md-6 basicdetails_child">
             <Labelbox type="text" labelname="Contact Person Mobile Number"
               changeData={(data) => this.changeDynamic(data, 'ContactNumber')}
               value={this.state.basicDetails.ContactNumber.value}
               error={this.state.basicDetails.ContactNumber.error}
               errmsg={this.state.basicDetails.ContactNumber.errmsg}
             />
-          </div>
+          </div> */}
+
+          <div className="col-md-6 basicdetails_child">
+        
+
+                  <Labelbox type="text" labelname="Email Id"
+              changeData={(data) => this.changeDynamic(data, 'email')}
+              value={this.state.basicDetails.email.value}
+              error={this.state.basicDetails.email.error}
+              errmsg={this.state.basicDetails.email.errmsg}
+            />
+            </div>
         </div>
         {/* <Grid container>
           <Grid item xs={12} md={6} className="basicdetails_container">

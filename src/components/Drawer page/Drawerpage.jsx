@@ -153,12 +153,16 @@ class Drawerpage extends React.Component {
 
   componentDidMount(){
     this.ProfileGetApi()
-
-    
-      this.setState({
+    this.setState({
         current_location: window.location.href
       },() => console.log("sfdshfjsdhfjsdhfsdf", this.state.current_location))
   }
+
+  setLocation = (url) => {
+    this.setState({current_location:url})
+  }
+
+  
   ProfileGetApi=()=>{
     var self=this
     Axios({
@@ -507,7 +511,8 @@ class Drawerpage extends React.Component {
             />
             <Route
               path={`${this.props.match.path}/AppointmentsList`}
-              component={AppointmentList}
+    
+              render={(props) => <AppointmentList {...props} setLocation={this.setLocation} />}
               exact
             />
             <Route
@@ -517,12 +522,12 @@ class Drawerpage extends React.Component {
             />
             <Route
               path={`${this.props.match.path}/CancelAppointments`}
-              component={CancelAppointmentMaster}
+              render={(props) => <CancelAppointmentMaster {...props} setLocation={this.setLocation} />}
               exact
             />
             <Route
-              path={`${this.props.match.path}/advertisementbooking`}
-              render={(props) => <AdvertisementMaster {...props} generateAlert={this.generateAlert} />}
+              path={`${this.props.match.path}/Advertisementbooking`}
+              render={(props) => <AdvertisementMaster {...props} generateAlert={this.generateAlert} setLocation={this.setLocation} />}
               exact
             />
             <Route
@@ -538,7 +543,7 @@ class Drawerpage extends React.Component {
             />
             <Route
               path={`${this.props.match.path}/Revenue`}
-              component={RevenueMaster}
+              render={(props) => <RevenueMaster {...props} setLocation={this.setLocation} />}
               exact
             />
             <Route
@@ -549,17 +554,18 @@ class Drawerpage extends React.Component {
 
             <Route
               path={`${this.props.match.path}/Test`}
-              component={LabTestMaster}
+              render={(props) => <LabTestMaster {...props} setLocation={this.setLocation} /> }
               exact
             />
             <Route
               path={`${this.props.match.path}/mediauploads`}
-              component={MediaUploadsMaster}
+              render={(props) => <MediaUploadsMaster {...props} setLocation={this.setLocation} />}
               exact
             />
             <Route
               path={`${this.props.match.path}/profile`}
-              component={ProfileComp}
+              // component={ProfileComp}
+              render={(props) => <ProfileComp {...props} ProfileGetApi={this.ProfileGetApi} />}
               exact
             />
             <Route

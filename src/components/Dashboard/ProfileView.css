@@ -98,29 +98,35 @@
 }
 
 .lab_profile_modal .MuiDialog-paperWidthSm {
-  width: 40% !important;
+  width: 500px !important;
 }
 
 @media only screen and (max-width: 768px) {
   .lab_profile_modal .MuiDialog-paperWidthSm {
-    width: 60% !important;
+    width: 500px !important;
   }
 }
 
 .profileContainer_Dash{
   display: flex;
   justify-content: space-between;
-  padding: 5px 95px;
+  padding: 5px 50px;
 }
 
-.profileMaster_Dash{
+.profileMaster_Dashfont{
   font-size: 15.6px;
 }
 
 .profileContainer_Dash div:first-child{
   color:rgba(0, 0, 0, 0.87);
+  white-space: nowrap;
 }
 
 .profileMaster_Dash div:nth-child(2){
   color: gray;
+}
+
+.profileContainer_Dash div~div{
+  width: 50%;
+  text-align: right;
 }

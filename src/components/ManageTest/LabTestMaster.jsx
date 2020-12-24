@@ -29,6 +29,10 @@ export default class LabTestMaster extends Component {
     })
   }
 
+  componentDidMount() {
+    this.props.setLocation(window.location.href)
+  }
+
   render() {
     const { Search } = Input;
     console.log(dateFormat(new Date(),"dd mmm yyyy"))

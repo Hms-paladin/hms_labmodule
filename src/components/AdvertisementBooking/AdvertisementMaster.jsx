@@ -46,6 +46,10 @@ componentWillMount(){
       // else{} send the error response = 1
     })
 }
+
+componentDidMount() {
+  this.props.setLocation(window.location.href)
+}
   render() {
     const { Option } = Select;
     const { Search } = Input;

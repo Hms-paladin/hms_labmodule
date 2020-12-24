@@ -44,9 +44,10 @@ export default class TestView extends Component {
         },
         lab_test_name: {
           'value': '',
-          validation: [{ 'name': 'required' }],
+          validation: [{ 'name': 'required' },{'name': 'custommaxLength',"params":20 }],
           error: null,
           errmsg: null,
+    
         },
         lab_cost: {
           'value': '',

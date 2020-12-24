@@ -7,12 +7,21 @@ import { apiurl } from "../../App";
 import dateformat from 'dateformat';
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Spin } from 'antd';
+import { Spin,message } from 'antd';
 
 var moment = require('moment');
-let timer = null;
 
-
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+}
 
 export default class ResultView extends React.Component {
   state = {
@@ -39,7 +48,20 @@ export default class ResultView extends React.Component {
 
 
   handleChange = (info, data) => {
+    const key = 'updatable';
+    const filetype = info.file.type === 'image/jpeg' || info.file.type === 'application/pdf';
+    console.log(info.file.type,"filetype")
 
+    console.log(filetype,"filetype")
+
+    if(!filetype){
+      notification.info({
+        key,
+        description:
+        'You can only upload JPG/PDF/JPEG file!',
+        placement: "topRight",
+      });
+    }else{
     let fileList = [...info.fileList];
 
     var formData = new FormData();
@@ -61,6 +83,7 @@ export default class ResultView extends React.Component {
         this.recallget()
         this.setState({loader:true})
       })
+    }
       
 
 
@@ -173,12 +196,12 @@ componentWillUnmount() {
 
 
 
-    const props = {
-      name: "file",
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-      onChange: this.handleChange,
-      // multiple: true,
-    };
+    // const props = {
+    //   name: "file",
+    //   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    //   onChange: this.handleChange,
+    //   // multiple: true,
+    // };
     const styles = "";
     const { classes, onClose, cancel, selectedValue, ...other } = this.props;
     const {uploaddata} = this.state
@@ -233,7 +256,11 @@ componentWillUnmount() {
                     <DeleteIcon className="list_class_delete" onClick={()=>this.deleteuploadtest(val)} />:
                     <>
                     {this.state.enablecurrentTime ?
-                      <Upload {...props} onChange={(info) => this.handleChange(info, val)}>
+                      <Upload
+                      name = "file"
+                      action = 'https://www.mocky.io/v2/5cc8019d300000980a055e76'
+                      // beforeUpload={beforeUpload}
+                      onChange={(info) => this.handleChange(info, val)}>
                         <OpenInBrowserIcon className="list_class_browse" />
                       </Upload>:
                     <OpenInBrowserIcon className="list_class_browsenotallow" />

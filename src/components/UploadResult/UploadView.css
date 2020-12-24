@@ -122,7 +122,7 @@
 }
 
 .profile_modal .MuiDialog-paperWidthSm {
-  width: 40% !important;
+  width: 500px !important;
 }
 
 .lab_details_container p {
@@ -135,6 +135,9 @@
   display: flex;
   align-items: center;
   margin-top: 10px;
+  white-space: nowrap;
+  padding-bottom: 10px;
+  overflow-y:scroll;
 }
 
 .test_report_container p {
@@ -212,7 +215,7 @@ align-items:flex-start; */
 
 @media only screen and (max-width: 768px) {
   .profile_modal .MuiDialog-paperWidthSm {
-    width: 60% !important;
+    width: 500px !important;
   }
 }
 

@@ -62,7 +62,7 @@ export default class ProfileView extends React.Component {
     <h3 className="lab_name">{viewdata && viewdata.customer}</h3>
            <p className="lab_age">{viewdata && viewdata.age ? viewdata.age + " " + "Years" : 0 + " " + "Years" }</p>
            <p className="labappointment_details">Appointment Details</p>
-           <div className="profileMaster_Dash">
+           <div className="profileMaster_Dashfont">
 
              <div className="profileContainer_Dash">
                <div>Date</div>
