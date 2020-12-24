@@ -17,7 +17,7 @@ export default class CategoryForm extends Component {
             manageCategory: {
                 'lab_test_category': {
                     'value': '',
-                    validation: [{ 'name': 'required' }],
+                    validation: [{ 'name': 'required' },{'name': 'custommaxLength',"params":20 }],
                     error: null,
                     errmsg: null,
                 },

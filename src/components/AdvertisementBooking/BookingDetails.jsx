@@ -70,7 +70,7 @@ export default class AdBooking extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-          
+            pno : null,
             open: false,
             edit: false,
             loading: false,
@@ -192,8 +192,10 @@ export default class AdBooking extends React.Component {
 
 
 
-    changeTabFun = (data) => {
-        console.log("asfshdfsdfksd",data)
+    changeTabFun = (data,pno) => {
+      
+        this.setState({pno})
+
         if(new Date (data.ad_start_date) < new Date() && new Date (data.ad_end_date) < new Date() ){
             notification.info({
                 message:
@@ -216,10 +218,8 @@ export default class AdBooking extends React.Component {
         },() => this.storeadSize(this.state.editData.ad_size))
 
         // For Edit Data form filling
-        var imgarr = data.ad_filename.split('/');
-        var s = imgarr[imgarr.length - 1];
-        var splitted = s.split('ad_filename');
-        console.log(splitted[1].slice(4),"editurl")
+
+    
 
         this.state.id = data.id
         this.state.startdate = dateformat(data.ad_start_date, "yyyy-mm-dd")
@@ -229,8 +229,8 @@ export default class AdBooking extends React.Component {
         this.state.location = data.ad_location_id
         this.state.adfeeperday = data.ad_fee_per_day
         this.state.adtotalcost = data.ad_total_cost
-        this.state.imagedata = [{name:splitted[1].slice(4)}]
-        this.state.filename = splitted[1].slice(5);
+        this.state.imagedata = data.uploaded_file
+        this.state.filename = data.uploaded_file
 
         this.setState({})
 
@@ -492,6 +492,7 @@ export default class AdBooking extends React.Component {
             this.state.totalcostError = false;
            
             this.state.filename = "";
+            this.state.imagedata = [];
             this.state.edit = false;
 
             this.handlePlacement()
@@ -790,7 +791,7 @@ export default class AdBooking extends React.Component {
 
                                         <div className="validation__error--size">{this.state.sizeError && this.state.sizeError}</div>
 
-                                        <div className="advertise_cost" style={{ marginTop: "2.3rem" }}>
+                                        <div className="advertise_cost" style={{ marginTop: "5px" }}>
                                             {/* <div style={{marginTop:"2rem"}}> */}
                                             <label className="fees_cost" >Fee / Day (KWD)</label>
                                             <input type="number" className="html__input" value={this.state.adfeeperday}></input>
@@ -869,7 +870,8 @@ export default class AdBooking extends React.Component {
                                 <AdvertiseList
                                     ad_details={this.state.ad_details} // list data
                                     getAdvertiseList={this.getAdBooking} // get api function
-                                    changeTab={(data) => this.changeTabFun(data)}
+                                    changeTab={(data,pno) => this.changeTabFun(data,pno)}
+                                    pno={this.state.pno}
                                 />
                             </TabPane>
                         </Tabs>

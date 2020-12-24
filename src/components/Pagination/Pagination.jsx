@@ -30,7 +30,7 @@ export default class ReactPagination extends React.Component {
         const offset = selectedPage * this.state.perPage;
 
         console.log('sdfjsdfhjsdfh',selectedPage)
-        
+        this.props.storePageNo && this.props.storePageNo(selectedPage)
 
         this.setState({
             currentPage:selectedPage,

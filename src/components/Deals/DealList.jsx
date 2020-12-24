@@ -28,7 +28,8 @@ export default class DealList extends React.Component {
      dyndeallist:[],
      dyndealAlllist:[], 
      total_count:"",
-     limit:10,
+     limit: 5,
+     pageno:1
     };
   }
 
@@ -50,6 +51,10 @@ export default class DealList extends React.Component {
   //   }
   // }
 
+  storePageNo = (data) => {
+    this.setState({pageno:data+1})
+  }
+
 
   getPaginateList=(data)=>{
     this.setState({dataOnload:true})
@@ -60,7 +65,7 @@ export default class DealList extends React.Component {
         data:{
           "vendor_id":"2", 
           "limit": this.state.limit, 
-          "pageno":data+1
+          "pageno": this.state.pageno
           
         } 
     })
@@ -162,7 +167,7 @@ export default class DealList extends React.Component {
         data:{
           "vendor_id":"2", 
           "limit": this.state.limit, 
-          "pageno":1
+          "pageno": this.state.pageno
           
         } 
     })
@@ -358,10 +363,10 @@ export default class DealList extends React.Component {
           <DeleteMedia closemodal={this.handleClose} deleteitem={this.deleteDealLIst} closeDeleteModel={this.handleClose}/>
         </Modalcomp>
       </div>}
-      {this.state.total_count !== "" && this.state.total_count > 10 &&
+      {this.state.total_count !== "" && this.state.total_count > 5 &&
       <div className="pagination__container">
             <div className="pagination__box">
-                    <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getPaginateList} />
+                    <ReactPagination  limit={this.state.limit} total_count={this.state.total_count} getAdDetails={this.getPaginateList} storePageNo={this.storePageNo}  />
             </div>
         </div>
   }

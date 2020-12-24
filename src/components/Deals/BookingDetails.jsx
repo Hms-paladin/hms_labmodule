@@ -264,7 +264,7 @@ export default class BookingDetails extends React.Component {
         var bookingDetails = {
             userId: 1,
             dealvendorId: 2,
-            dealservicetypeId: this.state.serviceTypeAll ? this.state.servicetype : data,
+            dealservicetypeId: this.state.serviceTypeAll ? this.state.servicetype : data.join(","),
             dealtitle: this.state.bookingDetails.deal_title.value,
             dealvalidfrom: dateformat(this.state.deal_valid_from, "yyyy-mm-dd"),
             dealvalidto: dateformat(this.state.deal_valid_to, "yyyy-mm-dd"),
