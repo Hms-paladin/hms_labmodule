@@ -29,7 +29,7 @@ export default class MediaUploadsModal extends Component {
       mediaupload_lab: {
         'media_title': {
           'value': '',
-          validation: [{ 'name': 'required' }],
+          validation: [{ 'name': 'required' },{'name':'custommaxLength','params':25}],
           error: null,
           errmsg: null,
         },
@@ -47,8 +47,6 @@ export default class MediaUploadsModal extends Component {
       sortorder: this.props.editData && this.props.editData.media_sortorder ? this.props.editData.media_sortorder : 1,
       filename: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
     }
-
-    console.log("sdfjhsdfjkhdsfjkdfs", this.state.filename)
   }
   handleOpen = () => {
     this.setState({ open: true })
