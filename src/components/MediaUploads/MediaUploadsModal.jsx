@@ -25,11 +25,11 @@ export default class MediaUploadsModal extends Component {
     this.state = {
       open: false,
       mediaError: false,
-      imageurl: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : "",
+      imageurl: this.props.editData && this.props.editData.media_filename ? this.props.editData.media_filename : undefined,
       mediaupload_lab: {
         'media_title': {
           'value': '',
-          validation: [{ 'name': 'required' },{'name':'custommaxLength','params':25}],
+          validation: [{ 'name': 'required' }, { 'name': 'custommaxLength', 'params': 25 }],
           error: null,
           errmsg: null,
         },
@@ -94,18 +94,22 @@ export default class MediaUploadsModal extends Component {
     }
     var filtererr = medicineKeys.filter((obj) =>
       mediaupload_lab[obj].error == true);
-   
+
     if (filtererr.length > 0) {
-      this.setState({ error: true })
-    } else if (this.state.imageurl !== '') {
-      this.setState({ error: false })
-      this.onSubmitData()
-    } else {
-      this.setState({ mediaError: true })
+      this.setState({ error: true})
     }
+    if(this.state.imageurl === undefined){
+      this.setState({mediaError: true})
+    }
+    if (this.state.imageurl !== undefined && filtererr.length === 0) {
+      this.setState({ error: false, mediaError: false })
+      this.onSubmitData()
+    }
+    
     this.setState({ mediaupload_lab })
     this.setState({})
   }
+
   onSubmitData = () => {
 
 
@@ -241,14 +245,6 @@ export default class MediaUploadsModal extends Component {
   }
 
   render() {
-
-    console.log("sdfljsdhfkjsdfhjdfjsk", this.state.filename)
-
-
-
-
-    console.log(this.state.mediaupload_lab.media_description.value, "description")
-    console.log(this.props.truegetmethod, "statevalue")
     const props = {
       name: 'file',
       action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -286,8 +282,10 @@ export default class MediaUploadsModal extends Component {
                 </div>
 
               </div>
-
-              <div>{this.state.mediaError && <span className="validation__error">Field Required</span>}</div>
+              {
+                this.state.mediaError === true &&
+                <div><span className="validation__error">Field Required</span></div>
+              }
 
               <input type="file" id="getFile" className="fileupload" onChange={this.uploadFile} />
             </Grid>
